@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* 
+  Estilo: MAX AI Premium (Full Dark Mode)
+  Colores de Marca: Azul Marino Profundo (#020813), Azul Marino Secundario (#050E1D), Cobrizo (#C17F4E)
+  Tipografía: Inter
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: #020813;
+  color: #FFFFFF;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilidades de Marca */
+.bg-navy-dark {
+  background-color: #020813;
+}
+
+.bg-copper {
+  background-color: #C17F4E;
+}
+
+.text-copper {
+  color: #C17F4E;
+}
+
+.border-copper {
+  border-color: rgba(193, 127, 78, 0.3);
+}
+
+/* Efecto Cristalino Premium para Header */
+.premium-blur {
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background-color: rgba(2, 8, 19, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Tarjetas Premium en Modo Oscuro */
+.premium-card-dark {
+  background-color: #081428;
+  border: 1px solid rgba(193, 127, 78, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card-dark:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(193, 127, 78, 0.3);
+  transform: translateY(-4px);
+}
+
+/* Animaciones del Motor de IA */
+.ambient-copper-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, transparent 70%);
+  filter: blur(60px);
+  border-radius: 50%;
+  pointer-events: none;
+}

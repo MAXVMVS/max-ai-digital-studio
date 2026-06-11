@@ -1,0 +1,6 @@
+{
+  "name": "MAX AI Digital Studio",
+  "description": "Tech Premium Landing Page for an AI and Development Agency",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
