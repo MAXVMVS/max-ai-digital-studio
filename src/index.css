@@ -1,164 +1,173 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-brand-bg: #FFFFFF;
-  --color-brand-copper: #00BD7D;
-  --color-brand-copper-light: #33CCA2;
-  --color-brand-copper-dark: #008A5B;
-  --color-brand-white: #111827;
-  --color-brand-gray-light: #E2E8F0;
-  --color-brand-gray: #475569;
-  --color-brand-gray-dark: #1E293B;
+  --color-brand-bg: #041021;
+  --color-brand-copper: #C17F4E;
+  --color-brand-copper-light: #D79663;
+  --color-brand-copper-dark: #A56434;
+  --color-brand-white: #F8FAFC;
+  --color-brand-gray-light: #CBD5E1;
+  --color-brand-gray: #94A3B8;
+  --color-brand-gray-dark: #475569;
+  
+  --color-brand-card: rgba(6, 20, 38, 0.55);
+  --color-brand-border: rgba(193, 127, 78, 0.12);
+  --color-brand-border-hover: rgba(193, 127, 78, 0.35);
 
-  --font-sans: "Poppins", system-ui, -apple-system, sans-serif;
-  --font-display: "Oswald", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  /* Elite SaaS Typography */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Outfit", system-ui, -apple-system, sans-serif;
+  --font-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 
-  /* Standard modern rounded corners for Perspective */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
-  --radius-3xl: 24px;
+  /* Smooth Rounded Curves for Modern SaaS Aesthetics */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
   --radius-full: 9999px;
 }
 
 /* Base style resets */
 body {
-  background-color: #FFFFFF !important;
-  color: #111827 !important;
+  background-color: #041021;
+  color: #F8FAFC;
   font-family: var(--font-sans);
 }
 
-/* Global Light Theme Overrides */
+/* Global Dark Theme Settings */
 #max-ai-studio-app, main, section, footer, nav, header {
-  background-color: #FFFFFF !important;
-  color: #111827 !important;
+  background-color: #041021 !important;
+  color: #F8FAFC !important;
 }
 
-/* Alternate light backgrounds for sections */
-section:nth-of-type(even), footer {
-  background-color: #F8FAFC !important;
+/* Clean contrast alternating section backgrounds */
+section:nth-of-type(even) {
+  background-color: #020b16 !important;
 }
 
-/* Header typography mapping */
+/* Font resets for Oswald/Poppins overrides from the previous Perspective design */
 h1, h2, h3, h4, h5, h6, .font-display {
   font-family: var(--font-display) !important;
-  color: #111827 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  color: #F8FAFC !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
 }
 
 p, li, label, input, textarea, select {
   font-family: var(--font-sans) !important;
-  color: #334155 !important;
+  color: #94A3B8 !important;
 }
 
-/* Mono fonts */
-.font-mono, code, pre {
-  font-family: var(--font-mono) !important;
+/* Premium Visual Utility Classes: Smooth Glassmorphic SaaS Panels */
+.glass-panel {
+  background: rgba(6, 20, 38, 0.55) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(193, 127, 78, 0.12) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: 0 20px 40px -15px rgba(4, 16, 33, 0.7) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.glass-panel:hover {
+  border-color: rgba(193, 127, 78, 0.35) !important;
+  box-shadow: 0 30px 60px -20px rgba(193, 127, 78, 0.15), 0 20px 40px -15px rgba(4, 16, 33, 0.7) !important;
+}
+
+.premium-card-dark {
+  background: rgba(6, 20, 38, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: 0 16px 36px -12px rgba(4, 16, 33, 0.6) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: #F8FAFC !important;
+}
+
+.premium-card-dark:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(193, 127, 78, 0.25) !important;
+  background: rgba(8, 24, 46, 0.6) !important;
+  box-shadow: 0 24px 48px -18px rgba(193, 127, 78, 0.15), 0 16px 36px -12px rgba(4, 16, 33, 0.6) !important;
 }
 
 /* Reset colors of elements specifically with escaped Tailwind brackets */
-.text-white, .text-\[\#F8FAFC\], .text-gray-300, .text-gray-400, .text-\[\#94A3B8\], .text-\[\#CBD5E1\], .text-gray-400 {
-  color: #334155 !important;
+.text-white, .text-\[\#F8FAFC\] {
+  color: #F8FAFC !important;
+}
+
+.text-gray-300, .text-\[\#CBD5E1\] {
+  color: #E2E8F0 !important;
 }
 
 .text-gray-400, .text-\[\#94A3B8\] {
-  color: #64748B !important;
+  color: #94A3B8 !important;
 }
 
 /* Buttons and Primary Accents */
 .bg-copper, .bg-\[\#C17F4E\], [class*="bg-\[\#C17F4E\]"] {
-  background-color: #00BD7D !important;
-  color: #FFFFFF !important;
+  background-color: #C17F4E !important;
+  color: #F8FAFC !important;
+  border-radius: var(--radius-full) !important;
 }
 
 .bg-copper:hover, .bg-\[\#C17F4E\]\:hover, [class*="bg-\[\#C17F4E\]"]:hover {
-  background-color: #009A65 !important;
+  background-color: #D79663 !important;
+  box-shadow: 0 0 20px rgba(193, 127, 78, 0.35) !important;
 }
 
 .text-copper, .text-\[\#C17F4E\], .text-pure-copper {
-  color: #00BD7D !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: unset !important;
+  background: linear-gradient(135deg, #ECC19C 0%, #C17F4E 50%, #9F5F2F 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
 }
 
-/* Glow orbs are green in Perspective */
+/* Dynamic glowing background orbs */
 .glow-orb {
   position: absolute;
   width: 450px;
   height: 450px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 189, 125, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, rgba(4, 16, 33, 0) 70%);
   pointer-events: none;
-  filter: blur(60px);
+  filter: blur(50px);
 }
 
-/* 3D Offset Perspective Panels & Cards */
-.glass-panel {
-  background: #FFFFFF !important;
-  border: 2px solid #111827 !important;
-  border-radius: var(--radius-md) !important;
-  box-shadow: 4px 4px 0px 0px #00BD7D !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.glass-panel:hover {
-  transform: translate(-2px, -2px) !important;
-  box-shadow: 6px 6px 0px 0px #00BD7D !important;
-}
-
-.premium-card-dark {
-  background: #FFFFFF !important;
-  border: 2px solid #111827 !important;
-  border-radius: var(--radius-md) !important;
-  box-shadow: 6px 6px 0px 0px #00BD7D !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  color: #111827 !important;
-}
-
-.premium-card-dark:hover {
-  transform: translate(-3px, -3px) !important;
-  box-shadow: 9px 9px 0px 0px #00BD7D !important;
-}
-
-/* Input Fields overrides for diagnostic form */
+/* Form input styling for elite SaaS */
 input, textarea, select {
-  background-color: #FFFFFF !important;
-  border: 2px solid #111827 !important;
-  color: #111827 !important;
-  border-radius: 0px !important;
-  padding: 12px !important;
+  background-color: rgba(6, 20, 38, 0.6) !important;
+  border: 1px solid rgba(193, 127, 78, 0.15) !important;
+  color: #F8FAFC !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px 16px !important;
+  transition: all 0.3s ease !important;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none !important;
-  box-shadow: 3px 3px 0px 0px #00BD7D !important;
-}
-
-/* Form wrapper and dialog overrides */
-form {
-  background-color: #FFFFFF !important;
-  color: #111827 !important;
+  border-color: #C17F4E !important;
+  box-shadow: 0 0 15px rgba(193, 127, 78, 0.15) !important;
 }
 
 /* Step bullets in Onboarding Form */
 .bg-emerald-500, .bg-amber-500, .bg-\[\#C17F4E\]\/10 {
-  background-color: #E2E8F0 !important;
-  color: #111827 !important;
+  background-color: rgba(193, 127, 78, 0.15) !important;
+  color: #C17F4E !important;
 }
 
 .text-copper, .text-emerald-400, .text-amber-400 {
-  color: #00BD7D !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: #C17F4E !important;
 }
 
-/* Borders with escaped characters */
+/* Borders */
 .border-white\/5, .border-white\/10, .border-\[rgba\(193\,127\,78\,0\.12\)\] {
-  border-color: #E2E8F0 !important;
+  border-color: rgba(193, 127, 78, 0.1) !important;
 }
 
 /* Scroll smooth */
