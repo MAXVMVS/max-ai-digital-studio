@@ -122,9 +122,164 @@ const INITIAL_LOGS = [
   'SYSTEM: High-performance React engine ready on port 3000.'
 ];
 
+// --- 3D & Premium UI Components (Interactive Skills integration) ---
+function Interactive3DNetwork() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      setMousePos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-20 sm:opacity-30">
+      <svg 
+        style={{
+          transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0)`,
+          transition: 'transform 1s cubic-bezier(0.1, 0.8, 0.2, 1)',
+        }}
+        viewBox="0 0 800 600" 
+        className="w-full h-full"
+      >
+        <line x1="150" y1="100" x2="350" y2="80" stroke="#C17F4E" strokeWidth="0.8" strokeDasharray="3 3" />
+        <line x1="350" y1="80" x2="550" y2="180" stroke="#C17F4E" strokeWidth="0.8" />
+        <line x1="150" y1="100" x2="200" y2="380" stroke="#2563EB" strokeWidth="0.8" />
+        <line x1="200" y1="380" x2="450" y2="450" stroke="#2563EB" strokeWidth="0.8" strokeDasharray="2 2" />
+        <line x1="550" y1="180" x2="450" y2="450" stroke="#C17F4E" strokeWidth="0.8" />
+        <line x1="350" y1="80" x2="200" y2="380" stroke="#C17F4E" strokeWidth="0.8" />
+        <line x1="150" y1="100" x2="450" y2="450" stroke="#2563EB" strokeWidth="0.4" />
+
+        <circle cx="150" cy="100" r="5" fill="#2563EB" className="animate-pulse" />
+        <circle cx="350" cy="80" r="6" fill="#C17F4E" />
+        <circle cx="550" cy="180" r="7" fill="#2563EB" />
+        <circle cx="200" cy="380" r="5" fill="#C17F4E" className="animate-pulse" />
+        <circle cx="450" cy="450" r="6" fill="#2563EB" />
+      </svg>
+    </div>
+  );
+}
+
+interface CaseStudyCardProps {
+  c: CaseStudy;
+  isDark: boolean;
+  themeStyles: any;
+  lang: 'es' | 'en';
+}
+
+function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = -(y / (rect.height / 2)) * 6;
+    const tiltY = (x / (rect.width / 2)) * 6;
+    setCoords({ x: tiltX, y: tiltY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setCoords({ x: 0, y: 0 });
+  };
+
+  const translatedCategory = lang === 'es' 
+    ? c.category 
+    : (c.client === 'Psic. Damaris Pazmiño' ? 'Health & Automation' : c.client === 'Amy Tevet' ? 'Luxury & E-commerce' : 'Automotive & SaaS');
+
+  const translatedTagline = lang === 'es' 
+    ? c.tagline 
+    : (c.client === 'Psic. Damaris Pazmiño' ? 'Mental Health & Automated Clinic' : c.client === 'Amy Tevet' ? 'Premium Tailoring & B2C High Fashion' : 'Automotive Dealership & Automated Leads');
+
+  const translatedDescription = lang === 'es' 
+    ? c.description 
+    : (c.client === 'Psic. Damaris Pazmiño' ? 'Complete digital ecosystem to automate patient scheduling and workflow, integrated with Google Cloud Firestore and advanced Google Maps geolocation.' : c.client === 'Amy Tevet' ? 'Silent luxury interactive digital lookbook, with automatic catalog synchronization via Meta\'s Graph API to power direct conversion and ad campaigns.' : 'Intelligent vehicle inventory with automated lead qualification via integrated WhatsApp CRM, improving instant response time.');
+
+  const translatedKpis = lang === 'es' 
+    ? c.kpis 
+    : (c.client === 'Psic. Damaris Pazmiño' ? ['+140% booked appointments', 'Cancellations reduced to zero', 'Initial load < 1.2s'] : c.client === 'Amy Tevet' ? ['Active daily sync', '+220k Instagram reach', 'High contrast design'] : ['99.98% certified uptime', 'Lead conversion x3.5', 'Inference latency 85ms']);
+
+  return (
+    <div 
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: isHovered 
+          ? `perspective(1000px) rotateX(${coords.x}deg) rotateY(${coords.y}deg) translateY(-6px)`
+          : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)',
+        transition: isHovered ? 'none' : 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+        transformStyle: 'preserve-3d',
+      }}
+      className={`rounded-xl border flex flex-col justify-between overflow-hidden shadow-lg transition-all duration-300 ${
+        isHovered ? 'shadow-[#C17F4E]/10 border-[#C17F4E]/30' : ''
+      } ${themeStyles.card}`}
+    >
+      <div style={{ transform: 'translateZ(15px)' }}>
+        <div className="relative h-48 overflow-hidden bg-zinc-950">
+          <img 
+            src={c.image} 
+            alt={c.client} 
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
+          />
+          <div className="absolute top-4 left-4 bg-[#C17F4E] text-white font-mono text-[9px] font-bold uppercase px-2 py-1 rounded tracking-widest">
+            {translatedCategory}
+          </div>
+        </div>
+
+        <div className="p-6">
+          <h3 className={`font-display font-black text-lg uppercase leading-none ${themeStyles.title}`}>{c.client}</h3>
+          <p className="text-xs text-[#C17F4E] font-mono font-semibold mt-1 mb-3">{translatedTagline}</p>
+          <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed mb-4 ${themeStyles.textMuted}`}>{translatedDescription}</p>
+          
+          <div className={`space-y-1 p-3 rounded border mb-4 ${themeStyles.cardInner}`}>
+            <p className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">{lang === 'es' ? 'Métricas Auditadas' : 'Audited Metrics'}</p>
+            {translatedKpis.map((k, kIdx) => (
+              <div key={kIdx} className={`flex gap-2 items-center text-[11px] font-mono ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>
+                <span className="text-[#C17F4E] font-black">✓</span> {k}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ transform: 'translateZ(10px)' }} className="p-6 pt-0 border-t border-white/5 mt-auto flex items-center justify-between">
+        <div className="flex gap-1.5 flex-wrap">
+          {c.stack.map((s, sIdx) => (
+            <span key={sIdx} className="text-[9px] font-mono bg-zinc-950/80 px-2 py-0.5 rounded text-zinc-400">
+              {s}
+            </span>
+          ))}
+        </div>
+        
+        {c.url !== '#' && (
+          <a 
+            href={c.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1 text-[#C17F4E] hover:text-[#D79663] transition-colors"
+            title={lang === 'es' ? 'Visitar Staging' : 'Visit Staging'}
+          >
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio'>('inicio');
   const [isDark, setIsDark] = useState<boolean>(true);
+  const [lang, setLang] = useState<'es' | 'en'>('es');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // --- Firebase & Google Forms Integration State ---
@@ -440,6 +595,35 @@ export default function App() {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [validationError, setValidationError] = useState<string>('');
 
+  // Real-time validation & touched tracking for CRO (Conversion Rate Optimization skill)
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+
+  const isCompanyNameValid = useMemo(() => companyName.trim().length >= 3, [companyName]);
+  const isBottleneckValid = useMemo(() => bottleneck.trim().length >= 10, [bottleneck]);
+  const isContactNameValid = useMemo(() => contactName.trim().length >= 3, [contactName]);
+  
+  const isContactEmailValid = useMemo(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(contactEmail.trim());
+  }, [contactEmail]);
+
+  const isContactPhoneValid = useMemo(() => {
+    const phoneDigits = contactPhone.replace(/\D/g, '');
+    return phoneDigits.length >= 8;
+  }, [contactPhone]);
+
+  const handleFieldBlur = (field: string) => {
+    setTouchedFields(prev => ({ ...prev, [field]: true }));
+  };
+
+  const getInputClass = (field: string, isValid: boolean, styles: any) => {
+    const base = `w-full p-3 rounded text-sm transition-all duration-300 outline-none border ${styles.input}`;
+    if (!touchedFields[field]) return base;
+    return isValid 
+      ? `${base} border-emerald-500/50 focus:border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.08)] bg-emerald-500/5` 
+      : `${base} border-red-500/50 focus:border-red-500 bg-red-500/5`;
+  };
+
   // Scroll to top immediately when active page changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -509,13 +693,15 @@ export default function App() {
   const handleNextStep = () => {
     setValidationError('');
     if (onboardingStep === 1) {
-      if (!companyName.trim()) {
-        setValidationError('Por favor ingresa el nombre de tu negocio o empresa.');
+      setTouchedFields(prev => ({ ...prev, companyName: true }));
+      if (!isCompanyNameValid) {
+        setValidationError('Por favor ingresa el nombre de tu negocio o empresa (mínimo 3 caracteres).');
         return;
       }
     } else if (onboardingStep === 2) {
-      if (!bottleneck.trim()) {
-        setValidationError('Por favor detalla tu principal cuello de botella.');
+      setTouchedFields(prev => ({ ...prev, bottleneck: true }));
+      if (!isBottleneckValid) {
+        setValidationError('Por favor detalla tu principal cuello de botella (mínimo 10 caracteres).');
         return;
       }
     } else if (onboardingStep === 3) {
@@ -536,8 +722,23 @@ export default function App() {
     e.preventDefault();
     setValidationError('');
 
-    if (!contactName.trim() || !contactEmail.trim() || !contactPhone.trim()) {
-      setValidationError('Por favor completa todos los campos de contacto obligatorios.');
+    setTouchedFields(prev => ({
+      ...prev,
+      contactName: true,
+      contactEmail: true,
+      contactPhone: true
+    }));
+
+    if (!isContactNameValid) {
+      setValidationError('Por favor ingresa tu nombre (mínimo 3 caracteres).');
+      return;
+    }
+    if (!isContactEmailValid) {
+      setValidationError('Por favor ingresa un correo electrónico válido.');
+      return;
+    }
+    if (!isContactPhoneValid) {
+      setValidationError('Por favor ingresa un número de WhatsApp directo válido (mínimo 8 dígitos).');
       return;
     }
 
@@ -655,18 +856,278 @@ export default function App() {
     textMuted: 'text-zinc-400',
     title: 'text-white'
   } : {
-    bg: 'bg-[#F8FAFC] text-slate-900',
-    header: 'bg-white/80 border-slate-200',
-    card: 'bg-white border-slate-200 backdrop-blur-xl shadow-lg shadow-slate-200/50',
-    cardInner: 'bg-slate-50 border-slate-200/80',
-    input: 'bg-white border-slate-300 text-slate-800 focus:border-[#C17F4E]',
-    textMuted: 'text-slate-600',
-    title: 'text-slate-900'
+    bg: 'bg-[#F2EFE9] text-[#0A1128]',
+    header: 'bg-[#F2EFE9]/90 border-[#D6D0C1]',
+    card: 'bg-[#FAF8F5] border-[#D6D0C1] backdrop-blur-xl shadow-lg shadow-[#D6D0C1]/40',
+    cardInner: 'bg-[#EAE6DB] border-[#D0C9B8]',
+    input: 'bg-white border-[#D6D0C1] text-slate-800 focus:border-[#C17F4E]',
+    textMuted: 'text-[#4F5568]',
+    title: 'text-[#020813]'
+  };
+
+  const t = {
+    // Nav
+    home: lang === 'es' ? 'Inicio' : 'Home',
+    services: lang === 'es' ? 'Servicios' : 'Services',
+    portfolio: lang === 'es' ? 'Portafolio' : 'Portfolio',
+    contact: lang === 'es' ? 'Contactar' : 'Contact',
+    portHeader: lang === 'es' ? 'Portafolio & Onboarding' : 'Portfolio & Onboarding',
+    whatsappBtn: lang === 'es' ? 'WHATSAPP DIRECTO' : 'WHATSAPP DIRECT',
+
+    // Hero
+    heroBadge: lang === 'es' ? 'NÚCLEO v5.0 ACTIVO • QUITO, EC' : 'CORE v5.0 ACTIVE • QUITO, EC',
+    heroTitle1: lang === 'es' ? 'INFRAESTRUCTURA' : 'HIGH-PERFORMANCE',
+    heroTitle2: lang === 'es' ? 'COGNITIVA' : 'COGNITIVE',
+    heroTitle3: lang === 'es' ? 'DE ALTO' : 'INFRASTRUCTURE',
+    heroTitle4: lang === 'es' ? 'RENDIMIENTO' : 'ELITE SOFTWARE',
+    heroSub: lang === 'es' 
+      ? 'Diseñamos y desplegamos ecosistemas digitales propietarios impulsados por Inteligencia Artificial para el posicionamiento de marcas de élite de forma ultrarrápida.'
+      : 'We design and deploy proprietary digital ecosystems driven by Artificial Intelligence to position elite brands at ultra-fast speeds.',
+    heroCta1: lang === 'es' ? 'INICIAR DIAGNÓSTICO' : 'START DIAGNOSTIC',
+    heroCta2: lang === 'es' ? 'EXPLORAR STACK' : 'EXPLORE STACK',
+    heroStat1: lang === 'es' ? 'Conversión' : 'Conversion',
+    heroStat2: lang === 'es' ? 'Uptime' : 'Uptime',
+    heroStat3: lang === 'es' ? 'Latencia' : 'Latency',
+
+    // Problem Grid
+    probBadge: lang === 'es' ? 'Diagnóstico de Mercado' : 'Market Diagnostics',
+    probTitle: lang === 'es' ? 'La Fricción del Software Tradicional' : 'The Friction of Traditional Software',
+    probSub: lang === 'es'
+      ? 'Por qué las fábricas de software comunes fracasan al intentar implementar IA y pauta comercial digital de alto impacto.'
+      : 'Why standard software houses fail when trying to deploy AI and high-impact digital commercial campaigns.',
+    probCard1Title: lang === 'es' ? 'Fábricas de Software Comunes' : 'Standard Software Houses',
+    probCard1Items: lang === 'es' ? [
+      'Utilización de plantillas prefabricadas pesadas de WordPress que destrozan la conversión.',
+      'Simples bots de respuesta que alucinan y carecen de vinculación con CRM internos.',
+      'Estructuras desactualizadas que pierden conversiones debido a píxeles mal conectados con Meta.',
+      'Carga lenta del sistema de cara al usuario final (pérdida directa de retención).'
+    ] : [
+      'Use of heavy, pre-made WordPress templates that destroy conversion rates.',
+      'Simple answer bots that hallucinate and lack integration with internal CRMs.',
+      'Outdated structures that lose conversions due to poorly connected Meta pixels.',
+      'Slow system loading speeds for end users (direct loss of retention).'
+    ],
+    probCard2Title: lang === 'es' ? 'Estándares MAX AI Digital' : 'MAX AI Digital Standards',
+    probCard2Items: lang === 'es' ? [
+      'React puro optimizado y compilado para cargas menores a 1.2s.',
+      'Modelos cognitivos predictivos entrenados bajo tus parámetros de venta reales.',
+      'Sincronizadores robustos que enlazan catálogos directamente con Meta Ads Business Manager.',
+      'Base de datos no relacional cloud de alto rendimiento para métricas inmediatas.'
+    ] : [
+      'Pure React optimized and compiled for load times under 1.2s.',
+      'Predictive cognitive models trained under your real sales parameters.',
+      'Robust synchronizers linking catalogs directly with Meta Ads Business Manager.',
+      'High-performance cloud NoSQL database for instant real-time metrics.'
+    ],
+
+    // Methodology (4 Pilares)
+    metBadge: lang === 'es' ? 'Fases del Éxito' : 'Phases of Success',
+    metTitle: lang === 'es' ? 'Metodología de 4 Pilares' : '4-Pillar Methodology',
+    metSub: lang === 'es'
+      ? 'Despliegue ordenado de software premium corporativo sin improvisación.'
+      : 'Orderly deployment of enterprise premium software without improvisation.',
+    metPilar1Title: lang === 'es' ? 'Descubrimiento Estratégico' : 'Strategic Discovery',
+    metPilar1Sub: lang === 'es' ? 'Auditoría inicial de cuellos de botella' : 'Initial audit of operational bottlenecks',
+    metPilar2Title: lang === 'es' ? 'Modelamiento de Datos' : 'Data Modeling',
+    metPilar2Sub: lang === 'es' ? 'Estructuración NoSQL Firestore' : 'NoSQL Firestore structuring',
+    metPilar3Title: lang === 'es' ? 'Desarrollo Propietario' : 'Proprietary Development',
+    metPilar3Sub: lang === 'es' ? 'React / Tailwind premium puro' : 'Pure premium React / Tailwind',
+    metPilar4Title: lang === 'es' ? 'Integraciones Meta API' : 'Meta API Integrations',
+    metPilar4Sub: lang === 'es' ? 'Automatización y pipelines estables' : 'Automation and stable pipelines',
+    metDetailTitle: lang === 'es' ? 'Detalle del Proceso' : 'Process Details',
+    metPilarDetailTitles: lang === 'es' ? [
+      '01 • AUDITORÍA & AUDIENCIAS DIGITALES',
+      '02 • MODELADO DE BASE DE DATOS',
+      '03 • CODIFICACIÓN DE FIERROS Y FRONTEND',
+      '04 • PIPELINES A META GRAPH API'
+    ] : [
+      '01 • AUDIT & DIGITAL AUDIENCES',
+      '02 • DATABASE MODELING',
+      '03 • INFRASTRUCTURE & FRONTEND CODE',
+      '04 • META GRAPH API PIPELINES'
+    ],
+    metPilarDetailSubs: lang === 'es' ? [
+      'Descubrimos y documentamos cada fricción operativa. Estudiamos las campañas digitales de anuncios actuales, los tiempos de conversión de tu embudo de ventas y trazamos el plan técnico.',
+      'Esquematizamos bases de datos rápidas no relacionales en la nube para resguardar flujos transaccionales e información gerencial, blindados con rigurosas políticas de seguridad.',
+      'Codificamos módulos bajo las mejores prácticas, sin redundancias ni pesos muertos, logrando un posicionamiento SEO excepcional de cara a motores de búsqueda.',
+      'Enlazamos la información al instante con WhatsApp Business para agendamientos ágiles y con la API de conversión de Meta para maximizar el retorno de tu pauta publicitaria.'
+    ] : [
+      'We discover and document every operational friction. We analyze current digital ad campaigns, conversion times of your sales funnel, and draw up the technical plan.',
+      'We schema fast non-relational databases in the cloud to secure transactional flows and management information, shielded with rigorous security policies.',
+      'We write modules under the best programming practices, without redundancy or dead weight, achieving exceptional SEO positioning for search engines.',
+      'We link information instantly with WhatsApp Business for agile booking and with the Meta Conversion API to maximize your ad spend return.'
+    ],
+    metMetricTitle: lang === 'es' ? 'Métrica Clave' : 'Key Metric',
+    metStatusTitle: lang === 'es' ? 'Estado v5.0' : 'v5.0 Status',
+    metPilarMetrics: lang === 'es' ? [
+      'Incertidumbre Cero',
+      '23ms Firestore Sync',
+      '98+ Lighthouse Score',
+      '99.98% Uptime'
+    ] : [
+      'Zero Uncertainty',
+      '23ms Firestore Sync',
+      '98+ Lighthouse Score',
+      '99.98% Uptime'
+    ],
+
+    // Page 2: Servicios
+    servBadge: lang === 'es' ? 'Fierros y Arquitectura' : 'Tech Stack & Architecture',
+    servTitle: lang === 'es' ? 'NUESTRO STACK Y SOLUCIONES DE ÉLITE' : 'OUR STACK & ELITE SOLUTIONS',
+    servSub: lang === 'es'
+      ? 'Infraestructura robusta desarrollada con React, TypeScript y bases de datos cloud escalables para automatizar la captación de valor.'
+      : 'Robust infrastructure developed with React, TypeScript, and scalable cloud databases to automate value capture.',
+    servCard1Title: lang === 'es' ? 'Modelos de IA Personalizados' : 'Custom AI Models',
+    servCard1Sub: lang === 'es'
+      ? 'Algoritmos de aprendizaje predictivos e inteligentes estructurados en la nube para proyectar inventarios y preclasificar intención de prospectos calificados.'
+      : 'Cloud-structured intelligent predictive learning algorithms to project inventory and pre-qualify intent of prospects.',
+    servCard1Foot: lang === 'es' ? 'INTEGRACIONES DE APRENDIZAJE • CLOUD DEEP RUN' : 'LEARNING INTEGRATIONS • CLOUD DEEP RUN',
+    servCard2Title: lang === 'es' ? 'Estructuras Web Robustas' : 'Robust Web Architectures',
+    servCard2Sub: lang === 'es'
+      ? 'Aplicaciones de altísimo performance en React, optimizando la experiencia móvil de cara a tus clientes para maximizar la pauta de anuncios comerciales.'
+      : 'Ultra-high-performance React applications, optimizing the mobile experience for your customers to maximize ad campaigns.',
+    servCard2Foot: lang === 'es' ? 'REACT 19 • GOOGLE CLOUD STORAGE • VITE ENGINE' : 'REACT 19 • GOOGLE CLOUD STORAGE • VITE ENGINE',
+    servCard3Title: lang === 'es' ? 'Conectores de Conversión' : 'Conversion Connectors',
+    servCard3Sub: lang === 'es'
+      ? 'Canales estables conectados a Meta Business Suite y WhatsApp API para alimentar datos en tiempo real de visitas y carritos, multiplicando ventas efectivas.'
+      : 'Stable channels connected to Meta Business Suite and WhatsApp API to feed real-time cart and visit data, multiplying sales.',
+    servCard3Foot: lang === 'es' ? 'META GRAPH API • WHATSAPP CRM HOOKS' : 'META GRAPH API • WHATSAPP CRM HOOKS',
+
+    // Configurator
+    confBadge: lang === 'es' ? 'Configurador Inteligente' : 'Smart Configurator',
+    confTitle: lang === 'es' ? 'Crea tu Ecosistema Técnico' : 'Build Your Technical Ecosystem',
+    confSub: lang === 'es'
+      ? 'Selecciona los módulos tecnológicos que demanda tu negocio y obtén una estimación de recursos y tiempos del Ingeniero Principal.'
+      : 'Select the technical modules your business demands and obtain an estimate of resources and time from the Principal Engineer.',
+    confSumTitle: lang === 'es' ? 'RESUMEN DE INFRAESTRUCTURA' : 'INFRASTRUCTURE SUMMARY',
+    confSumMod: lang === 'es' ? 'Módulos Solicitados' : 'Requested Modules',
+    confSumTime: lang === 'es' ? 'Tiempo de Producción' : 'Production Time',
+    confSumTimeWeeks: lang === 'es' ? 'semanas' : 'weeks',
+    confSumBudget: lang === 'es' ? 'Presupuesto Estimado' : 'Estimated Budget',
+    confSumCta: lang === 'es' ? 'PROCEDER AL ONBOARDING' : 'PROCEED TO ONBOARDING',
+
+    // Page 3: Portafolio Tabs
+    tab1: lang === 'es' ? 'Casos de Éxito & Onboarding' : 'Case Studies & Onboarding',
+    tab2: lang === 'es' ? 'Google Forms Sync' : 'Google Forms Sync',
+    tab3: lang === 'es' ? 'Leads Recibidos (CRM)' : 'Received Leads (CRM)',
+
+    // Case Studies Page
+    csBadge: lang === 'es' ? 'Showcase Real' : 'Real Showcase',
+    csTitle: lang === 'es' ? 'CASOS DE ÉXITO MAX AI' : 'MAX AI CASE STUDIES',
+    csSub: lang === 'es'
+      ? 'Plataformas reales y estables producidas bajo ingeniería de alto desempeño para marcas sofisticadas.'
+      : 'Real and stable platforms built under high-performance engineering for sophisticated brands.',
+
+    // Onboarding Form Section
+    onbBadge: lang === 'es' ? 'Onboarding Exclusivo' : 'Exclusive Onboarding',
+    onbTitle: lang === 'es' ? 'Iniciar Protocolo de Diagnóstico' : 'Start Diagnostic Protocol',
+    onbSub: lang === 'es'
+      ? 'Toma 2 minutos configurar tu perfil para agendar una llamada directa de validación arquitectónica.'
+      : 'Takes 2 minutes to configure your profile to book a direct call for architectural validation.',
+    onbSteps: lang === 'es' ? ['Negocio', 'Fricciones', 'Infraestructura', 'Contacto'] : ['Business', 'Friction', 'Infrastructure', 'Contact'],
+    onbStep1Title: lang === 'es' ? 'Paso 1: Perfil de tu Marca o Negocio' : 'Step 1: Brand or Business Profile',
+    onbStep1Label1: lang === 'es' ? 'Nombre de la Empresa o Marca *' : 'Company or Brand Name *',
+    onbStep1Val: lang === 'es' ? 'Válido' : 'Valid',
+    onbStep1Label2: lang === 'es' ? 'Sector / Industria' : 'Sector / Industry',
+    onbStep1Label3: lang === 'es' ? 'Tamaño del Negocio' : 'Business Size',
+    onbStep2Title: lang === 'es' ? 'Paso 2: Diagnóstico de Fricciones' : 'Step 2: Friction Diagnostics',
+    onbStep2Label1: lang === 'es' ? 'Cuéntanos tu cuello de botella prioritario *' : 'Tell us your primary bottleneck *',
+    onbStep2Val: lang === 'es' ? 'Detallado' : 'Detailed',
+    onbStep2Label2: lang === 'es' ? 'Grado de madurez digital actual' : 'Current digital maturity level',
+    onbStep3Title: lang === 'es' ? 'Paso 3: Módulos de Infraestructura' : 'Step 3: Infrastructure Modules',
+    onbStep3Sub: lang === 'es'
+      ? 'Selecciona los pilares que deseas conectar (los valores sumados se calculan en base a tu cotizador).'
+      : 'Select the pillars you want to connect (the values are calculated based on your quote).',
+    onbStep3Budget: lang === 'es' ? 'PRESUPUESTO ESTIMADO DE ESTUDIO:' : 'ESTIMATED STUDY BUDGET:',
+    onbStep4Title: lang === 'es' ? 'Paso 4: Información de Contacto Directo' : 'Step 4: Direct Contact Information',
+    onbStep4Ficha: lang === 'es' ? 'Ficha de Diagnóstico' : 'Diagnostic Sheet',
+    onbStep4FichaEco: lang === 'es' ? 'Ecosistema Tailored' : 'Tailored Ecosystem',
+    onbStep4Label1: lang === 'es' ? 'Nombre del Contacto *' : 'Contact Name *',
+    onbStep4Label2: lang === 'es' ? 'Correo Electrónico *' : 'Email Address *',
+    onbStep4Label3: lang === 'es' ? 'WhatsApp directo *' : 'Direct WhatsApp *',
+    onbStep4Label4: lang === 'es' ? 'Comentarios sobre Google Maps / APIs' : 'Comments on Google Maps / APIs',
+    onbStep4Privacy: lang === 'es' 
+      ? '🔒 Privacidad Garantizada: Tu información de diagnóstico está protegida bajo estándares encriptados y es 100% confidencial. No realizamos spam.'
+      : '🔒 Privacy Guaranteed: Your diagnostic information is protected under encrypted standards and is 100% confidential. No spam.',
+    onbBtnBack: lang === 'es' ? 'Atrás' : 'Back',
+    onbBtnNext: lang === 'es' ? 'Siguiente' : 'Next',
+    onbBtnSubmit: lang === 'es' ? 'CONECTAR POR WHATSAPP' : 'CONNECT VIA WHATSAPP',
+    onbSuccessTitle: lang === 'es' ? '¡Protocolo Compilado!' : 'Protocol Compiled!',
+    onbSuccessSub: lang === 'es'
+      ? 'Tu solicitud se ha estructurado con éxito. Se ha inicializado una redirección segura hacia el WhatsApp del Ingeniero Principal para validar la infraestructura técnica de tu marca.'
+      : 'Your request has been successfully structured. A secure redirect has been initialized to the Principal Engineer\'s WhatsApp to validate your brand\'s technical infrastructure.',
+    onbSuccessReset: lang === 'es' ? 'Reiniciar Formulario' : 'Reset Form',
+    onbSuccessWa: lang === 'es' ? 'Ir a WhatsApp' : 'Go to WhatsApp',
+
+    // Google Forms
+    gfBadge: lang === 'es' ? 'Integración Google Forms' : 'Google Forms Integration',
+    gfTitle: lang === 'es' ? 'Sincronizador Google Forms' : 'Google Forms Synchronizer',
+    gfSub: lang === 'es'
+      ? 'Sincroniza tus formularios de Google Workspace con nuestro motor NoSQL. Genera análisis en tiempo real y gestiona prospectos corporativos.'
+      : 'Sync your Google Workspace forms with our NoSQL engine. Generate real-time analytics and manage enterprise leads.',
+    gfNoAuthTitle: lang === 'es' ? 'Conectar Google Workspace' : 'Connect Google Workspace',
+    gfNoAuthSub: lang === 'es'
+      ? 'Autentícate de forma segura con tu cuenta de Google para otorgarle a MAX AI acceso a tus formularios y sincronizar respuestas en tiempo real.'
+      : 'Authenticate securely with your Google account to grant MAX AI access to your forms and sync responses in real time.',
+    gfNoAuthBtn: lang === 'es' ? 'Iniciar Sesión con Google' : 'Sign In with Google',
+    gfAuthStatus: lang === 'es' ? 'ESPACIO DE TRABAJO CONECTADO' : 'WORKSPACE CONNECTED',
+    gfConnectTitle: lang === 'es' ? 'Conectar Formulario de Google' : 'Connect Google Form',
+    gfConnectLabel: lang === 'es' ? 'ID del Formulario en Google Forms' : 'Google Form ID',
+    gfConnectBtn: lang === 'es' ? 'Enlazar' : 'Link',
+    gfExpressTitle: lang === 'es' ? 'Creación Express de Diagnóstico' : 'Express Diagnostic Creation',
+    gfExpressSub: lang === 'es'
+      ? 'MAX AI creará un formulario en tu Google Drive estructurado con preguntas de cualificación para prospectos corporativos y lo enlazará automáticamente.'
+      : 'MAX AI will create a structured qualification Google Form in your Google Drive and automatically link it to the platform.',
+    gfExpressBtn1: lang === 'es' ? 'Generar Formulario 1-Click' : 'Generate Form 1-Click',
+    gfExpressBtn2: lang === 'es' ? 'Creando en Google...' : 'Creating in Google...',
+    gfLinkedTitle: lang === 'es' ? 'Formularios Enlazados' : 'Linked Forms',
+    gfLinkedEmpty: lang === 'es' ? 'No has conectado ningún formulario todavía.' : 'You have not connected any forms yet.',
+    gfActiveTitle: lang === 'es' ? 'Formulario Activo' : 'Active Form',
+    gfActiveResponses: lang === 'es' ? 'Respuestas' : 'Responses',
+    gfActiveQuestions: lang === 'es' ? 'Preguntas' : 'Questions',
+    gfRecentResponses: lang === 'es' ? 'Respuestas Recientes' : 'Recent Responses',
+    gfRecentResponsesSync: lang === 'es' ? 'Sincronización Live' : 'Live Sync',
+    gfRecentResponsesEmpty: lang === 'es' ? 'Tu formulario no tiene ninguna respuesta todavía.' : 'Your form does not have any responses yet.',
+    gfRecentResponsesEmptySub: lang === 'es' ? 'Comparte el enlace del formulario para recibir solicitudes de leads.' : 'Share the form link to start receiving lead requests.',
+    gfNoSelectedTitle: lang === 'es' ? 'Ningún Formulario Seleccionado' : 'No Form Selected',
+    gfNoSelectedSub: lang === 'es' ? 'Conecta un formulario existente ingresando su identificador o presiona el botón de generación express de 1-click.' : 'Connect an existing form by entering its ID or press the 1-click express generation button.',
+    gfActiveSync: lang === 'es' ? 'Estado Sync' : 'Sync Status',
+    gfRecentResponsesTag: lang === 'es' ? 'RESPUESTA' : 'RESPONSE',
+
+    // CRM
+    crmBadge: lang === 'es' ? 'CRM Corporativo' : 'Corporate CRM',
+    crmTitle: lang === 'es' ? 'Leads Recibidos' : 'Received Leads',
+    crmSub: lang === 'es'
+      ? 'Bandeja de entrada en tiempo real con las cotizaciones de tu onboarding configuradas en Firestore.'
+      : 'Real-time inbox with your onboarding quotes configured in Firestore.',
+    crmNoAuthTitle: lang === 'es' ? 'Acceso al CRM' : 'CRM Access',
+    crmNoAuthSub: lang === 'es'
+      ? 'Inicia sesión de forma segura para revisar las propuestas de diagnóstico y presupuestos estimados.'
+      : 'Sign in securely to review diagnostic proposals and estimated budgets.',
+    crmEmpty: lang === 'es' ? 'No se encontraron leads' : 'No leads found',
+    crmEmptySub: lang === 'es'
+      ? 'Los leads que configures y envíes en el protocolo de Onboarding aparecerán aquí instantáneamente.'
+      : 'Leads you configure and submit in the Onboarding protocol will appear here instantly.',
+    crmCardDate: lang === 'es' ? 'Fecha' : 'Date',
+    crmCardContact: lang === 'es' ? 'Contacto Directo' : 'Direct Contact',
+
+    // Footer
+    footText: lang === 'es' ? 'ESTRATEGIA • CÓDIGO • DISEÑO' : 'STRATEGY • CODE • DESIGN',
+    footServer: lang === 'es' ? 'ESTADO DEL SERVIDOR: ÓPTIMO' : 'SERVER STATUS: OPTIMAL',
   };
 
   return (
     <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${themeStyles.bg}`}>
       
+      {/* Background Image Layer */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
+        <img 
+          src={isDark ? "/bg_dark.jpg" : "/bg_light.jpg"} 
+          alt="MAX AI Background" 
+          className={`w-full h-full object-cover fixed top-0 left-0 transition-opacity duration-700 ${isDark ? 'opacity-[0.08]' : 'opacity-[0.09]'}`}
+        />
+      </div>
+
       {/* Background Orbes Ambientales */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className={`absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none transition-opacity duration-500 ${isDark ? 'opacity-100' : 'opacity-40'}`}></div>
@@ -684,10 +1145,10 @@ export default function App() {
             </div>
             <div>
               <div className="flex items-baseline gap-1.5">
-                <span className="font-display font-black text-xl tracking-tight uppercase text-white">MAX AI</span>
+                <span className={`font-display font-black text-xl tracking-tight uppercase ${themeStyles.title}`}>MAX AI</span>
                 <span className="text-[#C17F4E] font-mono text-xs font-bold tracking-wider">DIGITAL STUDIO</span>
               </div>
-              <p className="text-[9px] tracking-widest uppercase font-mono text-zinc-500">Elite Software Tailoring</p>
+              <p className={`text-[9px] tracking-widest uppercase font-mono ${themeStyles.textMuted}`}>Elite Software Tailoring</p>
             </div>
           </div>
 
@@ -697,54 +1158,37 @@ export default function App() {
               onClick={() => setActivePage('inicio')}
               className={`pb-1 transition-all uppercase ${
                 activePage === 'inicio' 
-                  ? 'text-white border-b-2 border-[#C17F4E]' 
-                  : 'hover:text-white'
+                  ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                  : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
               }`}
             >
-              Inicio
+              {t.home}
             </button>
             <button 
               onClick={() => setActivePage('servicios')}
               className={`pb-1 transition-all uppercase ${
                 activePage === 'servicios' 
-                  ? 'text-white border-b-2 border-[#C17F4E]' 
-                  : 'hover:text-white'
+                  ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                  : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
               }`}
             >
-              Servicios
+              {t.services}
             </button>
             <button 
               onClick={() => setActivePage('portafolio')}
               className={`pb-1 transition-all uppercase ${
                 activePage === 'portafolio' 
-                  ? 'text-white border-b-2 border-[#C17F4E]' 
-                  : 'hover:text-white'
+                  ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                  : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
               }`}
             >
-              Portafolio
+              {t.portfolio}
             </button>
           </nav>
 
-          {/* Action Tools: Switch Theme + WhatsApp Direct */}
-          <div className="hidden md:flex items-center gap-6">
-            {/* Theme Toggle Button */}
-            <div className="flex bg-zinc-900/50 p-1 rounded-full border border-white/5">
-              <button
-                onClick={() => setIsDark(true)}
-                className={`p-1.5 rounded-full transition-all ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title="Modo Oscuro Elegante"
-              >
-                <Moon className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setIsDark(false)}
-                className={`p-1.5 rounded-full transition-all ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title="Modo Claro Corporativo"
-              >
-                <Sun className="w-4 h-4" />
-              </button>
-            </div>
-
+          {/* Action Tools: Contact + Language + Theme */}
+          <div className="hidden md:flex items-center gap-4">
+            
             {/* Premium Contact Button */}
             <button 
               onClick={() => {
@@ -756,21 +1200,101 @@ export default function App() {
               }}
               className="px-6 py-2.5 bg-[#C17F4E] text-white text-xs font-bold uppercase tracking-widest rounded hover:bg-[#D79663] transition-colors"
             >
-              Contactar
+              {t.contact}
             </button>
+
+            {/* Language Switcher (ES | EN Toggle Group) */}
+            <div className={`flex p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <button
+                onClick={() => setLang('es')}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-all ${
+                  lang === 'es' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Español"
+              >
+                ES
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-all ${
+                  lang === 'en' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-660 hover:text-slate-900'
+                }`}
+                title="English"
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Theme Toggle Button (On the right) */}
+            <div className={`flex p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <button
+                onClick={() => setIsDark(true)}
+                className={`p-1.5 rounded-full transition-all ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
+              >
+                <Moon className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setIsDark(false)}
+                className={`p-1.5 rounded-full transition-all ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title={lang === 'es' ? "Modo Claro" : "Light Mode"}
+              >
+                <Sun className="w-4 h-4" />
+              </button>
+            </div>
+
           </div>
 
           {/* Mobile Menu Buttons */}
           <div className="flex md:hidden items-center gap-3">
+            {/* Language Switcher (ES | EN Toggle Group for mobile) */}
+            <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <button
+                onClick={() => setLang('es')}
+                className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold transition-all ${
+                  lang === 'es' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                ES
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold transition-all ${
+                  lang === 'en' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+            
+            {/* Theme Toggle Button for mobile */}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="p-2 rounded-full border border-white/5 bg-zinc-900/40 text-[#C17F4E]"
+              className={`p-2 rounded-full border transition-all ${
+                isDark 
+                  ? 'border-white/5 bg-zinc-900/40 text-[#C17F4E] hover:text-[#D79663]' 
+                  : 'border-[#D6D0C1] bg-[#FAF8F5] text-[#C17F4E] hover:bg-[#F2EFE9]'
+              }`}
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
+
+            {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded border border-white/5 bg-zinc-900/40 text-zinc-300"
+              className={`p-2 rounded border transition-all ${
+                isDark
+                  ? 'border-white/5 bg-zinc-900/40 text-zinc-305 hover:text-white'
+                  : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:bg-[#F2EFE9]'
+              }`}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -800,19 +1324,19 @@ export default function App() {
                   onClick={() => { setActivePage('inicio'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'inicio' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
-                  Inicio
+                  {t.home}
                 </button>
                 <button
                   onClick={() => { setActivePage('servicios'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'servicios' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
-                  Servicios
+                  {t.services}
                 </button>
                 <button
                   onClick={() => { setActivePage('portafolio'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'portafolio' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
-                  Portafolio & Onboarding
+                  {t.portHeader}
                 </button>
               </div>
             </div>
@@ -825,7 +1349,7 @@ export default function App() {
                 rel="noopener noreferrer"
                 className="w-full text-center block bg-[#C17F4E] hover:bg-[#D79663] text-white py-3 rounded font-mono text-xs font-bold uppercase tracking-widest shadow-lg"
               >
-                WHATSAPP DIRECTO
+                {t.whatsappBtn}
               </a>
             </div>
           </div>
@@ -843,21 +1367,22 @@ export default function App() {
             
             {/* --- HERO & DASHBOARD REPLICA ROW --- */}
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <Interactive3DNetwork />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
                 
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-start gap-6">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900/80 border border-white/10 rounded-full">
                     <span className="w-2 h-2 rounded-full bg-[#C17F4E] animate-pulse"></span>
-                    <span className="text-[10px] font-mono tracking-tighter text-[#C17F4E] uppercase">CORE v5.0 ACTIVE • QUITO, EC</span>
+                    <span className="text-[10px] font-mono tracking-tighter text-[#C17F4E] uppercase">{t.heroBadge}</span>
                   </div>
 
-                  <h1 className="font-display font-extrabold text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight text-white uppercase">
-                    INFRAESTRUCTURA <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">COGNITIVA</span> DE ALTO <br/> RENDIMIENTO
+                  <h1 className={`font-display font-extrabold text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
+                    {t.heroTitle1} <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle2}</span> <br/> {lang === 'es' ? `${t.heroTitle3} ${t.heroTitle4}` : t.heroTitle3}
                   </h1>
 
                   <p className={`text-base sm:text-lg max-w-xl font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                    Diseñamos y desplegamos ecosistemas digitales propietarios impulsados por Inteligencia Artificial para el posicionamiento de marcas de élite de forma ultrarrápida.
+                    {t.heroSub}
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
@@ -865,7 +1390,7 @@ export default function App() {
                       onClick={() => setActivePage('portafolio')}
                       className="px-8 py-3.5 bg-[#C17F4E] text-white text-xs font-bold uppercase tracking-widest rounded hover:bg-[#D79663] transition-all transform hover:-translate-y-0.5 shadow-lg shadow-[#C17F4E]/20 text-center flex items-center justify-center gap-2"
                     >
-                      <span>INICIAR DIAGNÓSTICO</span>
+                      <span>{t.heroCta1}</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                     
@@ -874,26 +1399,26 @@ export default function App() {
                       className={`px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest transition-all text-center border ${
                         isDark 
                           ? 'border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800' 
-                          : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50'
+                          : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-800 hover:bg-[#F2EFE9]'
                       }`}
                     >
-                      EXPLORAR STACK
+                      {t.heroCta2}
                     </button>
                   </div>
 
                   {/* Metrics Grid inside Hero */}
                   <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 w-full max-w-lg mt-6">
                     <div className="border-l border-[#C17F4E]/40 pl-4">
-                      <div className="text-2xl font-mono font-bold text-white tracking-tighter">3.5X</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">Conversión</div>
+                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>3.5X</div>
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat1}</div>
                     </div>
                     <div className="border-l border-[#C17F4E]/40 pl-4">
-                      <div className="text-2xl font-mono font-bold text-white tracking-tighter">99.98%</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">Uptime</div>
+                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>99.98%</div>
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat2}</div>
                     </div>
                     <div className="border-l border-[#C17F4E]/40 pl-4">
-                      <div className="text-2xl font-mono font-bold text-white tracking-tighter">85ms</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">Latencia</div>
+                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>85ms</div>
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat3}</div>
                     </div>
                   </div>
                 </div>
@@ -925,10 +1450,10 @@ export default function App() {
                           className={`py-2 rounded text-center font-mono text-[9px] uppercase tracking-wider transition-all ${
                             activeSparklineTab === tab
                               ? 'bg-[#C17F4E] text-white font-bold shadow-md'
-                              : isDark ? 'bg-zinc-950/60 text-zinc-400 hover:bg-zinc-800' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                              : isDark ? 'bg-zinc-950/60 text-zinc-400 hover:bg-zinc-800' : 'bg-[#EAE6DB] text-[#4F5568] hover:bg-[#D0C9B8]'
                           }`}
                         >
-                          {tab === 'trafico' ? 'Tráfico' : tab === 'conversion' ? 'Conversión' : 'Latencia'}
+                          {tab === 'trafico' ? (lang === 'es' ? 'Tráfico' : 'Traffic') : tab === 'conversion' ? (lang === 'es' ? 'Conversión' : 'Conversion') : (lang === 'es' ? 'Latencia' : 'Latency')}
                         </button>
                       ))}
                     </div>
@@ -1002,36 +1527,31 @@ export default function App() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: "easeOut" }}
               className={`py-24 px-6 sm:px-10 lg:px-16 border-t border-b ${
-                isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-slate-50 border-slate-200'
+                isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-[#EAE6DB] border-[#D0C9B8]'
               }`}
             >
               <div className="max-w-7xl mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Diagnóstico de Mercado</span>
-                  <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-white uppercase mt-2">
-                    La Fricción del Software Tradicional
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.probBadge}</span>
+                  <h2 className={`font-display font-bold text-3xl sm:text-4xl tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                    {t.probTitle}
                   </h2>
                   <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    Por qué las fábricas de software comunes fracasan al intentar implementar IA y pauta comercial digital de alto impacto.
+                    {t.probSub}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
                   {/* Traditional Failures */}
-                  <div className={`p-8 rounded-xl border ${isDark ? 'bg-zinc-950/60 border-red-500/10' : 'bg-white border-red-100 shadow'}`}>
+                  <div className={`p-8 rounded-xl border ${isDark ? 'bg-zinc-950/60 border-red-500/10' : 'bg-[#FAF8F5] border-red-200/60 shadow-sm'}`}>
                     <div className="flex items-center gap-3 mb-6">
                       <div className="p-2.5 rounded bg-red-500/10 text-red-500">
                         <AlertTriangle className="w-5 h-5" />
                       </div>
-                      <h3 className="font-display font-bold text-sm text-red-500 uppercase tracking-widest">Fábricas de Software Comunes</h3>
+                      <h3 className="font-display font-bold text-sm text-red-500 uppercase tracking-widest">{t.probCard1Title}</h3>
                     </div>
                     <ul className="space-y-4">
-                      {[
-                        'Utilización de plantillas prefabricadas pesadas de WordPress que destrozan la conversión.',
-                        'Simples bots de respuesta que alucinan y carecen de vinculación con CRM internos.',
-                        'Estructuras desactualizadas que pierden conversiones debido a píxeles mal conectados con Meta.',
-                        'Carga lenta del sistema de cara al usuario final (pérdida directa de retención).'
-                      ].map((fail, i) => (
+                      {t.probCard1Items.map((fail, i) => (
                         <li key={i} className="flex gap-3 text-xs sm:text-sm">
                           <span className="text-red-500 font-bold">✕</span>
                           <span className={themeStyles.textMuted}>{fail}</span>
@@ -1041,20 +1561,15 @@ export default function App() {
                   </div>
 
                   {/* MAX AI Standards */}
-                  <div className={`p-8 rounded-xl border ${isDark ? 'bg-[#061426]/55 border-[#C17F4E]/20 shadow-[0_0_20px_rgba(193,127,78,0.05)]' : 'bg-white border-[#C17F4E]/20 shadow-md'}`}>
+                  <div className={`p-8 rounded-xl border ${isDark ? 'bg-[#061426]/55 border-[#C17F4E]/20 shadow-[0_0_20px_rgba(193,127,78,0.05)]' : 'bg-[#FAF8F5] border-[#C17F4E]/20 shadow-md'}`}>
                     <div className="flex items-center gap-3 mb-6">
                       <div className="p-2.5 rounded bg-[#C17F4E]/10 text-[#C17F4E]">
                         <Check className="w-5 h-5" />
                       </div>
-                      <h3 className="font-display font-bold text-sm text-[#C17F4E] uppercase tracking-widest">Estándares MAX AI Digital</h3>
+                      <h3 className="font-display font-bold text-sm text-[#C17F4E] uppercase tracking-widest">{t.probCard2Title}</h3>
                     </div>
                     <ul className="space-y-4">
-                      {[
-                        'React puro optimizado y compilado para cargas menores a 1.2s.',
-                        'Modelos cognitivos predictivos entrenados bajo tus parámetros de venta reales.',
-                        'Sincronizadores robustos que enlazan catálogos directamente con Meta Ads Business Manager.',
-                        'Base de datos no relacional cloud de alto rendimiento para métricas inmediatas.'
-                      ].map((succ, i) => (
+                      {t.probCard2Items.map((succ, i) => (
                         <li key={i} className="flex gap-3 text-xs sm:text-sm">
                           <span className="text-emerald-500 font-bold">✓</span>
                           <span className={isDark ? 'text-zinc-200' : 'text-slate-800'}>{succ}</span>
@@ -1076,12 +1591,12 @@ export default function App() {
               className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
             >
               <div className="text-center max-w-3xl mx-auto mb-16">
-                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Fases del Éxito</span>
-                <h2 className="font-display font-bold text-3xl sm:text-4xl text-white uppercase mt-2">
-                  Metodología de 4 Pilares
+                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.metBadge}</span>
+                <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                  {t.metTitle}
                 </h2>
                 <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                  Despliegue ordenado de software premium corporativo sin improvisación.
+                  {t.metSub}
                 </p>
               </div>
 
@@ -1089,10 +1604,10 @@ export default function App() {
                 {/* Pilar buttons (Timeline left) */}
                 <div className="lg:col-span-5 flex flex-col gap-3">
                   {[
-                    { number: '01', title: 'Descubrimiento Estratégico', label: 'Auditoría inicial de cuellos de botella' },
-                    { number: '02', title: 'Modelamiento de Datos', label: 'Estructuración NoSQL Firestore' },
-                    { number: '03', title: 'Desarrollo Propietario', label: 'React / Tailwind premium puro' },
-                    { number: '04', title: 'Integraciones Meta API', label: 'Automatización y pipelines estables' }
+                    { number: '01', title: t.metPilar1Title, label: t.metPilar1Sub },
+                    { number: '02', title: t.metPilar2Title, label: t.metPilar2Sub },
+                    { number: '03', title: t.metPilar3Title, label: t.metPilar3Sub },
+                    { number: '04', title: t.metPilar4Title, label: t.metPilar4Sub }
                   ].map((p, idx) => (
                     <button
                       key={idx}
@@ -1100,14 +1615,14 @@ export default function App() {
                       className={`p-4 rounded-lg border text-left transition-all flex items-center gap-4 ${
                         activePilar === idx
                           ? 'border-[#C17F4E] bg-[#C17F4E]/10 shadow-md'
-                          : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:bg-zinc-850' : 'border-slate-200 bg-white hover:bg-slate-50'
+                          : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:bg-zinc-850' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:bg-[#F2EFE9]'
                       }`}
                     >
                       <span className={`font-mono text-lg font-bold ${activePilar === idx ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>
                         {p.number}
                       </span>
                       <div className="flex-1">
-                        <h4 className={`text-xs font-bold uppercase tracking-wider ${activePilar === idx ? 'text-white' : isDark ? 'text-zinc-300' : 'text-slate-700'}`}>
+                        <h4 className={`text-xs font-bold uppercase tracking-wider ${activePilar === idx ? (isDark ? 'text-white' : 'text-[#020813]') : isDark ? 'text-zinc-300' : 'text-slate-700'}`}>
                           {p.title}
                         </h4>
                         <p className="text-[10px] text-zinc-500 font-sans mt-0.5">{p.label}</p>
@@ -1121,33 +1636,24 @@ export default function App() {
                 <div className="lg:col-span-7">
                   <div className={`p-8 rounded-xl border h-full flex flex-col justify-between transition-all duration-300 ${themeStyles.card}`}>
                     <div className="space-y-4">
-                      <span className="text-[#C17F4E] font-mono text-[10px] uppercase tracking-widest font-bold">Detalle del Proceso</span>
-                      <h3 className="text-xl sm:text-2xl font-display font-bold text-white uppercase">
-                        {activePilar === 0 && "01 • AUDITORÍA & AUDIENCIAS DIGITALES"}
-                        {activePilar === 1 && "02 • MODELADO DE BASE DE DATOS"}
-                        {activePilar === 2 && "03 • CODIFICACIÓN DE FIERROS Y FRONTEND"}
-                        {activePilar === 3 && "04 • PIPELINES A META GRAPH API"}
+                      <span className="text-[#C17F4E] font-mono text-[10px] uppercase tracking-widest font-bold">{t.metDetailTitle}</span>
+                      <h3 className={`text-xl sm:text-2xl font-display font-bold uppercase ${themeStyles.title}`}>
+                        {t.metPilarDetailTitles[activePilar]}
                       </h3>
                       <p className={`text-sm leading-relaxed ${themeStyles.textMuted}`}>
-                        {activePilar === 0 && "Descubrimos y documentamos cada fricción operativa. Estudiamos las campañas digitales de anuncios actuales, los tiempos de conversión de tu embudo de ventas y trazamos el plan técnico."}
-                        {activePilar === 1 && "Esquematizamos bases de datos rápidas no relacionales en la nube para resguardar flujos transaccionales e información gerencial, blindados con rigurosas políticas de seguridad."}
-                        {activePilar === 2 && "Codificamos módulos bajo las mejores prácticas, sin redundancias ni pesos muertos, logrando un posicionamiento SEO excepcional de cara a motores de búsqueda."}
-                        {activePilar === 3 && "Enlazamos la información al instante con WhatsApp Business para agendamientos ágiles y con la API de conversión de Meta para maximizar el retorno de tu pauta publicitaria."}
+                        {t.metPilarDetailSubs[activePilar]}
                       </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5 mt-6">
                       <div>
-                        <h5 className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">Métrica Clave</h5>
+                        <h5 className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">{t.metMetricTitle}</h5>
                         <p className="font-mono text-xs font-bold text-[#C17F4E]">
-                          {activePilar === 0 && "Incertidumbre Cero"}
-                          {activePilar === 1 && "23ms Firestore Sync"}
-                          {activePilar === 2 && "98+ Lighthouse Score"}
-                          {activePilar === 3 && "99.98% Uptime"}
+                          {t.metPilarMetrics[activePilar]}
                         </p>
                       </div>
                       <div>
-                        <h5 className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">Estado v5.0</h5>
+                        <h5 className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">{t.metStatusTitle}</h5>
                         <p className="font-mono text-xs font-bold text-emerald-500">OPTIMAL MODULE</p>
                       </div>
                     </div>
@@ -1168,12 +1674,12 @@ export default function App() {
             {/* --- HERO TECNOLÓGICO --- */}
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <div className="max-w-4xl">
-                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Fierros y Arquitectura</span>
-                <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white uppercase mt-3 leading-none">
-                  NUESTRO STACK <br/> Y SOLUCIONES DE ÉLITE
+                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.servBadge}</span>
+                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
+                  {t.servTitle}
                 </h1>
                 <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl ${themeStyles.textMuted}`}>
-                  Infraestructura robusta desarrollada con React, TypeScript y bases de datos cloud escalables para automatizar la captación de valor.
+                  {t.servSub}
                 </p>
               </div>
 
@@ -1186,13 +1692,13 @@ export default function App() {
                     <div className="w-12 h-12 rounded bg-[#C17F4E]/10 flex items-center justify-center text-[#C17F4E] mb-6">
                       <Cpu className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display font-bold text-lg text-white uppercase mb-3">Modelos de IA Personalizados</h3>
+                    <h3 className={`font-display font-bold text-lg uppercase mb-3 ${themeStyles.title}`}>{t.servCard1Title}</h3>
                     <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                      Algoritmos de aprendizaje predictivos e inteligentes estructurados en la nube para proyectar inventarios y preclasificar intención de prospectos calificados.
+                      {t.servCard1Sub}
                     </p>
                   </div>
                   <div className="pt-6 border-t border-white/5 mt-6 font-mono text-[10px] text-zinc-500">
-                    INTEGRACIONES DE APRENDIZAJE • CLOUD DEEP RUN
+                    {t.servCard1Foot}
                   </div>
                 </div>
 
@@ -1202,13 +1708,13 @@ export default function App() {
                     <div className="w-12 h-12 rounded bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
                       <Code2 className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display font-bold text-lg text-white uppercase mb-3">Estructuras Web Robustas</h3>
+                    <h3 className={`font-display font-bold text-lg uppercase mb-3 ${themeStyles.title}`}>{t.servCard2Title}</h3>
                     <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                      Aplicaciones de altísimo performance en React, optimizando la experiencia móvil de cara a tus clientes para maximizar la pauta de anuncios comerciales.
+                      {t.servCard2Sub}
                     </p>
                   </div>
                   <div className="pt-6 border-t border-white/5 mt-6 font-mono text-[10px] text-zinc-500">
-                    REACT 19 • GOOGLE CLOUD STORAGE • VITE ENGINE
+                    {t.servCard2Foot}
                   </div>
                 </div>
 
@@ -1218,13 +1724,13 @@ export default function App() {
                     <div className="w-12 h-12 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6">
                       <Database className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display font-bold text-lg text-white uppercase mb-3">Conectores de Conversión</h3>
+                    <h3 className={`font-display font-bold text-lg uppercase mb-3 ${themeStyles.title}`}>{t.servCard3Title}</h3>
                     <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                      Canales estables conectados a Meta Business Suite y WhatsApp API para alimentar datos en tiempo real de visitas y carritos, multiplicando ventas efectivas.
+                      {t.servCard3Sub}
                     </p>
                   </div>
                   <div className="pt-6 border-t border-white/5 mt-6 font-mono text-[10px] text-zinc-500">
-                    META GRAPH API • WHATSAPP CRM HOOKS
+                    {t.servCard3Foot}
                   </div>
                 </div>
 
@@ -1232,15 +1738,15 @@ export default function App() {
             </section>
 
             {/* --- SOLUCIÓN CONFIGURATOR INTERACTIVO --- */}
-            <section className={`py-20 px-6 sm:px-10 lg:px-16 border-t ${isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+            <section className={`py-20 px-6 sm:px-10 lg:px-16 border-t ${isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-[#EAE6DB] border-[#D0C9B8]'}`}>
               <div className="max-w-7xl mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Configurador Inteligente</span>
-                  <h2 className="font-display font-bold text-3xl sm:text-4xl text-white uppercase mt-2">
-                    Crea tu Ecosistema Técnico
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.confBadge}</span>
+                  <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    {t.confTitle}
                   </h2>
                   <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    Selecciona los módulos tecnológicos que demanda tu negocio y obtén una estimación de recursos y tiempos del Ingeniero Principal.
+                    {t.confSub}
                   </p>
                 </div>
 
@@ -1250,6 +1756,9 @@ export default function App() {
                   <div className="lg:col-span-7 flex flex-col gap-4">
                     {MODULES.map((m) => {
                       const isSelected = selectedModules.includes(m.id);
+                      const translatedName = lang === 'es' ? m.name : (m.id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : m.id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : m.id === 'custom_ml' ? 'Custom AI & ML Model' : m.id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync');
+                      const translatedDesc = lang === 'es' ? m.description : (m.id === 'meta_b2c' ? 'Automated inventory sync to Meta Graph API, conversion pixels, and Instagram lookbooks.' : m.id === 'landing_crm' ? 'Ultra-fast design optimized for conversion with SEO indexing and native CRM connection.' : m.id === 'custom_ml' ? 'Predictive cognitive models trained with your business data to forecast demand or automate flows.' : m.id === 'whatsapp_flow' ? 'Smart automated customer care with hybrid AI agents to answer stock queries and book appointments.' : 'Real-time interactive panel for management administration with high-speed NoSQL database.');
+                      const translatedCat = lang === 'es' ? m.category : (m.category === 'Ventas e Integraciones' ? 'Sales & Integrations' : m.category === 'Infraestructura Web' ? 'Web Infrastructure' : 'Artificial Intelligence');
                       return (
                         <div
                           key={m.id}
@@ -1257,7 +1766,7 @@ export default function App() {
                           className={`p-5 rounded-lg border cursor-pointer transition-all flex items-start gap-4 ${
                             isSelected
                               ? 'border-[#C17F4E] bg-[#C17F4E]/5 shadow-md'
-                              : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-750' : 'border-slate-200 bg-white hover:border-slate-300 shadow-sm'
+                              : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-750' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:border-[#CAC6B7] shadow-sm'
                           }`}
                         >
                           <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center transition-all ${
@@ -1267,14 +1776,14 @@ export default function App() {
                           </div>
                           <div className="flex-1">
                             <div className="flex justify-between items-baseline flex-wrap gap-2">
-                              <h4 className="font-display font-bold text-sm text-white uppercase tracking-wider">{m.name}</h4>
+                              <h4 className={`font-display font-bold text-sm uppercase tracking-wider ${isDark ? 'text-white' : 'text-[#020813]'}`}>{translatedName}</h4>
                               <span className="font-mono text-xs text-[#C17F4E] font-semibold">${m.price} USD</span>
                             </div>
-                            <p className="text-xs text-zinc-500 font-sans mt-1 leading-relaxed">{m.description}</p>
+                            <p className="text-xs text-zinc-500 font-sans mt-1 leading-relaxed">{translatedDesc}</p>
                             <div className="flex gap-4 mt-2.5">
-                              <span className="font-mono text-[10px] text-zinc-500 uppercase">TIEMPO ESTIMADO: {m.durationWeeks} SEMANAS</span>
+                              <span className="font-mono text-[10px] text-zinc-500 uppercase">{lang === 'es' ? 'TIEMPO ESTIMADO' : 'ESTIMATED TIME'}: {m.durationWeeks} {lang === 'es' ? 'SEMANAS' : 'WEEKS'}</span>
                               <span className="font-mono text-[10px] text-zinc-500 uppercase">•</span>
-                              <span className="font-mono text-[10px] text-zinc-500 uppercase">{m.category}</span>
+                              <span className="font-mono text-[10px] text-zinc-500 uppercase">{translatedCat}</span>
                             </div>
                           </div>
                         </div>
@@ -1285,23 +1794,23 @@ export default function App() {
                   {/* Calculations and CTA Card (Right 5 Columns) */}
                   <div className="lg:col-span-5">
                     <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                      <h3 className="font-display font-bold text-sm text-white uppercase tracking-widest border-b border-white/5 pb-4 mb-6">
-                        RESUMEN DE INFRAESTRUCTURA
+                      <h3 className={`font-display font-bold text-sm uppercase tracking-widest border-b border-white/5 pb-4 mb-6 ${themeStyles.title}`}>
+                        {t.confSumTitle}
                       </h3>
 
                       <div className="space-y-4">
                         <div className="flex justify-between font-sans">
-                          <span className="text-xs text-zinc-500 font-semibold uppercase">Módulos Solicitados</span>
-                          <span className="text-xs font-mono text-white font-bold">{selectedModules.length}</span>
+                          <span className="text-xs text-zinc-500 font-semibold uppercase">{t.confSumMod}</span>
+                          <span className={`text-xs font-mono font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>{selectedModules.length}</span>
                         </div>
                         
                         <div className="flex justify-between font-sans">
-                          <span className="text-xs text-zinc-500 font-semibold uppercase">Tiempo de Producción</span>
-                          <span className="text-xs font-mono text-white font-bold">~ {configuratorDuration} semanas</span>
+                          <span className="text-xs text-zinc-500 font-semibold uppercase">{t.confSumTime}</span>
+                          <span className={`text-xs font-mono font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>~ {configuratorDuration} {t.confSumTimeWeeks}</span>
                         </div>
 
                         <div className="pt-4 border-t border-white/5 flex justify-between items-baseline mt-4">
-                          <span className="text-xs font-mono font-bold uppercase text-zinc-400">Presupuesto Estimado</span>
+                          <span className="text-xs font-mono font-bold uppercase text-zinc-400">{t.confSumBudget}</span>
                           <span className="text-3xl font-mono text-[#C17F4E] font-black">${configuratorTotal} <span className="text-xs text-zinc-500 font-sans">USD</span></span>
                         </div>
 
@@ -1315,7 +1824,7 @@ export default function App() {
                                 : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                             }`}
                           >
-                            <span>PROCEDER AL ONBOARDING</span>
+                            <span>{t.confSumCta}</span>
                             <ArrowRight className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -1342,34 +1851,34 @@ export default function App() {
                 onClick={() => setPortfolioTab('casos')}
                 className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
                   portfolioTab === 'casos' 
-                    ? 'text-white border-b-2 border-[#C17F4E]' 
-                    : 'hover:text-white'
+                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
                 }`}
               >
                 <FolderKanban className="w-4 h-4" />
-                Casos de Éxito & Onboarding
+                {t.tab1}
               </button>
               <button 
                 onClick={() => setPortfolioTab('forms')}
                 className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
                   portfolioTab === 'forms' 
-                    ? 'text-white border-b-2 border-[#C17F4E]' 
-                    : 'hover:text-white'
+                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
                 }`}
               >
                 <FileText className="w-4 h-4" />
-                Google Forms Sync
+                {t.tab2}
               </button>
               <button 
                 onClick={() => setPortfolioTab('leads')}
                 className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
                   portfolioTab === 'leads' 
-                    ? 'text-white border-b-2 border-[#C17F4E]' 
-                    : 'hover:text-white'
+                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
-                Leads Recibidos (CRM)
+                {t.tab3}
               </button>
             </div>
 
@@ -1379,71 +1888,19 @@ export default function App() {
                 {/* --- GALLERY CASOS DE ÉXITO --- */}
                 <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
                   <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Showcase Real</span>
-                    <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-white uppercase mt-2">
-                      CASOS DE ÉXITO MAX AI
+                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.csBadge}</span>
+                    <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 ${themeStyles.title}`}>
+                      {t.csTitle}
                     </h1>
                     <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                      Plataformas reales y estables producidas bajo ingeniería de alto desempeño para marcas sofisticadas.
+                      {t.csSub}
                     </p>
                   </div>
 
                   {/* Grid of Case Studies */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
                     {CASE_STUDIES.map((c, i) => (
-                      <div key={i} className={`rounded-xl border flex flex-col justify-between overflow-hidden ${themeStyles.card}`}>
-                        <div>
-                          {/* Responsive Image */}
-                          <div className="relative h-48 overflow-hidden bg-zinc-950">
-                            <img 
-                              src={c.image} 
-                              alt={c.client} 
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
-                            />
-                            <div className="absolute top-4 left-4 bg-[#C17F4E] text-white font-mono text-[9px] font-bold uppercase px-2 py-1 rounded tracking-widest">
-                              {c.category}
-                            </div>
-                          </div>
-
-                          <div className="p-6">
-                            <h3 className="font-display font-black text-lg text-white uppercase leading-none">{c.client}</h3>
-                            <p className="text-xs text-[#C17F4E] font-mono font-semibold mt-1 mb-3">{c.tagline}</p>
-                            <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed mb-4 ${themeStyles.textMuted}`}>{c.description}</p>
-                            
-                            <div className="space-y-1 bg-black/40 p-3 rounded border border-white/5 mb-4">
-                              <p className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">Métricas Auditadas</p>
-                              {c.kpis.map((k, kIdx) => (
-                                <div key={kIdx} className="flex gap-2 items-center text-[11px] font-mono text-zinc-300">
-                                  <span className="text-[#C17F4E] font-black">✓</span> {k}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-6 pt-0 border-t border-white/5 mt-auto flex items-center justify-between">
-                          <div className="flex gap-1.5 flex-wrap">
-                            {c.stack.map((s, sIdx) => (
-                              <span key={sIdx} className="text-[9px] font-mono bg-zinc-950/80 px-2 py-0.5 rounded text-zinc-400">
-                                {s}
-                              </span>
-                            ))}
-                          </div>
-                          
-                          {c.url !== '#' && (
-                            <a 
-                              href={c.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1 text-[#C17F4E] hover:text-[#D79663] transition-colors"
-                              title="Visitar Staging"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                      </div>
+                      <CaseStudyCard key={i} c={c} isDark={isDark} themeStyles={themeStyles} lang={lang} />
                     ))}
                   </div>
                 </section>
@@ -1453,22 +1910,22 @@ export default function App() {
                   <div className="max-w-3xl mx-auto">
                     
                     <div className="text-center mb-12">
-                      <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Onboarding Exclusivo</span>
-                      <h2 className="font-display font-bold text-3xl text-white uppercase mt-2">
-                        Iniciar Protocolo de Diagnóstico
+                      <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.onbBadge}</span>
+                      <h2 className={`font-display font-bold text-3xl uppercase mt-2 ${themeStyles.title}`}>
+                        {t.onbTitle}
                       </h2>
                       <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                        Toma 2 minutos configurar tu perfil para agendar una llamada directa de validación arquitectónica.
+                        {t.onbSub}
                       </p>
                     </div>
 
                     {/* Form Progress Indicator Header */}
                     <div className="flex items-center justify-between mb-8 px-4 font-mono text-[10px] tracking-wider text-zinc-500 border-b border-white/5 pb-4">
                       {[
-                        { step: 1, label: 'Negocio' },
-                        { step: 2, label: 'Fricciones' },
-                        { step: 3, label: 'Infraestructura' },
-                        { step: 4, label: 'Contacto' }
+                        { step: 1, label: t.onbSteps[0] },
+                        { step: 2, label: t.onbSteps[1] },
+                        { step: 3, label: t.onbSteps[2] },
+                        { step: 4, label: t.onbSteps[3] }
                       ].map((s) => (
                         <div key={s.step} className="flex items-center gap-2">
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold ${
@@ -1476,7 +1933,7 @@ export default function App() {
                           }`}>
                             {s.step}
                           </span>
-                          <span className={onboardingStep === s.step ? 'text-white font-bold' : ''}>{s.label}</span>
+                          <span className={onboardingStep === s.step ? `${isDark ? 'text-white' : 'text-[#020813]'} font-bold` : ''}>{s.label}</span>
                         </div>
                       ))}
                     </div>
@@ -1498,25 +1955,31 @@ export default function App() {
                           {/* STEP 1: PERFIL NEGOCIO */}
                           {onboardingStep === 1 && (
                             <div className="space-y-4 fade-in">
-                              <h3 className="font-display font-bold text-base text-white uppercase tracking-wider mb-2">Paso 1: Perfil de tu Marca o Negocio</h3>
+                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep1Title}</h3>
                               
                               <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  Nombre de la Empresa o Marca *
+                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                                  <span>{t.onbStep1Label1}</span>
+                                  {touchedFields.companyName && isCompanyNameValid && (
+                                    <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                                      <Check className="w-3.5 h-3.5" /> {t.onbStep1Val}
+                                    </span>
+                                  )}
                                 </label>
                                 <input
                                   type="text"
                                   value={companyName}
                                   onChange={(e) => setCompanyName(e.target.value)}
+                                  onBlur={() => handleFieldBlur('companyName')}
                                   placeholder="Ej. Amy Tevet TM"
-                                  className={`w-full p-3 rounded ${themeStyles.input}`}
+                                  className={getInputClass('companyName', isCompanyNameValid, themeStyles)}
                                 />
                               </div>
 
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                   <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    Sector / Industria
+                                    {t.onbStep1Label2}
                                   </label>
                                   <select
                                     value={industry}
@@ -1524,14 +1987,14 @@ export default function App() {
                                     className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
                                   >
                                     {['Tecnología', 'Salud y Clínicas', 'Retail / E-commerce', 'Inmobiliaria', 'Educación', 'Servicios Profesionales'].map((ind) => (
-                                      <option key={ind} value={ind} className="bg-[#020813] text-white">{ind}</option>
+                                      <option key={ind} value={ind} className={isDark ? "bg-[#020813] text-white" : "bg-[#FAF8F5] text-slate-800"}>{lang === 'es' ? ind : (ind === 'Tecnología' ? 'Technology' : ind === 'Salud y Clínicas' ? 'Health & Clinics' : ind === 'Retail / E-commerce' ? 'Retail / E-commerce' : ind === 'Inmobiliaria' ? 'Real Estate' : ind === 'Educación' ? 'Education' : 'Professional Services')}</option>
                                     ))}
                                   </select>
                                 </div>
 
                                 <div>
                                   <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    Tamaño del Negocio
+                                    {t.onbStep1Label3}
                                   </label>
                                   <select
                                     value={companySize}
@@ -1539,7 +2002,7 @@ export default function App() {
                                     className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
                                   >
                                     {['1-10 empleados', '11-50 empleados', '51+ empleados'].map((size) => (
-                                      <option key={size} value={size} className="bg-[#020813] text-white">{size}</option>
+                                      <option key={size} value={size} className={isDark ? "bg-[#020813] text-white" : "bg-[#FAF8F5] text-slate-800"}>{lang === 'es' ? size : size.replace('empleados', 'employees')}</option>
                                     ))}
                                   </select>
                                 </div>
@@ -1550,24 +2013,30 @@ export default function App() {
                           {/* STEP 2: CUELLO DE BOTELLA */}
                           {onboardingStep === 2 && (
                             <div className="space-y-4 fade-in">
-                              <h3 className="font-display font-bold text-base text-white uppercase tracking-wider mb-2">Paso 2: Diagnóstico de Fricciones</h3>
+                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep2Title}</h3>
 
                               <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  Cuéntanos tu cuello de botella prioritario *
+                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                                  <span>{t.onbStep2Label1}</span>
+                                  {touchedFields.bottleneck && isBottleneckValid && (
+                                    <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                                      <Check className="w-3.5 h-3.5" /> {t.onbStep2Val}
+                                    </span>
+                                  )}
                                 </label>
                                 <textarea
                                   rows={3}
                                   value={bottleneck}
                                   onChange={(e) => setBottleneck(e.target.value)}
-                                  placeholder="Ej. Mi catálogo no sincroniza automáticamente con Meta Ads y perdemos compras manuales..."
-                                  className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
+                                  onBlur={() => handleFieldBlur('bottleneck')}
+                                  placeholder={lang === 'es' ? 'Ej. Mi catálogo no sincroniza automáticamente con Meta Ads y perdemos compras manuales...' : 'e.g. My catalog does not sync automatically with Meta Ads and we lose manual sales...'}
+                                  className={getInputClass('bottleneck', isBottleneckValid, themeStyles)}
                                 />
                               </div>
 
                               <div>
                                 <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  Grado de madurez digital actual
+                                  {t.onbStep2Label2}
                                 </label>
                                 <div className="grid grid-cols-3 gap-2">
                                   {['Bajo', 'Medio', 'Avanzado'].map((lvl) => (
@@ -1577,11 +2046,11 @@ export default function App() {
                                       onClick={() => setDigitalMaturity(lvl)}
                                       className={`py-2 rounded font-mono text-xs uppercase transition-all border ${
                                         digitalMaturity === lvl
-                                          ? 'border-[#C17F4E] bg-[#C17F4E]/10 text-white font-bold'
-                                          : 'border-white/5 bg-zinc-900/20 text-zinc-400'
+                                          ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}`
+                                          : isDark ? 'border-white/5 bg-zinc-900/20 text-zinc-400' : 'border-slate-200 bg-slate-100 text-slate-600 hover:bg-slate-200/80'
                                       }`}
                                     >
-                                      {lvl}
+                                      {lang === 'es' ? lvl : (lvl === 'Bajo' ? 'Low' : lvl === 'Medio' ? 'Medium' : 'Advanced')}
                                     </button>
                                   ))}
                                 </div>
@@ -1592,29 +2061,30 @@ export default function App() {
                           {/* STEP 3: INFRAESTRUCTURA */}
                           {onboardingStep === 3 && (
                             <div className="space-y-4 fade-in">
-                              <h3 className="font-display font-bold text-base text-white uppercase tracking-wider mb-2">Paso 3: Módulos de Infraestructura</h3>
+                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep3Title}</h3>
                               <p className="text-xs text-zinc-500 font-sans leading-relaxed">
-                                Selecciona los pilares que deseas conectar (los valores sumados se calculan en base a tu cotizador).
+                                {t.onbStep3Sub}
                               </p>
 
                               <div className="space-y-2">
                                 {MODULES.map((m) => {
                                   const checked = selectedModules.includes(m.id);
+                                  const translatedName = lang === 'es' ? m.name : (m.id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : m.id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : m.id === 'custom_ml' ? 'Custom AI & ML Model' : m.id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync');
                                   return (
                                     <div
                                       key={m.id}
                                       onClick={() => toggleModule(m.id)}
                                       className={`p-3 rounded border cursor-pointer flex items-center justify-between text-xs transition-all ${
                                         checked 
-                                          ? 'border-[#C17F4E] bg-[#C17F4E]/10 text-white' 
-                                          : 'border-white/5 bg-zinc-900/10 text-zinc-400'
+                                          ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}` 
+                                          : isDark ? 'border-white/5 bg-zinc-900/10 text-zinc-400' : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-350'
                                       }`}
                                     >
                                       <div className="flex items-center gap-3">
                                         <span className={`w-4 h-4 rounded border flex items-center justify-center ${checked ? 'bg-[#C17F4E] border-[#C17F4E]' : 'border-zinc-500'}`}>
                                           {checked && <Check className="w-2.5 h-2.5 text-white" />}
                                         </span>
-                                        <span>{m.name}</span>
+                                        <span>{translatedName}</span>
                                       </div>
                                       <span className="font-mono text-[#C17F4E] font-semibold">${m.price}</span>
                                     </div>
@@ -1623,7 +2093,7 @@ export default function App() {
                               </div>
 
                               <div className="pt-2 flex justify-between font-mono text-xs text-[#C17F4E] font-bold">
-                                <span>PRESUPUESTO ESTIMADO DE ESTUDIO:</span>
+                                <span>{t.onbStep3Budget}</span>
                                 <span>${configuratorTotal} USD</span>
                               </div>
                             </div>
@@ -1632,58 +2102,96 @@ export default function App() {
                           {/* STEP 4: CONTACT DATA */}
                           {onboardingStep === 4 && (
                             <div className="space-y-4 fade-in">
-                              <h3 className="font-display font-bold text-base text-white uppercase tracking-wider mb-2">Paso 4: Información de Contacto Directo</h3>
+                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep4Title}</h3>
+
+                              {/* Ficha Técnica Resumen para Reducción de Fricción (CRO) */}
+                              <div className={`p-4 rounded-lg border space-y-2 text-xs font-mono mb-4 ${themeStyles.cardInner}`}>
+                                <p className={`text-[10px] text-zinc-500 uppercase tracking-widest font-bold border-b pb-1.5 mb-2 flex items-center justify-between ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
+                                  <span>{t.onbStep4Ficha}</span>
+                                  <span className="text-[#C17F4E]">{t.onbStep4FichaEco}</span>
+                                </p>
+                                <div className="flex justify-between">
+                                  <span className="text-zinc-500">🏢 {lang === 'es' ? 'Negocio' : 'Business'}:</span>
+                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>{companyName || (lang === 'es' ? 'No especificado' : 'Not specified')}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-zinc-500">🛠️ {lang === 'es' ? 'Módulos' : 'Modules'}:</span>
+                                  <span className={`max-w-[220px] text-right truncate ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>
+                                    {selectedModules.map(id => lang === 'es' ? MODULES.find(m => m.id === id)?.name : (id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : id === 'custom_ml' ? 'Custom AI & ML Model' : id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync')).join(', ')}
+                                  </span>
+                                </div>
+                                <div className={`flex justify-between border-t pt-1.5 mt-1.5 font-bold text-[#C17F4E] ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
+                                  <span>💰 {lang === 'es' ? 'Presupuesto estimado' : 'Estimated budget'}:</span>
+                                  <span>${configuratorTotal} USD</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-zinc-500">⏱️ {lang === 'es' ? 'Tiempo estimado' : 'Estimated time'}:</span>
+                                  <span className={isDark ? 'text-zinc-400' : 'text-slate-750'}>~{configuratorDuration} {t.confSumTimeWeeks}</span>
+                                </div>
+                              </div>
 
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    Nombre del Contacto *
+                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                                    <span>{t.onbStep4Label1}</span>
+                                    {touchedFields.contactName && isContactNameValid && (
+                                      <span className="text-emerald-500 text-[10px]">✓</span>
+                                    )}
                                   </label>
                                   <input
                                     type="text"
                                     value={contactName}
                                     onChange={(e) => setContactName(e.target.value)}
-                                    placeholder="Ej. Psic. Damaris Pazmiño"
-                                    className={`w-full p-3 rounded ${themeStyles.input}`}
+                                    onBlur={() => handleFieldBlur('contactName')}
+                                    placeholder={lang === 'es' ? 'Ej. Psic. Damaris Pazmiño' : 'e.g. Dr. Jane Doe'}
+                                    className={getInputClass('contactName', isContactNameValid, themeStyles)}
                                   />
                                 </div>
 
                                 <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    Correo Electrónico *
+                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                                    <span>{t.onbStep4Label2}</span>
+                                    {touchedFields.contactEmail && isContactEmailValid && (
+                                      <span className="text-emerald-500 text-[10px]">✓</span>
+                                    )}
                                   </label>
                                   <input
                                     type="email"
                                     value={contactEmail}
                                     onChange={(e) => setContactEmail(e.target.value)}
+                                    onBlur={() => handleFieldBlur('contactEmail')}
                                     placeholder="contacto@empresa.com"
-                                    className={`w-full p-3 rounded ${themeStyles.input}`}
+                                    className={getInputClass('contactEmail', isContactEmailValid, themeStyles)}
                                   />
                                 </div>
                               </div>
 
                               <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  WhatsApp directo (Ej. +593983186044) *
+                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                                  <span>{t.onbStep4Label3}</span>
+                                  {touchedFields.contactPhone && isContactPhoneValid && (
+                                    <span className="text-emerald-500 text-[10px]">✓ {lang === 'es' ? 'Teléfono Válido' : 'Valid Phone'}</span>
+                                  )}
                                 </label>
                                 <input
                                   type="text"
                                   value={contactPhone}
                                   onChange={(e) => setContactPhone(e.target.value)}
-                                  placeholder="+593"
-                                  className={`w-full p-3 rounded ${themeStyles.input}`}
+                                  onBlur={() => handleFieldBlur('contactPhone')}
+                                  placeholder={lang === 'es' ? 'Ej. +593983186044' : 'e.g. +1234567890'}
+                                  className={getInputClass('contactPhone', isContactPhoneValid, themeStyles)}
                                 />
                               </div>
 
                               <div>
                                 <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  Comentarios sobre Google Maps / APIs
+                                  {t.onbStep4Label4}
                                 </label>
                                 <textarea
                                   rows={2}
                                   value={customMessage}
                                   onChange={(e) => setCustomMessage(e.target.value)}
-                                  placeholder="Alguna preferencia para la pasarela de pagos, geolocalización o APIs..."
+                                  placeholder={lang === 'es' ? 'Alguna preferencia para la pasarela de pagos, geolocalización o APIs...' : 'Any preferences for payment gateway, geolocation or APIs...'}
                                   className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
                                 />
                               </div>
@@ -1691,36 +2199,44 @@ export default function App() {
                           )}
 
                           {/* Navigation Stepper buttons footer */}
-                          <div className="flex justify-between items-center pt-6 border-t border-white/5">
-                            {onboardingStep > 1 ? (
-                              <button
-                                type="button"
-                                onClick={handlePrevStep}
-                                className="px-5 py-2.5 rounded border border-white/5 text-zinc-400 hover:bg-white/5 font-mono text-xs uppercase"
-                              >
-                                <span>Atrás</span>
-                              </button>
-                            ) : (
-                              <div></div>
-                            )}
+                          <div className="flex flex-col gap-4 pt-6 border-t border-white/5">
+                            <div className="flex justify-between items-center w-full">
+                              {onboardingStep > 1 ? (
+                                <button
+                                  type="button"
+                                  onClick={handlePrevStep}
+                                  className="px-5 py-2.5 rounded border border-white/5 text-zinc-400 hover:bg-white/5 font-mono text-xs uppercase transition-colors"
+                                >
+                                  <span>{t.onbBtnBack}</span>
+                                </button>
+                              ) : (
+                                <div></div>
+                              )}
 
-                            {onboardingStep < 4 ? (
-                              <button
-                                type="button"
-                                onClick={handleNextStep}
-                                className="bg-[#C17F4E] hover:bg-[#D79663] text-white px-6 py-2.5 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5"
-                              >
-                                <span>Siguiente</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
-                              </button>
-                            ) : (
-                              <button
-                                type="submit"
-                                className="bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white px-8 py-3 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-[#C17F4E]/25"
-                              >
-                                <span>CONECTAR POR WHATSAPP</span>
-                                <Send className="w-3.5 h-3.5" />
-                              </button>
+                              {onboardingStep < 4 ? (
+                                <button
+                                  type="button"
+                                  onClick={handleNextStep}
+                                  className="bg-[#C17F4E] hover:bg-[#D79663] text-white px-6 py-2.5 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-colors"
+                                >
+                                  <span>{t.onbBtnNext}</span>
+                                  <ArrowRight className="w-3.5 h-3.5" />
+                                </button>
+                              ) : (
+                                <button
+                                  type="submit"
+                                  className="bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white px-8 py-3 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-[#C17F4E]/25 transition-all transform hover:-translate-y-0.5"
+                                >
+                                  <span>{t.onbBtnSubmit}</span>
+                                  <Send className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+
+                            {onboardingStep === 4 && (
+                              <p className="text-[10px] text-center text-zinc-500 font-sans tracking-wide">
+                                {t.onbStep4Privacy}
+                              </p>
                             )}
                           </div>
 
@@ -1731,16 +2247,16 @@ export default function App() {
                           <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
                             <CheckCircle2 className="w-10 h-10" />
                           </div>
-                          <h3 className="font-display font-black text-xl uppercase text-white">¡Protocolo Compilado!</h3>
+                          <h3 className={`font-display font-black text-xl uppercase ${themeStyles.title}`}>{t.onbSuccessTitle}</h3>
                           <p className={`text-xs sm:text-sm max-w-md mx-auto leading-relaxed ${themeStyles.textMuted}`}>
-                            Tu solicitud se ha estructurado con éxito. Se ha inicializado una redirección segura hacia el WhatsApp del Ingeniero Principal para validar la infraestructura técnica de tu marca.
+                            {t.onbSuccessSub}
                           </p>
                           <div className="flex gap-4 justify-center">
                             <button
                               onClick={resetForm}
                               className="px-5 py-2.5 border border-[#C17F4E] text-[#C17F4E] rounded text-xs font-mono uppercase font-bold"
                             >
-                              Reiniciar Formulario
+                              {t.onbSuccessReset}
                             </button>
                             <a
                               href="https://wa.me/593983186044"
@@ -1748,7 +2264,7 @@ export default function App() {
                               rel="noopener noreferrer"
                               className="px-5 py-2.5 bg-[#C17F4E] text-white rounded text-xs font-mono uppercase font-bold hover:bg-[#D79663]"
                             >
-                              Ir a WhatsApp
+                              {t.onbSuccessWa}
                             </a>
                           </div>
                         </div>
@@ -1764,12 +2280,12 @@ export default function App() {
             {portfolioTab === 'forms' && (
               <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">Google Forms Integration</span>
-                  <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-white uppercase mt-2">
-                    Sincronizador Google Forms
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.gfBadge}</span>
+                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    {t.gfTitle}
                   </h1>
                   <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    Sincroniza tus formularios de Google Workspace con nuestro motor NoSQL. Genera análisis en tiempo real y gestiona prospectos corporativos.
+                    {t.gfSub}
                   </p>
                 </div>
 
@@ -1779,9 +2295,9 @@ export default function App() {
                     <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
                       <FileText className="w-8 h-8" />
                     </div>
-                    <h3 className="font-display font-black text-xl text-white uppercase mb-3">Conectar Google Workspace</h3>
+                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>{t.gfNoAuthTitle}</h3>
                     <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
-                      Autentícate de forma segura con tu cuenta de Google para otorgarle a MAX AI acceso a tus formularios y sincronizar respuestas en tiempo real.
+                      {t.gfNoAuthSub}
                     </p>
                     <button
                       onClick={handleGoogleSignIn}
@@ -1793,7 +2309,7 @@ export default function App() {
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                       </svg>
-                      <span>Iniciar Sesión con Google</span>
+                      <span>{t.gfNoAuthBtn}</span>
                     </button>
                     {formsError && (
                       <p className="text-red-400 font-mono text-xs mt-4">{formsError}</p>
@@ -1814,12 +2330,12 @@ export default function App() {
                           </div>
                         )}
                         <div className="text-left">
-                          <h3 className="font-display font-bold text-sm text-white uppercase">{currentUser.displayName || 'Usuario Google'}</h3>
+                          <h3 className={`font-display font-bold text-sm uppercase ${themeStyles.title}`}>{currentUser.displayName || 'Usuario Google'}</h3>
                           <p className="text-xs text-zinc-500 font-mono">{currentUser.email}</p>
                         </div>
                       </div>
                       <div className="flex gap-4 items-center">
-                        <span className="font-mono text-[9px] text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded tracking-wider">WORKSPACE CONNECTED</span>
+                        <span className="font-mono text-[9px] text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded tracking-wider">{t.gfAuthStatus}</span>
                         <button
                           onClick={handleSignOut}
                           className="p-2 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
@@ -1836,14 +2352,14 @@ export default function App() {
                         
                         {/* Enlazar Form */}
                         <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                          <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 flex items-center gap-2 ${themeStyles.title}`}>
                             <Plus className="w-4 h-4 text-[#C17F4E]" />
-                            Conectar Formulario de Google
+                            {t.gfConnectTitle}
                           </h4>
                           <form onSubmit={handleConnectForm} className="space-y-4">
                             <div>
                               <label className="block text-[10px] uppercase font-mono tracking-wider text-zinc-500 mb-2">
-                                ID del Formulario en Google Forms
+                                {t.gfConnectLabel}
                               </label>
                               <div className="flex gap-2">
                                 <input
@@ -1858,7 +2374,7 @@ export default function App() {
                                   disabled={isLoadingForms}
                                   className="bg-[#C17F4E] hover:bg-[#D79663] text-white px-4 rounded text-xs font-mono font-bold uppercase disabled:opacity-50 cursor-pointer"
                                 >
-                                  {isLoadingForms ? '...' : 'Enlazar'}
+                                  {isLoadingForms ? '...' : t.gfConnectBtn}
                                 </button>
                               </div>
                             </div>
@@ -1868,28 +2384,28 @@ export default function App() {
                         {/* Crear Form Express */}
                         <div className={`p-6 rounded-xl border border-dashed border-[#C17F4E]/30 bg-[#C17F4E]/5 text-center`}>
                           <Zap className="w-6 h-6 text-[#C17F4E] mx-auto mb-3" />
-                          <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider mb-2">
-                            Creación Express de Diagnóstico
+                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-2 ${themeStyles.title}`}>
+                            {t.gfExpressTitle}
                           </h4>
                           <p className="text-[11px] text-zinc-400 leading-relaxed mb-4 font-sans">
-                            MAX AI creará un formulario en tu Google Drive estructurado con preguntas de cualificación para prospectos corporativos y lo enlazará automáticamente.
+                            {t.gfExpressSub}
                           </p>
                           <button
                             onClick={handleCreateAutoForm}
                             disabled={isCreatingForm}
                             className="w-full bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white py-2.5 rounded text-xs font-mono font-bold uppercase tracking-widest disabled:opacity-50 cursor-pointer"
                           >
-                            {isCreatingForm ? 'Creando en Google...' : 'Generar Formulario 1-Click'}
+                            {isCreatingForm ? t.gfExpressBtn2 : t.gfExpressBtn1}
                           </button>
                         </div>
 
                         {/* Lista de Forms Conectados */}
                         <div className={`p-6 rounded-xl border flex-1 ${themeStyles.card}`}>
-                          <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider mb-4">
-                            Formularios Enlazados ({connectedForms.length})
+                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 ${themeStyles.title}`}>
+                            {t.gfLinkedTitle} ({connectedForms.length})
                           </h4>
                           {connectedForms.length === 0 ? (
-                            <p className="text-[11px] text-zinc-500 font-sans italic">No has conectado ningún formulario todavía.</p>
+                            <p className="text-[11px] text-zinc-500 font-sans italic">{t.gfLinkedEmpty}</p>
                           ) : (
                             <div className="space-y-2 max-h-60 overflow-y-auto">
                               {connectedForms.map((f) => (
@@ -1898,8 +2414,8 @@ export default function App() {
                                   onClick={() => setSelectedFormId(f.formId)}
                                   className={`w-full p-3 rounded text-left flex items-center justify-between border text-xs transition-all ${
                                     selectedFormId === f.formId
-                                      ? 'border-[#C17F4E] bg-[#C17F4E]/10 text-white font-bold'
-                                      : 'border-white/5 bg-zinc-900/15 text-zinc-400 hover:bg-zinc-900/30'
+                                      ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}`
+                                      : isDark ? 'border-white/5 bg-zinc-900/15 text-zinc-400 hover:bg-zinc-900/30' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
                                   }`}
                                 >
                                   <div className="truncate flex-1 pr-2">
@@ -1927,8 +2443,8 @@ export default function App() {
                         {!selectedFormId ? (
                           <div className={`p-12 rounded-xl border text-center h-full flex flex-col justify-center items-center ${themeStyles.card}`}>
                             <HelpCircle className="w-12 h-12 text-zinc-600 mb-4" />
-                            <h5 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">Ningún Formulario Seleccionado</h5>
-                            <p className="text-xs text-zinc-500 font-sans max-w-sm">Conecta un formulario existente ingresando su identificador o presiona el botón de generación express de 1-click.</p>
+                            <h5 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">{t.gfNoSelectedTitle}</h5>
+                            <p className="text-xs text-zinc-500 font-sans max-w-sm">{t.gfNoSelectedSub}</p>
                           </div>
                         ) : (
                           <div className="space-y-6">
@@ -1937,8 +2453,8 @@ export default function App() {
                             <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
                               <div className="flex justify-between items-start gap-4 mb-4">
                                 <div className="text-left">
-                                  <span className="text-zinc-500 font-mono text-[9px] uppercase tracking-wider block">Formulario Activo</span>
-                                  <h3 className="font-display font-black text-lg text-white uppercase mt-1 leading-tight">
+                                  <span className="text-zinc-500 font-mono text-[9px] uppercase tracking-wider block">{t.gfActiveTitle}</span>
+                                  <h3 className={`font-display font-black text-lg uppercase mt-1 leading-tight ${themeStyles.title}`}>
                                     {activeFormDetails?.info?.title || 'Cargando formulario de Google...'}
                                   </h3>
                                   <p className="text-[10px] text-zinc-500 font-mono truncate max-w-md mt-1">ID: {selectedFormId}</p>
@@ -1964,20 +2480,20 @@ export default function App() {
                                 </div>
                               </div>
 
-                              <div className="grid grid-cols-3 gap-4 border-t border-white/5 pt-4">
-                                <div className="bg-black/20 p-3 rounded border border-white/5 text-center">
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">Respuestas</span>
-                                  <span className="font-mono text-lg font-bold text-white">{activeFormResponses.length}</span>
+                               <div className={`grid grid-cols-3 gap-4 border-t pt-4 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
+                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
+                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveResponses}</span>
+                                  <span className={`font-mono text-lg font-bold ${themeStyles.title}`}>{activeFormResponses.length}</span>
                                 </div>
-                                <div className="bg-black/20 p-3 rounded border border-white/5 text-center">
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">Estado Sync</span>
+                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
+                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveSync}</span>
                                   <span className="font-mono text-[10px] font-bold text-emerald-500 flex items-center justify-center gap-1 mt-1">
                                     <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                                     ONLINE
                                   </span>
                                 </div>
-                                <div className="bg-black/20 p-3 rounded border border-white/5 text-center">
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">Preguntas</span>
+                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
+                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveQuestions}</span>
                                   <span className="font-mono text-lg font-bold text-[#C17F4E]">
                                     {activeFormDetails?.items?.length || 0}
                                   </span>
@@ -1987,24 +2503,24 @@ export default function App() {
 
                             {/* visualizador de Respuestas en Tiempo Real */}
                             <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                              <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider mb-4 flex justify-between items-center">
-                                <span>Respuestas Recientes ({activeFormResponses.length})</span>
-                                <span className="text-[9px] text-zinc-500 font-mono font-normal">Sincronización Live</span>
+                              <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 flex justify-between items-center ${themeStyles.title}`}>
+                                <span>{t.gfRecentResponses} ({activeFormResponses.length})</span>
+                                <span className="text-[9px] text-zinc-500 font-mono font-normal">{t.gfRecentResponsesSync}</span>
                               </h4>
                               
                               {activeFormResponses.length === 0 ? (
                                 <div className="text-center py-8">
-                                  <p className="text-xs text-zinc-500 font-sans italic">Tu formulario no tiene ninguna respuesta todavía.</p>
-                                  <p className="text-[10px] text-zinc-600 font-sans mt-1">Comparte el enlace del formulario para recibir solicitudes de leads.</p>
+                                  <p className="text-xs text-zinc-500 font-sans italic">{t.gfRecentResponsesEmpty}</p>
+                                  <p className="text-[10px] text-zinc-600 font-sans mt-1">{t.gfRecentResponsesEmptySub}</p>
                                 </div>
                               ) : (
                                 <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
                                   {activeFormResponses.map((resp: any, rIdx) => {
                                     const timestamp = resp.lastSubmittedTime ? new Date(resp.lastSubmittedTime).toLocaleDateString() : 'N/A';
                                     return (
-                                      <div key={rIdx} className="bg-black/40 p-4 rounded border border-white/5 space-y-2 text-left text-xs">
-                                        <div className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
-                                          <span className="text-[#C17F4E] font-bold">RESPUESTA #{activeFormResponses.length - rIdx}</span>
+                                      <div key={rIdx} className={`p-4 rounded border space-y-2 text-left text-xs ${themeStyles.cardInner}`}>
+                                        <div className={`flex justify-between items-center text-[10px] font-mono border-b pb-1 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
+                                          <span className="text-[#C17F4E] font-bold">{t.gfRecentResponsesTag} #{activeFormResponses.length - rIdx}</span>
                                           <span className="text-zinc-500">{timestamp}</span>
                                         </div>
                                         <div className="space-y-1">
@@ -2016,7 +2532,7 @@ export default function App() {
                                             return (
                                               <p key={ansKey} className="text-[11px] font-sans leading-relaxed">
                                                 <span className="text-zinc-500 font-medium block">{questionTitle}:</span>
-                                                <span className="text-zinc-300 block pl-2 border-l border-[#C17F4E]/30">{answersList || 'N/A'}</span>
+                                                <span className={`block pl-2 border-l border-[#C17F4E]/30 ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>{answersList || 'N/A'}</span>
                                               </p>
                                             );
                                           })}
@@ -2042,12 +2558,12 @@ export default function App() {
             {portfolioTab === 'leads' && (
               <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">CRM Corporativo</span>
-                  <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-white uppercase mt-2">
-                    Leads Recibidos
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.crmBadge}</span>
+                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    {t.crmTitle}
                   </h1>
                   <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    Bandeja de entrada en tiempo real con las cotizaciones de tu onboarding configuradas en Firestore.
+                    {t.crmSub}
                   </p>
                 </div>
 
@@ -2056,15 +2572,15 @@ export default function App() {
                     <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
                       <Users className="w-8 h-8" />
                     </div>
-                    <h3 className="font-display font-black text-xl text-white uppercase mb-3">Acceso al CRM</h3>
+                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>{t.crmNoAuthTitle}</h3>
                     <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
-                      Inicia sesión de forma segura para revisar las propuestas de diagnóstico y presupuestos estimados.
+                      {t.crmNoAuthSub}
                     </p>
                     <button
                       onClick={handleGoogleSignIn}
                       className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
                     >
-                      Iniciar Sesión con Google
+                      {t.gfNoAuthBtn}
                     </button>
                   </div>
                 ) : (
@@ -2072,8 +2588,8 @@ export default function App() {
                     {receivedLeads.length === 0 ? (
                       <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
                         <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                        <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">No se encontraron leads</h4>
-                        <p className="text-xs text-zinc-500 font-sans">Los leads que configures y envíes en el protocolo de Onboarding aparecerán aquí instantáneamente.</p>
+                        <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">{t.crmEmpty}</h4>
+                        <p className="text-xs text-zinc-500 font-sans">{t.crmEmptySub}</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -2090,28 +2606,28 @@ export default function App() {
                                 </div>
 
                                 <div>
-                                  <h4 className="font-display font-black text-base text-white uppercase tracking-tight leading-tight">{lead.companyName}</h4>
-                                  <p className="text-[9px] text-zinc-500 font-mono mt-1">Fecha: {dateStr}</p>
+                                  <h4 className={`font-display font-black text-base uppercase tracking-tight leading-tight ${themeStyles.title}`}>{lead.companyName}</h4>
+                                  <p className="text-[9px] text-zinc-500 font-mono mt-1">{t.crmCardDate}: {dateStr}</p>
                                 </div>
 
-                                <div className="space-y-1.5 bg-black/30 p-3 rounded border border-white/5 text-[11px] font-sans">
-                                  <p className="text-zinc-400 font-light"><strong className="text-zinc-300 font-medium">Cuello de Botella:</strong> {lead.bottleneck}</p>
-                                  <p className="text-zinc-400 font-light"><strong className="text-zinc-300 font-medium">Presupuesto:</strong> ${lead.configuratorTotal} USD</p>
-                                  <p className="text-zinc-400 font-light"><strong className="text-zinc-300 font-medium">Plazo:</strong> {lead.configuratorDuration} semanas</p>
+                                <div className={`space-y-1.5 p-3 rounded border text-[11px] font-sans ${themeStyles.cardInner}`}>
+                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Cuello de Botella:</strong> {lead.bottleneck}</p>
+                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Presupuesto:</strong> ${lead.configuratorTotal} USD</p>
+                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Plazo:</strong> {lead.configuratorDuration} semanas</p>
                                 </div>
 
-                                <div className="space-y-1 border-t border-white/5 pt-3 text-xs">
-                                  <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest font-bold">Contacto Directo</p>
-                                  <p className="text-white font-medium">{lead.contactName}</p>
-                                  <p className="text-zinc-400 truncate">{lead.contactEmail}</p>
+                                <div className={`space-y-1 border-t pt-3 text-xs ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
+                                  <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest font-bold">{t.crmCardContact}</p>
+                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-[#020813]'}`}>{lead.contactName}</p>
+                                  <p className={`truncate ${themeStyles.textMuted}`}>{lead.contactEmail}</p>
                                   <p className="text-[#C17F4E] font-mono">{lead.contactPhone}</p>
                                 </div>
                               </div>
 
-                              <div className="grid grid-cols-2 gap-2 pt-4 border-t border-white/5 mt-4">
+                              <div className={`grid grid-cols-2 gap-2 pt-4 border-t mt-4 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
                                 <a
                                   href={`mailto:${lead.contactEmail}`}
-                                  className="py-2 bg-zinc-900 border border-white/5 rounded text-center text-zinc-300 hover:text-white transition-colors font-mono text-[10px] font-bold uppercase flex items-center justify-center"
+                                  className={`py-2 border rounded text-center transition-colors font-mono text-[10px] font-bold uppercase flex items-center justify-center ${isDark ? 'bg-zinc-900 border-white/5 text-zinc-300 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-800 hover:bg-slate-200'}`}
                                 >
                                   Email
                                 </a>
@@ -2140,18 +2656,18 @@ export default function App() {
       </main>
 
       {/* --- PREMIUM FOOTER --- */}
-      <footer className={`border-t py-12 transition-colors duration-500 ${isDark ? 'bg-zinc-950/80 border-white/5 text-zinc-400' : 'bg-white border-slate-200 text-slate-600'}`}>
+      <footer className={`border-t py-12 transition-colors duration-500 ${isDark ? 'bg-zinc-950/80 border-white/5 text-zinc-400' : 'bg-[#FAF8F5] border-[#D6D0C1] text-slate-600'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row justify-between items-center gap-6 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
           <div className="flex gap-6 flex-wrap justify-center">
             <span>© 2026 MAX AI STUDIO</span>
             <span className="text-zinc-700">|</span>
-            <span>ESTRATEGIA • CÓDIGO • DISEÑO</span>
+            <span>{t.footText}</span>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-              <span className="text-zinc-400">SERVER STATUS: OPTIMAL</span>
+              <span className="text-zinc-400">{t.footServer}</span>
             </div>
             <span className="text-zinc-700">|</span>
             <a href="https://www.instagram.com/amytevet.tm" target="_blank" rel="noopener noreferrer" className="hover:text-[#C17F4E] transition-colors">INSTAGRAM</a>
