@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -11,23 +11,24 @@
   --color-brand-gray: #94A3B8;
   --color-brand-gray-dark: #475569;
   
-  --color-brand-card: rgba(6, 20, 38, 0.55);
-  --color-brand-border: rgba(193, 127, 78, 0.12);
-  --color-brand-border-hover: rgba(193, 127, 78, 0.35);
+  --color-brand-card: #041021;
+  --color-brand-border: rgba(193, 127, 78, 0.15);
+  --color-brand-border-hover: rgba(193, 127, 78, 0.4);
 
-  /* Elite SaaS Typography */
+  /* Claude system typography: Inter grotesque with Lora serif display */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", system-ui, -apple-system, sans-serif;
-  --font-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Lora", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
 
-  /* Smooth Rounded Curves for Modern SaaS Aesthetics */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --radius-2xl: 24px;
-  --radius-3xl: 32px;
-  --radius-full: 9999px;
+  /* Claude 0px flat corners */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-full: 0px;
 }
 
 /* Base style resets */
@@ -37,23 +38,30 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Global Dark Theme Settings */
+/* Global Dark Theme Settings (MAX AI Navy) */
 #max-ai-studio-app, main, section, footer, nav, header {
   background-color: #041021 !important;
   color: #F8FAFC !important;
 }
 
-/* Clean contrast alternating section backgrounds */
+/* Restrained alternating section backgrounds */
 section:nth-of-type(even) {
-  background-color: #020b16 !important;
+  background-color: #020914 !important;
 }
 
-/* Font resets for Oswald/Poppins overrides from the previous Perspective design */
+/* Header typography mapping: Bold clean uppercase or restrained serif */
 h1, h2, h3, h4, h5, h6, .font-display {
-  font-family: var(--font-display) !important;
+  font-family: var(--font-sans) !important;
   color: #F8FAFC !important;
-  text-transform: none !important;
-  letter-spacing: -0.02em !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Custom serif display headings for specific feature cards/sections as per Claude rules */
+.serif-display {
+  font-family: var(--font-serif) !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
 }
 
 p, li, label, input, textarea, select {
@@ -61,36 +69,39 @@ p, li, label, input, textarea, select {
   color: #94A3B8 !important;
 }
 
-/* Premium Visual Utility Classes: Smooth Glassmorphic SaaS Panels */
+/* Mono fonts */
+.font-mono, code, pre {
+  font-family: var(--font-mono) !important;
+}
+
+/* Flat Cards & Panels (No Shadows, Sharp Edges, Explicit Contrasts) */
 .glass-panel {
-  background: rgba(6, 20, 38, 0.55) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(193, 127, 78, 0.12) !important;
-  border-radius: var(--radius-2xl) !important;
-  box-shadow: 0 20px 40px -15px rgba(4, 16, 33, 0.7) !important;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: #020914 !important;
+  border: 1px solid rgba(193, 127, 78, 0.2) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease !important;
 }
 
 .glass-panel:hover {
-  border-color: rgba(193, 127, 78, 0.35) !important;
-  box-shadow: 0 30px 60px -20px rgba(193, 127, 78, 0.15), 0 20px 40px -15px rgba(4, 16, 33, 0.7) !important;
+  border-color: #C17F4E !important;
+  box-shadow: none !important;
 }
 
 .premium-card-dark {
-  background: rgba(6, 20, 38, 0.45) !important;
-  border: 1px solid rgba(255, 255, 255, 0.04) !important;
-  border-radius: var(--radius-2xl) !important;
-  box-shadow: 0 16px 36px -12px rgba(4, 16, 33, 0.6) !important;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: #020914 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
   color: #F8FAFC !important;
 }
 
 .premium-card-dark:hover {
-  transform: translateY(-4px) !important;
-  border-color: rgba(193, 127, 78, 0.25) !important;
-  background: rgba(8, 24, 46, 0.6) !important;
-  box-shadow: 0 24px 48px -18px rgba(193, 127, 78, 0.15), 0 16px 36px -12px rgba(4, 16, 33, 0.6) !important;
+  transform: none !important;
+  border-color: #C17F4E !important;
+  background: #041021 !important;
+  box-shadow: none !important;
 }
 
 /* Reset colors of elements specifically with escaped Tailwind brackets */
@@ -102,54 +113,66 @@ p, li, label, input, textarea, select {
   color: #E2E8F0 !important;
 }
 
-.text-gray-400, .text-\[\#94A3B8\] {
+.text-gray-400, .text-\[\#94A3B8\], .text-gray-400 {
   color: #94A3B8 !important;
 }
 
-/* Buttons and Primary Accents */
+/* Flat buttons and primary accents */
 .bg-copper, .bg-\[\#C17F4E\], [class*="bg-\[\#C17F4E\]"] {
   background-color: #C17F4E !important;
   color: #F8FAFC !important;
-  border-radius: var(--radius-full) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
 }
 
 .bg-copper:hover, .bg-\[\#C17F4E\]\:hover, [class*="bg-\[\#C17F4E\]"]:hover {
   background-color: #D79663 !important;
-  box-shadow: 0 0 20px rgba(193, 127, 78, 0.35) !important;
+  box-shadow: none !important;
 }
 
 .text-copper, .text-\[\#C17F4E\], .text-pure-copper {
-  background: linear-gradient(135deg, #ECC19C 0%, #C17F4E 50%, #9F5F2F 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: #C17F4E !important;
 }
 
-/* Dynamic glowing background orbs */
+/* Asymmetric Flat-Top/Rounded-Bottom primary CTA */
+.asymmetric-cta {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+}
+
+/* Underline emphasis for active links and elements (Claude brand style) */
+.active-link {
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  text-decoration-color: #C17F4E !important;
+}
+
+/* Glow orbs are completely hidden under Claude's achromatic journal guidelines */
 .glow-orb {
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, rgba(4, 16, 33, 0) 70%);
-  pointer-events: none;
-  filter: blur(50px);
+  display: none !important;
+  opacity: 0 !important;
 }
 
-/* Form input styling for elite SaaS */
+/* Input Fields overrides */
 input, textarea, select {
-  background-color: rgba(6, 20, 38, 0.6) !important;
-  border: 1px solid rgba(193, 127, 78, 0.15) !important;
+  background-color: #041021 !important;
+  border: 1px solid rgba(193, 127, 78, 0.2) !important;
   color: #F8FAFC !important;
-  border-radius: var(--radius-md) !important;
+  border-radius: 0px !important;
   padding: 12px 16px !important;
-  transition: all 0.3s ease !important;
+  transition: all 0.2s ease !important;
+  box-shadow: none !important;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none !important;
   border-color: #C17F4E !important;
-  box-shadow: 0 0 15px rgba(193, 127, 78, 0.15) !important;
+  box-shadow: none !important;
 }
 
 /* Step bullets in Onboarding Form */
@@ -159,15 +182,12 @@ input:focus, textarea:focus, select:focus {
 }
 
 .text-copper, .text-emerald-400, .text-amber-400 {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: unset !important;
   color: #C17F4E !important;
 }
 
 /* Borders */
 .border-white\/5, .border-white\/10, .border-\[rgba\(193\,127\,78\,0\.12\)\] {
-  border-color: rgba(193, 127, 78, 0.1) !important;
+  border-color: rgba(193, 127, 78, 0.15) !important;
 }
 
 /* Scroll smooth */
