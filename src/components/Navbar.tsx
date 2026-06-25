@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Logo from "./Logo";
 
-export default function Navbar() {
+interface NavbarProps {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -48,6 +53,13 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full border border-[rgba(193,127,78,0.12)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[#C17F4E] transition-all duration-300 flex items-center justify-center cursor-pointer"
+              aria-label="Toggle Light/Dark Theme"
+            >
+              {theme === "dark" ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
+            </button>
             <a
               href="#onboarding"
               className="px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase border border-[#C17F4E]/30 text-[#F8FAFC] bg-[#C17F4E]/10 hover:bg-[#C17F4E] hover:border-[#C17F4E] transition-all duration-300 flex items-center gap-1.5"
@@ -100,12 +112,22 @@ export default function Navbar() {
               transition={{ delay: 0.3 }}
               className="flex flex-col gap-4 pb-12"
             >
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-4 text-center rounded-xl border border-[rgba(193,127,78,0.15)] text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2"
+              >
+                {theme === "dark" ? <><Sun className="w-4 h-4" /> Modo Claro</> : <><Moon className="w-4 h-4" /> Modo Oscuro</>}
+              </button>
               <a
                 href="#onboarding"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-4 text-center rounded-xl bg-[#C17F4E] text-[#F8FAFC] font-semibold tracking-wider uppercase text-sm shadow-[0_4px_20px_rgba(193,127,78,0.25)] hover:bg-[#C17F4E]/90 transition-all"
+                className="w-full py-4 text-center rounded-xl bg-[#C17F4E] text-[#F8FAFC] font-semibold tracking-wider uppercase text-sm hover:bg-[#C17F4E]/90 transition-all flex items-center justify-center gap-1.5"
               >
                 Onboarding Digital
+                <ArrowRight className="w-4 h-4" />
               </a>
               <div className="text-center text-xs text-[#475569]">
                 Quito, Ecuador • Consultoría de Élite

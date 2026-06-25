@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import ProblemGrid from "./components/ProblemGrid";
@@ -9,11 +9,21 @@ import OnboardingForm from "./components/OnboardingForm";
 import Footer from "./components/Footer";
 
 export default function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
   return (
-    <div id="max-ai-studio-app" className="bg-[#041021] text-[#F8FAFC] antialiased selection:bg-[#C17F4E]/30 selection:text-[#F8FAFC] min-h-screen relative overflow-x-hidden">
-      
-      {/* Absolute top fixed navbar */}
-      <Navbar />
+    <div 
+      id="max-ai-studio-app" 
+      className={`bg-[#041021] text-[#F8FAFC] antialiased selection:bg-[#C17F4E]/30 selection:text-[#F8FAFC] min-h-screen relative overflow-x-hidden ${
+        theme === "light" ? "light-theme" : ""
+      }`}
+    >
+      {/* Absolute top fixed navbar with Theme Switcher support */}
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
 
       <main className="relative flex flex-col w-full">
         {/* Hero Segment */}
