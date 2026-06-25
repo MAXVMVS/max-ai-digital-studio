@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "maxai-digitalstudio",
     "public": "dist",
     "ignore": [
       "firebase.json",
