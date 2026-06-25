@@ -1,9 +1,9 @@
 {
-  "apiKey": "PLACEHOLDER_API_KEY",
-  "authDomain": "PLACEHOLDER_AUTH_DOMAIN",
-  "projectId": "PLACEHOLDER_PROJECT_ID",
-  "storageBucket": "PLACEHOLDER_STORAGE_BUCKET",
-  "messagingSenderId": "PLACEHOLDER_MESSAGING_SENDER_ID",
-  "appId": "PLACEHOLDER_APP_ID",
-  "firestoreDatabaseId": "(default)"
+  "projectId": "gen-lang-client-0281764405",
+  "appId": "1:864330343333:web:73c5d6a7e399dd60b87e4c",
+  "apiKey": "AIzaSyDXKSZv01p729C8_aJEI9Uu7bDc3YKqysQ",
+  "authDomain": "gen-lang-client-0281764405.firebaseapp.com",
+  "storageBucket": "gen-lang-client-0281764405.firebasestorage.app",
+  "messagingSenderId": "864330343333",
+  "measurementId": ""
 }

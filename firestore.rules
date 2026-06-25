@@ -1,0 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Standard security primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Helpers for incoming and existing resources
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- ONBOARDING SCHEMA VALIDATION ---
+    function isValidOnboarding(data) {
+      return data.keys().hasAll(['companyName', 'contactName', 'contactEmail', 'contactPhone', 'createdAt', 'status'])
+        && data.keys().size() <= 16
+        && data.companyName is string && data.companyName.size() > 0 && data.companyName.size() <= 200
+        && data.contactName is string && data.contactName.size() > 0 && data.contactName.size() <= 200
+        && data.contactEmail is string && data.contactEmail.size() > 0 && data.contactEmail.size() <= 200
+        && data.contactPhone is string && data.contactPhone.size() > 0 && data.contactPhone.size() <= 100
+        && data.status is string && data.status in ['pending', 'processing', 'contacted', 'completed']
+        && (data.userId == null || (data.userId is string && data.userId.size() <= 128))
+        && (data.industry == null || (data.industry is string && data.industry.size() <= 100))
+        && (data.companySize == null || (data.companySize is string && data.companySize.size() <= 100))
+        && (data.digitalMaturity == null || (data.digitalMaturity is string && data.digitalMaturity.size() <= 100))
+        && (data.bottleneck == null || (data.bottleneck is string && data.bottleneck.size() <= 1000))
+        && (data.customMessage == null || (data.customMessage is string && data.customMessage.size() <= 2000))
+        && (data.configuratorTotal == null || data.configuratorTotal is number)
+        && (data.configuratorDuration == null || data.configuratorDuration is number)
+        && (data.selectedModules == null || (data.selectedModules is list && data.selectedModules.size() <= 10));
+    }
+
+    // --- USER FORM CONFIG SCHEMA VALIDATION ---
+    function isValidUserForm(data) {
+      return data.keys().hasAll(['userId', 'formId', 'formTitle', 'connectedAt', 'syncEnabled'])
+        && data.keys().size() <= 7
+        && data.userId is string && data.userId.size() <= 128 && data.userId == request.auth.uid
+        && data.formId is string && data.formId.size() <= 128
+        && data.formTitle is string && data.formTitle.size() <= 500
+        && data.syncEnabled is bool;
+    }
+
+    // --- ADMIN RULES ---
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Configured through Google Cloud Admin Console
+    }
+
+    // --- ONBOARDING RULES ---
+    match /onboarding/{leadId} {
+      allow get: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+      allow list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      
+      allow create: if isValidId(leadId) 
+        && isValidOnboarding(incoming()) 
+        && incoming().createdAt == request.time
+        && incoming().status == 'pending'
+        && (incoming().userId == null || incoming().userId == request.auth.uid);
+
+      // Only admins can update the status or modify leads
+      allow update: if isAdmin() 
+        && isValidOnboarding(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().userId == existing().userId;
+
+      allow delete: if isAdmin();
+    }
+
+    // --- USER FORM CONFIG RULES ---
+    match /userForms/{formConfigId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow create: if isValidId(formConfigId)
+        && isValidUserForm(incoming())
+        && incoming().connectedAt == request.time;
+
+      allow update: if isSignedIn()
+        && existing().userId == request.auth.uid
+        && isValidUserForm(incoming())
+        && incoming().connectedAt == existing().connectedAt
+        && incoming().userId == existing().userId
+        && incoming().formId == existing().formId
+        && incoming().diff(existing()).affectedKeys().hasOnly(['formTitle', 'syncEnabled']);
+
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+
+  }
+}

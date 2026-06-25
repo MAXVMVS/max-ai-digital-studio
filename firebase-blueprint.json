@@ -1,55 +1,52 @@
 {
   "entities": {
-    "leads": {
-      "title": "Lead",
-      "description": "Onboarding leads captured from MAX AI landing page",
+    "onboarding": {
+      "title": "Onboarding Lead",
+      "description": "Premium onboarding lead submission details with business and contact info.",
       "type": "object",
       "properties": {
-        "fullName": {
-          "type": "string",
-          "description": "El nombre completo del cliente potencial"
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "El correo profesional del contacto"
-        },
-        "companyName": {
-          "type": "string",
-          "description": "El nombre del negocio o de la empresa"
-        },
-        "selectedPainPoints": {
-          "type": "array",
-          "description": "Lista de dolores de negocio seleccionados"
-        },
-        "selectedServices": {
-          "type": "array",
-          "description": "Servicios en los que tiene interés el cliente"
-        },
-        "extraDetails": {
-          "type": "string",
-          "description": "Información complementaria aportada por el cliente"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Fecha y hora de creación sincronizada con el servidor"
-        }
+        "id": { "type": "string", "description": "Unique identifier of the lead" },
+        "companyName": { "type": "string", "description": "Name of the business or brand" },
+        "industry": { "type": "string", "description": "Industry sector" },
+        "companySize": { "type": "string", "description": "Number of employees" },
+        "digitalMaturity": { "type": "string", "description": "Digital maturity level" },
+        "bottleneck": { "type": "string", "description": "Primary digital business bottleneck" },
+        "selectedModules": { "type": "array", "description": "List of selected tech modules" },
+        "contactName": { "type": "string", "description": "Name of the contact person" },
+        "contactEmail": { "type": "string", "description": "Email address of the contact" },
+        "contactPhone": { "type": "string", "description": "Phone or WhatsApp number" },
+        "customMessage": { "type": "string", "description": "Additional user comments" },
+        "configuratorTotal": { "type": "number", "description": "Total estimated budget in USD" },
+        "configuratorDuration": { "type": "number", "description": "Estimated production duration in weeks" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the lead was submitted" },
+        "userId": { "type": "string", "description": "ID of the authenticated user who submitted" },
+        "status": { "type": "string", "enum": ["pending", "processing", "contacted", "completed"], "description": "Processing state of the lead" }
       },
-      "required": [
-        "fullName",
-        "email",
-        "companyName",
-        "selectedPainPoints",
-        "selectedServices",
-        "createdAt"
-      ]
+      "required": ["companyName", "contactName", "contactEmail", "contactPhone", "createdAt", "status"]
+    },
+    "userForm": {
+      "title": "Connected Google Form",
+      "description": "User connected Google Form configuration for dashboard tracking.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique record identifier" },
+        "userId": { "type": "string", "description": "The authenticated owner UID" },
+        "formId": { "type": "string", "description": "Google Form identifier" },
+        "formTitle": { "type": "string", "description": "Title of the Google Form" },
+        "connectedAt": { "type": "string", "format": "date-time", "description": "Timestamp when connected" },
+        "syncEnabled": { "type": "boolean", "description": "Whether sync is currently active" }
+      },
+      "required": ["userId", "formId", "formTitle", "connectedAt", "syncEnabled"]
     }
   },
   "firestore": {
-    "/leads/{leadId}": {
-      "schema": "leads",
-      "description": "Colección de contactos de captación comercial de MAX AI"
+    "/onboarding/{leadId}": {
+      "schema": { "$ref": "#/entities/onboarding" },
+      "description": "Individual onboarding lead registrations."
+    },
+    "/userForms/{formConfigId}": {
+      "schema": { "$ref": "#/entities/userForm" },
+      "description": "Connected Google Form tracking configs per authenticated user."
     }
   }
 }

@@ -1,238 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-:root {
-  /* Default Dark Mode (MAX AI signature theme) */
-  --color-bg: #041021;
-  --color-bg-alt: #020914;
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
-  
-  --color-copper: #C17F4E;
-  --color-copper-light: #D79663;
-  --color-copper-dark: #A56434;
-  
-  --color-card-bg: rgba(6, 20, 38, 0.55);
-  --color-border: rgba(193, 127, 78, 0.12);
-  --color-border-hover: rgba(193, 127, 78, 0.35);
-  --glow-opacity: 0.08;
-  --shadow-color: rgba(4, 16, 33, 0.8);
-}
-
-.light-theme {
-  /* Light Mode (Clean Corporate Ivory/White theme) */
-  --color-bg: #F8FAFC;
-  --color-bg-alt: #FFFFFF;
-  --color-text-primary: #041021;
-  --color-text-secondary: #475569;
-  --color-text-muted: #64748B;
-  
-  --color-copper: #C17F4E;
-  --color-copper-light: #A56434;
-  --color-copper-dark: #78451D;
-  
-  --color-card-bg: #FFFFFF;
-  --color-border: rgba(193, 127, 78, 0.18);
-  --color-border-hover: rgba(193, 127, 78, 0.45);
-  --glow-opacity: 0.02;
-  --shadow-color: rgba(67, 75, 87, 0.08);
-}
-
 @theme {
-  --color-brand-bg: var(--color-bg);
-  --color-brand-copper: var(--color-copper);
-  --color-brand-copper-light: var(--color-copper-light);
-  --color-brand-copper-dark: var(--color-copper-dark);
-  --color-brand-white: var(--color-text-primary);
-  --color-brand-gray-light: var(--color-text-primary);
-  --color-brand-gray: var(--color-text-secondary);
-  --color-brand-gray-dark: var(--color-text-muted);
-
-  /* Corporate Typography Settings */
-  --font-sans: "Open Sans", system-ui, -apple-system, sans-serif;
-  --font-display: "Poppins", system-ui, -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-
-  /* Corporate Rounded Scale */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
-  --radius-3xl: 24px;
-  --radius-full: 9999px;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Base style resets */
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
-  font-family: var(--font-sans);
-  transition: background-color 0.3s ease, color 0.3s ease;
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
 }
 
-/* Global Light/Dark Theme Variable Mappings */
-#max-ai-studio-app, main, section, footer, header {
-  background-color: var(--color-bg) !important;
-  color: var(--color-text-primary) !important;
-  transition: background-color 0.3s ease, color 0.3s ease;
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.15;
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+    opacity: 0.25;
+  }
+  66% {
+    transform: translate(-30px, 20px) scale(0.95);
+    opacity: 0.2;
+  }
 }
 
-/* Alternate sections background */
-section:nth-of-type(even) {
-  background-color: var(--color-bg-alt) !important;
+.animate-pulse-glow-1 {
+  animation: pulseGlow 12s infinite ease-in-out;
 }
 
-/* Header typography mapping: Poppins headings */
-h1, h2, h3, h4, h5, h6, .font-display {
-  font-family: var(--font-display) !important;
-  color: var(--color-text-primary) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.015em !important;
-}
-
-p, li, label {
-  font-family: var(--font-sans) !important;
-  color: var(--color-text-secondary) !important;
-  font-weight: 400 !important;
-}
-
-/* Mono fonts */
-.font-mono, code, pre {
-  font-family: var(--font-mono) !important;
-}
-
-/* Glassmorphic panels using CSS variables */
-.glass-panel {
-  background: var(--color-card-bg) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border) !important;
-  border-radius: var(--radius-2xl) !important;
-  box-shadow: 0 20px 40px -15px var(--shadow-color) !important;
-  transition: all 0.3s ease !important;
-}
-
-.glass-panel:hover {
-  border-color: var(--color-border-hover) !important;
-  box-shadow: 0 30px 60px -20px rgba(193, 127, 78, 0.12), 0 20px 40px -15px var(--shadow-color) !important;
-}
-
-.premium-card-dark {
-  background: var(--color-card-bg) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: var(--radius-2xl) !important;
-  box-shadow: 0 16px 36px -12px var(--shadow-color) !important;
-  transition: all 0.3s ease !important;
-  color: var(--color-text-primary) !important;
-}
-
-.premium-card-dark:hover {
-  transform: translateY(-4px) !important;
-  border-color: var(--color-border-hover) !important;
-  box-shadow: 0 24px 48px -18px rgba(193, 127, 78, 0.12), 0 16px 36px -12px var(--shadow-color) !important;
-}
-
-/* Reset colors of elements specifically with escaped Tailwind brackets */
-.text-white, .text-\[\#F8FAFC\] {
-  color: var(--color-text-primary) !important;
-}
-
-.text-gray-300, .text-\[\#CBD5E1\] {
-  color: var(--color-text-primary) !important;
-  opacity: 0.9;
-}
-
-.text-gray-400, .text-\[\#94A3B8\], .text-gray-400 {
-  color: var(--color-text-secondary) !important;
-}
-
-/* Buttons and Primary Accents */
-.bg-copper, .bg-\[\#C17F4E\], [class*="bg-\[\#C17F4E\]"] {
-  background-color: var(--color-copper) !important;
-  color: #F8FAFC !important;
-  border-radius: var(--radius-full) !important;
-  box-shadow: 0 4px 12px rgba(193, 127, 78, 0.2) !important;
-  border: none !important;
-}
-
-.bg-copper:hover, .bg-\[\#C17F4E\]\:hover, [class*="bg-\[\#C17F4E\]"]:hover {
-  background-color: var(--color-copper-light) !important;
-  box-shadow: 0 6px 18px rgba(193, 127, 78, 0.35) !important;
-}
-
-.text-copper, .text-\[\#C17F4E\], .text-pure-copper {
-  color: var(--color-copper) !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: unset !important;
-}
-
-/* Input Fields overrides */
-input, textarea, select {
-  background-color: var(--color-bg-alt) !important;
-  border: 1px solid var(--color-border) !important;
-  color: var(--color-text-primary) !important;
-  border-radius: var(--radius-md) !important;
-  padding: 12px 16px !important;
-  transition: all 0.3s ease !important;
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: none !important;
-  border-color: var(--color-copper) !important;
-  box-shadow: 0 0 15px rgba(193, 127, 78, 0.15) !important;
-}
-
-/* Step bullets in Onboarding Form */
-.bg-emerald-500, .bg-amber-500, .bg-\[\#C17F4E\]\/10 {
-  background-color: var(--color-border) !important;
-  color: var(--color-copper) !important;
-}
-
-.text-copper, .text-emerald-400, .text-amber-400 {
-  color: var(--color-copper) !important;
-}
-
-/* Borders */
-.border-white\/5, .border-white\/10, .border-\[rgba\(193\,127\,78\,0\.12\)\] {
-  border-color: var(--color-border) !important;
-}
-
-/* Dynamic glowing background orbs */
-.glow-orb {
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(193, 127, 78, var(--glow-opacity)) 0%, rgba(4, 16, 33, 0) 70%);
-  pointer-events: none;
-  filter: blur(50px);
-}
-
-/* Theme Switcher Button Styling */
-.theme-toggle-btn {
-  background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  border-radius: var(--radius-full);
-  padding: 8px 16px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-}
-
-.theme-toggle-btn:hover {
-  border-color: var(--color-copper);
-  color: var(--color-copper);
-}
-
-/* Scroll smooth */
-html {
-  scroll-behavior: smooth;
+.animate-pulse-glow-2 {
+  animation: pulseGlow 16s infinite ease-in-out alternate;
 }
