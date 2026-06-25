@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "leads": {
+      "title": "Lead",
+      "description": "Onboarding leads captured from MAX AI landing page",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "El nombre completo del cliente potencial"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "El correo profesional del contacto"
+        },
+        "companyName": {
+          "type": "string",
+          "description": "El nombre del negocio o de la empresa"
+        },
+        "selectedPainPoints": {
+          "type": "array",
+          "description": "Lista de dolores de negocio seleccionados"
+        },
+        "selectedServices": {
+          "type": "array",
+          "description": "Servicios en los que tiene interés el cliente"
+        },
+        "extraDetails": {
+          "type": "string",
+          "description": "Información complementaria aportada por el cliente"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Fecha y hora de creación sincronizada con el servidor"
+        }
+      },
+      "required": [
+        "fullName",
+        "email",
+        "companyName",
+        "selectedPainPoints",
+        "selectedServices",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": "leads",
+      "description": "Colección de contactos de captación comercial de MAX AI"
+    }
+  }
+}

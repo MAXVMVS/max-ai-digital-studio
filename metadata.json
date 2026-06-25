@@ -1,6 +1,6 @@
 {
-  "name": "MAX AI Digital Studio",
-  "description": "Tech Premium Landing Page for an AI and Development Agency",
+  "name": "MAX AI - Digital Studio",
+  "description": "Landing page premium con formulario de onboarding interactivo y diseño de alta gama para MAX AI - Digital Studio",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

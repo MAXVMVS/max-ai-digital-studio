@@ -1,71 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* 
-  Estilo: MAX AI Premium (Full Dark Mode)
-  Colores de Marca: Azul Marino Profundo (#020813), Azul Marino Secundario (#050E1D), Cobrizo (#C17F4E)
-  Tipografía: Inter
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-bg: #041021;
+  --color-brand-copper: #C17F4E;
+  --color-brand-copper-light: #D79663;
+  --color-brand-copper-dark: #A56434;
+  --color-brand-white: #F8FAFC;
+  --color-brand-gray-light: #CBD5E1;
+  --color-brand-gray: #94A3B8;
+  --color-brand-gray-dark: #475569;
+  
+  --color-brand-card: rgba(6, 18, 36, 0.45);
+  --color-brand-border: rgba(193, 127, 78, 0.12);
+  --color-brand-border-hover: rgba(193, 127, 78, 0.35);
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", "Outfit", system-ui, -apple-system, sans-serif;
 }
 
+/* Base style resets */
 body {
-  background-color: #020813;
-  color: #FFFFFF;
-  font-family: "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: #041021;
+  color: #F8FAFC;
+  font-family: var(--font-sans);
 }
 
-/* Utilidades de Marca */
-.bg-navy-dark {
-  background-color: #020813;
-}
-
-.bg-copper {
-  background-color: #C17F4E;
-}
-
-.text-copper {
-  color: #C17F4E;
-}
-
-.border-copper {
-  border-color: rgba(193, 127, 78, 0.3);
-}
-
-/* Efecto Cristalino Premium para Header */
-.premium-blur {
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  background-color: rgba(2, 8, 19, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Tarjetas Premium en Modo Oscuro */
-.premium-card-dark {
-  background-color: #081428;
+/* Premium Visual Utility Classes */
+.glass-panel {
+  background: rgba(6, 20, 38, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(193, 127, 78, 0.1);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.premium-card-dark:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(193, 127, 78, 0.3);
-  transform: translateY(-4px);
+.glass-panel:hover {
+  border-color: rgba(193, 127, 78, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(193, 127, 78, 0.15);
 }
 
-/* Animaciones del Motor de IA */
-.ambient-copper-glow {
+/* Glowing ornaments representing light emission in deep space */
+.glow-orb {
   position: absolute;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, transparent 70%);
-  filter: blur(60px);
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
+  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, rgba(4, 16, 33, 0) 70%);
   pointer-events: none;
+  filter: blur(40px);
+}
+
+/* Copper metal brushed text gradient */
+.text-copper-gradient {
+  background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 40%, #C17F4E 80%, #9F5F2F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pure Copper Accent Gradient */
+.text-pure-copper {
+  background: linear-gradient(135deg, #ECC19C 0%, #C17F4E 50%, #9F5F2F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer overlay effect for enterprise technical style */
+.shimmer-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-bg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(193, 127, 78, 0.08) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shimmer-anim 6s infinite linear;
+}
+
+@keyframes shimmer-anim {
+  0% { left: -150%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+/* Micro-animación premium de scroll suave */
+html {
+  scroll-behavior: smooth;
 }
