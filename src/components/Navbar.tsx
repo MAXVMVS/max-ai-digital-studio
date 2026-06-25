@@ -50,7 +50,7 @@ export default function Navbar() {
             ))}
             <a
               href="#onboarding"
-              className="px-5 py-2.5 asymmetric-cta text-xs font-semibold tracking-wider uppercase border border-[#C17F4E]/30 text-[#F8FAFC] bg-[#C17F4E]/10 hover:bg-[#C17F4E] hover:border-[#C17F4E] transition-all duration-300 flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase border border-[#C17F4E]/30 text-[#F8FAFC] bg-[#C17F4E]/10 hover:bg-[#C17F4E] hover:border-[#C17F4E] transition-all duration-300 flex items-center gap-1.5"
             >
               Iniciar Onboarding
               <ArrowRight className="w-3.5 h-3.5" />

@@ -75,7 +75,7 @@ export default function Hero() {
           >
             <a
               href="#onboarding"
-              className="px-8 py-4.5 asymmetric-cta bg-[#C17F4E] text-[#F8FAFC] font-semibold text-center tracking-wider uppercase text-xs hover:bg-[#D79663] transition-all duration-300 flex items-center justify-center gap-2 group"
+              className="px-8 py-4.5 rounded-full bg-[#C17F4E] text-[#F8FAFC] font-semibold text-center tracking-wider uppercase text-xs hover:bg-[#D79663] transition-all duration-300 flex items-center justify-center gap-2 group"
             >
               Iniciar Onboarding
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

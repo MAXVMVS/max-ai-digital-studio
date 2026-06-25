@@ -1,67 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Audiowide&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-brand-bg: #041021;
-  --color-brand-copper: #C17F4E;
-  --color-brand-copper-light: #D79663;
-  --color-brand-copper-dark: #A56434;
+  --color-brand-bg: #020617;
+  --color-brand-copper: #3B82F6;
+  --color-brand-copper-light: #60A5FA;
+  --color-brand-copper-dark: #1D4ED8;
   --color-brand-white: #F8FAFC;
   --color-brand-gray-light: #CBD5E1;
   --color-brand-gray: #94A3B8;
   --color-brand-gray-dark: #475569;
   
-  --color-brand-card: #041021;
-  --color-brand-border: rgba(193, 127, 78, 0.15);
-  --color-brand-border-hover: rgba(193, 127, 78, 0.4);
+  --color-brand-card: rgba(15, 23, 42, 0.55);
+  --color-brand-border: rgba(139, 92, 246, 0.15);
+  --color-brand-border-hover: rgba(59, 130, 246, 0.45);
 
-  /* Claude system typography: Inter grotesque with Lora serif display */
+  /* Cosmic Futuristic Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "Lora", Georgia, serif;
+  --font-display: "Audiowide", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Claude 0px flat corners */
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-full: 0px;
+  /* Standard modern rounded scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
 }
 
 /* Base style resets */
 body {
-  background-color: #041021;
+  background-color: #020617;
   color: #F8FAFC;
   font-family: var(--font-sans);
 }
 
-/* Global Dark Theme Settings (MAX AI Navy) */
+/* Global Dark Theme Settings (Cosmic Space Theme) */
 #max-ai-studio-app, main, section, footer, nav, header {
-  background-color: #041021 !important;
+  background-color: #020617 !important;
   color: #F8FAFC !important;
 }
 
-/* Restrained alternating section backgrounds */
+/* Alternate sections background */
 section:nth-of-type(even) {
-  background-color: #020914 !important;
+  background-color: #0b0f19 !important;
 }
 
-/* Header typography mapping: Bold clean uppercase or restrained serif */
+/* Header typography mapping: Audiowide uppercase futuristic headers */
 h1, h2, h3, h4, h5, h6, .font-display {
-  font-family: var(--font-sans) !important;
+  font-family: var(--font-display) !important;
   color: #F8FAFC !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.01em !important;
-}
-
-/* Custom serif display headings for specific feature cards/sections as per Claude rules */
-.serif-display {
-  font-family: var(--font-serif) !important;
-  font-weight: 500 !important;
-  font-style: italic !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 p, li, label, input, textarea, select {
@@ -74,34 +66,37 @@ p, li, label, input, textarea, select {
   font-family: var(--font-mono) !important;
 }
 
-/* Flat Cards & Panels (No Shadows, Sharp Edges, Explicit Contrasts) */
+/* Glassmorphic panels with Neon Purple borders and Neon Blue shadows */
 .glass-panel {
-  background: #020914 !important;
-  border: 1px solid rgba(193, 127, 78, 0.2) !important;
-  border-radius: 0px !important;
-  box-shadow: none !important;
-  transition: border-color 0.2s ease !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: 0 20px 40px -15px rgba(2, 6, 23, 0.8) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .glass-panel:hover {
-  border-color: #C17F4E !important;
-  box-shadow: none !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.25), 0 20px 40px -15px rgba(2, 6, 23, 0.8) !important;
+  transform: translateY(-2px);
 }
 
 .premium-card-dark {
-  background: #020914 !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  border-radius: 0px !important;
-  box-shadow: none !important;
-  transition: all 0.2s ease !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  border: 1px solid rgba(139, 92, 246, 0.12) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: 0 16px 36px -12px rgba(2, 6, 23, 0.7) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
   color: #F8FAFC !important;
 }
 
 .premium-card-dark:hover {
-  transform: none !important;
-  border-color: #C17F4E !important;
-  background: #041021 !important;
-  box-shadow: none !important;
+  transform: translateY(-4px) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.2), 0 16px 36px -12px rgba(2, 6, 23, 0.7) !important;
 }
 
 /* Reset colors of elements specifically with escaped Tailwind brackets */
@@ -117,77 +112,71 @@ p, li, label, input, textarea, select {
   color: #94A3B8 !important;
 }
 
-/* Flat buttons and primary accents */
+/* Buttons and Primary Accents (Neon Blue to Purple Gradient) */
 .bg-copper, .bg-\[\#C17F4E\], [class*="bg-\[\#C17F4E\]"] {
-  background-color: #C17F4E !important;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%) !important;
   color: #F8FAFC !important;
-  border-radius: 0px !important;
-  box-shadow: none !important;
+  border-radius: var(--radius-full) !important;
+  border: none !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3) !important;
 }
 
 .bg-copper:hover, .bg-\[\#C17F4E\]\:hover, [class*="bg-\[\#C17F4E\]"]:hover {
-  background-color: #D79663 !important;
-  box-shadow: none !important;
+  background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%) !important;
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5) !important;
 }
 
 .text-copper, .text-\[\#C17F4E\], .text-pure-copper {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: unset !important;
-  color: #C17F4E !important;
+  background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
 }
 
-/* Asymmetric Flat-Top/Rounded-Bottom primary CTA */
-.asymmetric-cta {
-  border-top-left-radius: 0px !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-left-radius: 12px !important;
-  border-bottom-right-radius: 12px !important;
-}
-
-/* Underline emphasis for active links and elements (Claude brand style) */
-.active-link {
-  text-decoration: underline !important;
-  text-underline-offset: 4px !important;
-  text-decoration-color: #C17F4E !important;
-}
-
-/* Glow orbs are completely hidden under Claude's achromatic journal guidelines */
+/* Dynamic glowing background orbs (Nebula style) */
 .glow-orb {
-  display: none !important;
-  opacity: 0 !important;
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 50%, rgba(2, 6, 23, 0) 100%);
+  pointer-events: none;
+  filter: blur(60px);
 }
 
 /* Input Fields overrides */
 input, textarea, select {
-  background-color: #041021 !important;
-  border: 1px solid rgba(193, 127, 78, 0.2) !important;
+  background-color: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
   color: #F8FAFC !important;
-  border-radius: 0px !important;
+  border-radius: var(--radius-md) !important;
   padding: 12px 16px !important;
-  transition: all 0.2s ease !important;
-  box-shadow: none !important;
+  transition: all 0.3s ease !important;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none !important;
-  border-color: #C17F4E !important;
-  box-shadow: none !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
 }
 
 /* Step bullets in Onboarding Form */
 .bg-emerald-500, .bg-amber-500, .bg-\[\#C17F4E\]\/10 {
-  background-color: rgba(193, 127, 78, 0.15) !important;
-  color: #C17F4E !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%) !important;
+  color: #8B5CF6 !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
 }
 
 .text-copper, .text-emerald-400, .text-amber-400 {
-  color: #C17F4E !important;
+  color: #3B82F6 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
 }
 
 /* Borders */
 .border-white\/5, .border-white\/10, .border-\[rgba\(193\,127\,78\,0\.12\)\] {
-  border-color: rgba(193, 127, 78, 0.15) !important;
+  border-color: rgba(139, 92, 246, 0.1) !important;
 }
 
 /* Scroll smooth */
