@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
-
 
 @theme {
   --color-brand-bg: #041021;
@@ -12,12 +11,23 @@
   --color-brand-gray: #94A3B8;
   --color-brand-gray-dark: #475569;
   
-  --color-brand-card: rgba(6, 18, 36, 0.45);
-  --color-brand-border: rgba(193, 127, 78, 0.12);
-  --color-brand-border-hover: rgba(193, 127, 78, 0.35);
+  --color-brand-card: rgba(6, 20, 38, 0.4);
+  --color-brand-border: rgba(193, 127, 78, 0.08);
+  --color-brand-border-hover: rgba(193, 127, 78, 0.25);
 
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Space Grotesk", "Outfit", system-ui, -apple-system, sans-serif;
+  /* Matrix Editorial Typography: Monospace display and readability-friendly body */
+  --font-sans: "Space Mono", monospace;
+  --font-display: "Space Mono", monospace;
+  --font-mono: "Space Mono", monospace;
+
+  /* Force sharp corners globally (Matrix Editorial 90-degree corners) */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-full: 0px;
 }
 
 /* Base style resets */
@@ -27,29 +37,43 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Premium Visual Utility Classes */
+/* Premium Visual Utility Classes: Asymmetric Hairline Panels */
 .glass-panel {
-  background: rgba(6, 20, 38, 0.5);
+  background: rgba(6, 20, 38, 0.45);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(193, 127, 78, 0.1);
+  border: 0.5px solid rgba(193, 127, 78, 0.1);
+  border-radius: 0px !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel:hover {
-  border-color: rgba(193, 127, 78, 0.35);
-  box-shadow: 0 12px 30px -10px rgba(193, 127, 78, 0.15);
+  border-color: rgba(193, 127, 78, 0.25);
+  box-shadow: 0 16px 40px -15px rgba(193, 127, 78, 0.1);
+}
+
+.premium-card-dark {
+  background: rgba(6, 20, 38, 0.35);
+  border: 0.5px solid rgba(193, 127, 78, 0.08);
+  border-radius: 0px !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card-dark:hover {
+  border-color: rgba(193, 127, 78, 0.25);
+  background: rgba(6, 20, 38, 0.5);
+  box-shadow: 0 16px 40px -15px rgba(193, 127, 78, 0.1);
 }
 
 /* Glowing ornaments representing light emission in deep space */
 .glow-orb {
   position: absolute;
-  width: 350px;
-  height: 350px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(193, 127, 78, 0.08) 0%, rgba(4, 16, 33, 0) 70%);
+  background: radial-gradient(circle, rgba(193, 127, 78, 0.06) 0%, rgba(4, 16, 33, 0) 70%);
   pointer-events: none;
-  filter: blur(40px);
+  filter: blur(50px);
 }
 
 /* Copper metal brushed text gradient */
@@ -84,11 +108,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(193, 127, 78, 0.08) 50%,
+    rgba(193, 127, 78, 0.05) 50%,
     transparent 100%
   );
   transform: skewX(-20deg);
-  animation: shimmer-anim 6s infinite linear;
+  animation: shimmer-anim 8s infinite linear;
 }
 
 @keyframes shimmer-anim {
