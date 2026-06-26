@@ -1166,20 +1166,20 @@ export default function App() {
           
           {/* Brand Logo with Fluid Expanding Image Effect */}
           <div 
-            className="group relative h-10 w-10 hover:w-[125px] transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0" 
+            className="group relative h-10 w-10 hover:w-[125px] rounded-lg transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0" 
             onClick={() => setActivePage('inicio')}
           >
             {/* Small Logo */}
             <img 
               src="/logo_pequeno.png" 
               alt="MAX AI" 
-              className="absolute left-0 top-0 h-10 w-10 object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
+              className="absolute left-0 top-0 h-10 w-10 rounded-lg object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
             />
             {/* Long Logo */}
             <img 
               src="/logo_largo.png" 
               alt="MAX AI Digital Studio" 
-              className="absolute left-0 top-0 h-10 w-[125px] object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
+              className="absolute left-0 top-0 h-10 w-[125px] rounded-lg object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
             />
           </div>
 
@@ -1345,7 +1345,7 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between pb-8 border-b border-white/5">
                 <div className="flex items-center gap-2">
-                  <img src="/logo_largo.png" alt="MAX AI" className="h-8 object-contain" />
+                  <img src="/logo_largo.png" alt="MAX AI" className="h-8 object-contain rounded-md" />
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded border border-white/5 text-zinc-400">
                   <X className="w-5 h-5" />
