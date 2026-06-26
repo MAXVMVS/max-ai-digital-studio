@@ -1402,11 +1402,11 @@ export default function App() {
                 
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-start gap-6">
-                  <div className="mb-2 select-none w-full">
+                  <div className="mb-2 select-none w-full flex justify-center">
                     <img 
                       src="/logo_max_ai.png" 
                       alt="MAX AI" 
-                      className="h-32 sm:h-48 md:h-64 w-full max-w-[550px] object-contain object-left filter drop-shadow-[0_4px_16px_rgba(193,127,78,0.18)]"
+                      className="h-48 sm:h-[288px] md:h-96 w-full max-w-[825px] object-contain filter drop-shadow-[0_4px_20px_rgba(193,127,78,0.20)]"
                     />
                   </div>
 
