@@ -2029,39 +2029,7 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <Interactive3DNetwork />
               
-              {/* Hero Top Bar: Split Translucent Panel (Left: Official Logo, Right: Core Services) */}
-              <div className={`w-full grid grid-cols-1 md:grid-cols-2 rounded-2xl border transition-all duration-500 mb-12 relative z-10 overflow-hidden backdrop-blur-xl ${themeStyles.card}`}>
-                {/* Left Half: Official Brand Logo */}
-                <div className="p-5 flex items-center justify-start">
-                  <img 
-                    src="/logo_largo.png" 
-                    alt="MAX AI" 
-                    className="h-10 sm:h-12 object-contain filter drop-shadow-[0_2px_8px_rgba(193,127,78,0.15)]" 
-                  />
-                </div>
-                {/* Right Half: Core Pillars (Split visually with divider border) */}
-                <div className={`p-5 flex items-center justify-start md:justify-end border-t md:border-t-0 md:border-l ${isDark ? 'border-white/5 bg-white/[0.01]' : 'border-[#D6D0C1]/60 bg-black/[0.01]'}`}>
-                  <div className={`text-[10px] sm:text-xs font-mono font-bold tracking-wider text-left md:text-right uppercase flex flex-wrap justify-start md:justify-end items-center gap-x-3 gap-y-1.5 ${themeStyles.textMuted}`}>
-                    {lang === 'es' ? (
-                      <>
-                        <span className="text-[#C17F4E]">Branding & Marketing Digital</span>
-                        <span className="opacity-30">•</span>
-                        <span>Desarrollo Web</span>
-                        <span className="opacity-30">•</span>
-                        <span className="text-[#C17F4E]">IA & Automatización</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-[#C17F4E]">Branding & Digital Marketing</span>
-                        <span className="opacity-30">•</span>
-                        <span>Web Development</span>
-                        <span className="opacity-30">•</span>
-                        <span className="text-[#C17F4E]">AI & Automation</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
+
 
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-start items-center relative z-10">
                 
