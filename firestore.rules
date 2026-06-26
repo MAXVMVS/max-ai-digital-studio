@@ -63,6 +63,17 @@ service cloud.firestore {
         && data.syncEnabled is bool;
     }
 
+    // --- PROJECT SCHEMA VALIDATION ---
+    function isValidProject(data) {
+      return data.keys().hasAll(['clientId', 'name', 'description', 'progress', 'status', 'createdAt'])
+        && data.keys().size() <= 8
+        && data.clientId is string && data.clientId.size() <= 128
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.description is string && data.description.size() <= 2000
+        && data.progress is number && data.progress >= 0 && data.progress <= 100
+        && data.status is string && data.status in ['en proceso', 'finalizado', 'en pausa', 'completado'];
+    }
+
     // --- ADMIN RULES ---
     match /admins/{adminId} {
       allow read: if isSignedIn();
@@ -107,6 +118,16 @@ service cloud.firestore {
         && incoming().diff(existing()).affectedKeys().hasOnly(['formTitle', 'syncEnabled']);
 
       allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+
+    // --- PROJECTS RULES ---
+    match /projects/{projectId} {
+      allow get: if isAdmin() || (isSignedIn() && existing().clientId == request.auth.uid);
+      allow list: if isAdmin() || (isSignedIn() && resource.data.clientId == request.auth.uid);
+
+      allow create: if isAdmin() || (isSignedIn() && incoming().clientId == request.auth.uid && isValidProject(incoming()) && incoming().createdAt == request.time);
+      allow update: if isAdmin() || (isSignedIn() && existing().clientId == request.auth.uid && incoming().clientId == existing().clientId && isValidProject(incoming()) && incoming().createdAt == existing().createdAt);
+      allow delete: if isAdmin();
     }
 
   }

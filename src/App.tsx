@@ -13,7 +13,7 @@ import {
   signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User 
 } from 'firebase/auth';
 import { 
-  doc, setDoc, getDoc, getDocs, collection, query, where, onSnapshot, serverTimestamp, limit, orderBy
+  doc, setDoc, getDoc, getDocs, collection, query, where, onSnapshot, serverTimestamp, limit, orderBy, addDoc
 } from 'firebase/firestore';
 
 // --- Types & Interfaces ---
@@ -285,7 +285,7 @@ export default function App() {
   // --- Firebase & Google Forms Integration State ---
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(null);
-  const [portfolioTab, setPortfolioTab] = useState<'casos' | 'forms' | 'leads'>('casos');
+  const [portfolioTab, setPortfolioTab] = useState<'casos' | 'forms' | 'leads' | 'projects'>('casos');
   const [connectedForms, setConnectedForms] = useState<any[]>([]);
   const [selectedFormId, setSelectedFormId] = useState<string>('');
   const [formInputId, setFormInputId] = useState<string>('');
@@ -296,6 +296,8 @@ export default function App() {
   const [receivedLeads, setReceivedLeads] = useState<any[]>([]);
   const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
   const [formsError, setFormsError] = useState<string>('');
+  const [clientProjects, setClientProjects] = useState<any[]>([]);
+  const [isCreatingProject, setIsCreatingProject] = useState<boolean>(false);
 
   // Sincronizar estado de Auth en carga
   useEffect(() => {
@@ -352,6 +354,29 @@ export default function App() {
     });
     return () => unsubscribe();
   }, [currentUser]);
+
+  // Escuchar proyectos del cliente en tiempo real desde Firestore
+  useEffect(() => {
+    if (!currentUser) {
+      setClientProjects([]);
+      return;
+    }
+    const projectsCol = collection(db, 'projects');
+    const q = isAdminUser 
+      ? query(projectsCol, orderBy('createdAt', 'desc'))
+      : query(projectsCol, where('clientId', '==', currentUser.uid));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const projectsList: any[] = [];
+      snapshot.forEach((doc) => {
+        projectsList.push({ id: doc.id, ...doc.data() });
+      });
+      setClientProjects(projectsList);
+    }, (error) => {
+      console.error("Error al escuchar proyectos de Firestore:", error.message);
+    });
+    return () => unsubscribe();
+  }, [currentUser, isAdminUser]);
 
   // Sincronizar detalles del formulario activo de Google Forms y respuestas
   const fetchActiveFormFromGoogle = async () => {
@@ -1010,6 +1035,7 @@ export default function App() {
     tab1: lang === 'es' ? 'Casos de Éxito & Onboarding' : 'Case Studies & Onboarding',
     tab2: lang === 'es' ? 'Google Forms Sync' : 'Google Forms Sync',
     tab3: lang === 'es' ? 'Leads Recibidos (CRM)' : 'Received Leads (CRM)',
+    tab4: lang === 'es' ? 'Mis Proyectos' : 'My Projects',
 
     // Case Studies Page
     csBadge: lang === 'es' ? 'Showcase Real' : 'Real Showcase',
@@ -1880,6 +1906,17 @@ export default function App() {
                 <LayoutDashboard className="w-4 h-4" />
                 {t.tab3}
               </button>
+              <button 
+                onClick={() => setPortfolioTab('projects')}
+                className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
+                  portfolioTab === 'projects' 
+                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
+                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                {t.tab4}
+              </button>
             </div>
 
             {/* TAB 1: CASOS DE ÉXITO & FORM DE ONBOARDING */}
@@ -2639,6 +2676,146 @@ export default function App() {
                                 >
                                   WhatsApp
                                 </a>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* TAB 4: MIS PROYECTOS (PROYECTOS DEL CLIENTE EN FIRESTORE) */}
+            {portfolioTab === 'projects' && (
+              <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Portal de Clientes' : 'Client Portal'}</span>
+                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    {lang === 'es' ? 'Mis Proyectos Activos' : 'My Active Projects'}
+                  </h1>
+                  <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
+                    {lang === 'es' 
+                      ? 'Monitorea en tiempo real el progreso de tu desarrollo, entregables y estados.' 
+                      : 'Monitor in real-time the progress of your development, deliverables, and statuses.'}
+                  </p>
+                </div>
+
+                {!currentUser ? (
+                  <div className={`p-12 rounded-xl border text-center max-w-2xl mx-auto ${themeStyles.card}`}>
+                    <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
+                      <FolderKanban className="w-8 h-8" />
+                    </div>
+                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>
+                      {lang === 'es' ? 'Acceso al Portal' : 'Portal Access'}
+                    </h3>
+                    <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
+                      {lang === 'es' 
+                        ? 'Inicia sesión con tu cuenta de Google autorizada para ver tus proyectos contratados.' 
+                        : 'Sign in with your authorized Google account to view your contracted projects.'}
+                    </p>
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
+                    >
+                      {t.gfNoAuthBtn}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Botón para crear proyecto de prueba en modo de desarrollo / testing */}
+                    <div className="flex justify-end mb-4">
+                      <button
+                        onClick={async () => {
+                          if (isCreatingProject) return;
+                          setIsCreatingProject(true);
+                          try {
+                            const newProj = {
+                              clientId: currentUser.uid,
+                              name: lang === 'es' ? "Ecosistema Digital Especializado" : "Specialized Digital Ecosystem",
+                              description: lang === 'es' 
+                                ? "Desarrollo a medida con integración de base de datos Firestore y autenticación federada de Google Auth."
+                                : "Custom development with Firestore database integration and federated Google Auth authentication.",
+                              progress: 35,
+                              status: "en proceso",
+                              createdAt: serverTimestamp()
+                            };
+                            await addDoc(collection(db, 'projects'), newProj);
+                            alert(lang === 'es' ? "Proyecto de prueba creado en Firestore." : "Test project created in Firestore.");
+                          } catch (e: any) {
+                            console.error("Error creating project:", e);
+                            alert("Error: " + e.message);
+                          } finally {
+                            setIsCreatingProject(false);
+                          }
+                        }}
+                        disabled={isCreatingProject}
+                        className="inline-flex items-center gap-2 bg-[#C17F4E]/10 border border-[#C17F4E]/20 text-[#C17F4E] hover:bg-[#C17F4E]/20 px-4 py-2 rounded text-xs font-mono font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>{lang === 'es' ? 'Crear Proyecto de Prueba' : 'Create Test Project'}</span>
+                      </button>
+                    </div>
+
+                    {clientProjects.length === 0 ? (
+                      <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
+                        <FolderKanban className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                        <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">
+                          {lang === 'es' ? 'Sin Proyectos Vinculados' : 'No Projects Linked'}
+                        </h4>
+                        <p className="text-xs text-zinc-500 font-sans">
+                          {lang === 'es' 
+                            ? 'No se encontraron proyectos activos vinculados a tu ID de cliente. Tu UID es: ' 
+                            : 'No active projects found linked to your client ID. Your UID is: '}
+                          <span className="font-mono text-[#C17F4E] font-bold">{currentUser.uid}</span>
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
+                        {clientProjects.map((project) => {
+                          const dateStr = project.createdAt && typeof project.createdAt.toDate === 'function' 
+                            ? project.createdAt.toDate().toLocaleDateString() 
+                            : 'Fecha Reciente';
+                          return (
+                            <div key={project.id} className={`p-6 rounded-xl border flex flex-col justify-between text-left ${themeStyles.card}`}>
+                              <div className="space-y-4">
+                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                                  <span className="text-[9px] text-zinc-500 font-mono font-bold uppercase tracking-wider">ID: {project.id.substring(0, 8)}...</span>
+                                  <span className={`font-mono text-[9px] px-2 py-0.5 rounded uppercase font-bold ${
+                                    project.status === 'finalizado' || project.status === 'completado'
+                                      ? 'text-emerald-500 bg-emerald-500/10'
+                                      : 'text-[#C17F4E] bg-[#C17F4E]/10'
+                                  }`}>
+                                    {project.status}
+                                  </span>
+                                </div>
+
+                                <div>
+                                  <h4 className={`font-display font-black text-lg uppercase tracking-tight leading-tight ${themeStyles.title}`}>
+                                    {project.name}
+                                  </h4>
+                                  <p className="text-[9px] text-zinc-500 font-mono mt-1">
+                                    {lang === 'es' ? 'Iniciado' : 'Started'}: {dateStr}
+                                  </p>
+                                </div>
+
+                                <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
+                                  {project.description}
+                                </p>
+
+                                <div className="space-y-2 pt-2">
+                                  <div className="flex justify-between items-center text-xs font-mono">
+                                    <span className="text-zinc-500">{lang === 'es' ? 'Progreso' : 'Progress'}</span>
+                                    <span className="text-[#C17F4E] font-bold">{project.progress}%</span>
+                                  </div>
+                                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                    <div 
+                                      className="h-full bg-[#C17F4E] rounded-full transition-all duration-500" 
+                                      style={{ width: `${project.progress}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           );
