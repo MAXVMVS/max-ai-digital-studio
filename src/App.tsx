@@ -1457,7 +1457,7 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between pb-8 border-b border-white/5">
                 <div className="flex items-center gap-2">
-                  <img src="/logo_largo.png" alt="MAX AI" className="h-20 object-contain rounded-lg" />
+                  <img src="/logo_largo.png" alt="MAX AI" className="h-16 object-contain rounded-lg" />
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded border border-white/5 text-zinc-400">
                   <X className="w-5 h-5" />
