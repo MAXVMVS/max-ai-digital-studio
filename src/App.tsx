@@ -3,7 +3,7 @@ import {
   Brain, Cpu, Layers, Zap, Sparkles, Code2, Database, Network, 
   ArrowRight, Check, CheckCircle2, ArrowLeft, Sun, Moon, Menu, X, 
   ExternalLink, TrendingUp, Users, ChevronRight, Send, AlertTriangle, HelpCircle,
-  FolderKanban, LayoutDashboard, LogOut, Plus, RefreshCw, FileText, CheckCircle,
+  FolderKanban, LayoutDashboard, LogOut, LogIn, Plus, RefreshCw, FileText, CheckCircle,
   Mail, MapPin, Phone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -278,14 +278,21 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto'>(() => {
+  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto' | 'login'>(() => {
     const saved = localStorage.getItem('maxai_active_page');
-    return (saved as 'inicio' | 'servicios' | 'portafolio' | 'contacto') || 'inicio';
+    return (saved as 'inicio' | 'servicios' | 'portafolio' | 'contacto' | 'login') || 'inicio';
   });
 
   useEffect(() => {
     localStorage.setItem('maxai_active_page', activePage);
   }, [activePage]);
+
+  // Si activePage es 'login' y el tab seleccionado es 'casos' (que es para el portafolio), cambiar a 'leads' para el dashboard de admin
+  useEffect(() => {
+    if (activePage === 'login' && portfolioTab === 'casos') {
+      setPortfolioTab('leads');
+    }
+  }, [activePage, portfolioTab]);
 
   // --- Contact page state ---
   const [contactFormName, setContactFormName] = useState<string>('');
@@ -977,8 +984,12 @@ export default function App() {
     services: lang === 'es' ? 'Servicios' : 'Services',
     portfolio: lang === 'es' ? 'Portafolio' : 'Portfolio',
     contact: lang === 'es' ? 'Contactar' : 'Contact',
-    portHeader: lang === 'es' ? 'Portafolio & Onboarding' : 'Portfolio & Onboarding',
+    portHeader: lang === 'es' ? 'Portafolio' : 'Portfolio',
     whatsappBtn: lang === 'es' ? 'WHATSAPP DIRECTO' : 'WHATSAPP DIRECT',
+    login: lang === 'es' ? 'Login' : 'Login',
+    system: lang === 'es' ? 'Sistema' : 'System',
+    dashboard: lang === 'es' ? 'Dashboard' : 'Dashboard',
+    portal: lang === 'es' ? 'Mi Portal' : 'My Portal',
 
     // Hero
     heroBadge: lang === 'es' ? 'NÚCLEO v5.0 ACTIVO • QUITO, EC' : 'CORE v5.0 ACTIVE • QUITO, EC',
@@ -1244,6 +1255,134 @@ export default function App() {
     footServer: lang === 'es' ? 'ESTADO DEL SERVIDOR: ÓPTIMO' : 'SERVER STATUS: OPTIMAL',
   };
 
+  // Render Projects Helper
+  const renderProjectsSection = () => {
+    return (
+      <div className="space-y-6">
+        {/* Botón para crear proyecto de prueba en modo de desarrollo / testing */}
+        {isAdminUser && (
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={async () => {
+                if (isCreatingProject) return;
+                setIsCreatingProject(true);
+                try {
+                  const newProj = {
+                    clientId: currentUser?.uid || '',
+                    name: lang === 'es' ? "Ecosistema Digital Especializado" : "Specialized Digital Ecosystem",
+                    description: lang === 'es' 
+                      ? "Desarrollo a medida con integración de base de datos Firestore y autenticación federada de Google Auth."
+                      : "Custom development with Firestore database integration and federated Google Auth authentication.",
+                    progress: 35,
+                    status: "en proceso",
+                    createdAt: serverTimestamp()
+                  };
+                  await addDoc(collection(db, 'projects'), newProj);
+                  alert(lang === 'es' ? "Proyecto de prueba creado en Firestore." : "Test project created in Firestore.");
+                } catch (e: any) {
+                  console.error("Error creating project:", e);
+                  alert("Error: " + e.message);
+                } finally {
+                  setIsCreatingProject(false);
+                }
+              }}
+              disabled={isCreatingProject}
+              className="inline-flex items-center gap-2 bg-[#C17F4E]/10 border border-[#C17F4E]/20 text-[#C17F4E] hover:bg-[#C17F4E]/20 px-4 py-2 rounded text-xs font-mono font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>{lang === 'es' ? 'Crear Proyecto de Prueba' : 'Create Test Project'}</span>
+            </button>
+          </div>
+        )}
+
+        {!currentUser ? (
+          <div className={`p-12 rounded-xl border text-center max-w-2xl mx-auto ${themeStyles.card}`}>
+            <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
+              <FolderKanban className="w-8 h-8" />
+            </div>
+            <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>
+              {lang === 'es' ? 'Acceso al Portal' : 'Portal Access'}
+            </h3>
+            <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
+              {lang === 'es' 
+                ? 'Inicia sesión con tu cuenta de Google autorizada para ver tus proyectos contratados.' 
+                : 'Sign in with your authorized Google account to view your contracted projects.'}
+            </p>
+            <button
+              onClick={handleGoogleSignIn}
+              className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
+            >
+              {t.gfNoAuthBtn}
+            </button>
+          </div>
+        ) : clientProjects.length === 0 ? (
+          <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
+            <FolderKanban className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+            <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">
+              {lang === 'es' ? 'Sin Proyectos Vinculados' : 'No Projects Linked'}
+            </h4>
+            <p className="text-xs text-zinc-500 font-sans">
+              {lang === 'es' 
+                ? 'No se encontraron proyectos activos vinculados a tu ID de cliente. Tu UID es: ' 
+                : 'No active projects found linked to your client ID. Your UID is: '}
+              <span className="font-mono text-[#C17F4E] font-bold">{currentUser.uid}</span>
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
+            {clientProjects.map((project) => {
+              const dateStr = project.createdAt && typeof project.createdAt.toDate === 'function' 
+                ? project.createdAt.toDate().toLocaleDateString() 
+                : 'Fecha Reciente';
+              return (
+                <div key={project.id} className={`p-6 rounded-xl border flex flex-col justify-between text-left ${themeStyles.card}`}>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span className="text-[9px] text-zinc-500 font-mono font-bold uppercase tracking-wider">ID: {project.id.substring(0, 8)}...</span>
+                      <span className={`font-mono text-[9px] px-2 py-0.5 rounded uppercase font-bold ${
+                        project.status === 'finalizado' || project.status === 'completado'
+                          ? 'text-emerald-500 bg-emerald-500/10'
+                          : 'text-[#C17F4E] bg-[#C17F4E]/10'
+                      }`}>
+                        {project.status}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className={`font-display font-black text-lg uppercase tracking-tight leading-tight ${themeStyles.title}`}>
+                        {project.name}
+                      </h4>
+                      <p className="text-[9px] text-zinc-500 font-mono mt-1">
+                        {lang === 'es' ? 'Iniciado' : 'Started'}: {dateStr}
+                      </p>
+                    </div>
+
+                    <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
+                      {project.description}
+                    </p>
+
+                    <div className="space-y-2 pt-2">
+                      <div className="flex justify-between items-center text-xs font-mono">
+                        <span className="text-zinc-500">{lang === 'es' ? 'Progreso' : 'Progress'}</span>
+                        <span className="text-[#C17F4E] font-bold">{project.progress}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-[#C17F4E] rounded-full transition-all duration-500" 
+                          style={{ width: `${project.progress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${themeStyles.bg}`}>
       
@@ -1319,7 +1458,7 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Action Tools: Contact + Language + Theme */}
+          {/* Action Tools: Contact + Login + Language + Theme */}
           <div className="hidden md:flex items-center gap-4">
             
             {/* Premium Contact Button */}
@@ -1332,6 +1471,18 @@ export default function App() {
               }`}
             >
               {t.contact}
+            </button>
+
+            {/* Premium Login / Portal Button */}
+            <button 
+              onClick={() => setActivePage('login')}
+              className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded transition-all border ${
+                activePage === 'login'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : isDark ? 'border-white/10 hover:border-[#C17F4E]/50 text-zinc-300 hover:text-white bg-zinc-950/20' : 'border-slate-300 hover:border-[#C17F4E]/50 text-slate-700 hover:text-slate-900 bg-white/20'
+              }`}
+            >
+              {currentUser ? (isAdminUser ? t.system : t.portal) : t.login}
             </button>
 
             {/* Language Switcher (ES | EN Toggle Group) */}
@@ -1392,6 +1543,18 @@ export default function App() {
               }`}
             >
               {t.contact}
+            </button>
+
+            {/* Mobile Login / Portal Button */}
+            <button 
+              onClick={() => setActivePage('login')}
+              className={`px-3 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded border transition-all shrink-0 ${
+                activePage === 'login'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : isDark ? 'border-white/10 text-zinc-300 bg-zinc-950/20' : 'border-slate-300 text-slate-700 bg-white/20'
+              }`}
+            >
+              {currentUser ? (isAdminUser ? 'SYS' : 'PORT') : 'LOGIN'}
             </button>
 
             {/* Language Switcher (ES | EN Toggle Group for mobile) */}
@@ -1481,13 +1644,19 @@ export default function App() {
                   onClick={() => { setActivePage('portafolio'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'portafolio' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
-                  {t.portHeader}
+                  {t.portfolio}
                 </button>
                 <button
                   onClick={() => { setActivePage('contacto'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'contacto' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
                   {t.contact}
+                </button>
+                <button
+                  onClick={() => { setActivePage('login'); setMobileMenuOpen(false); }}
+                  className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'login' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
+                >
+                  {currentUser ? (isAdminUser ? t.system : t.portal) : t.login}
                 </button>
               </div>
             </div>
@@ -1998,963 +2167,463 @@ export default function App() {
         {/* ======================================= */}
         {activePage === 'portafolio' && (
           <div className="fade-in">
-            
-            {/* Tabs de Navegación del Portal Cliente / Portafolio */}
-            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-8 flex border-b border-white/5 gap-6 text-[11px] font-semibold tracking-widest text-zinc-500 uppercase overflow-x-auto">
-              <button 
-                onClick={() => setPortfolioTab('casos')}
-                className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
-                  portfolioTab === 'casos' 
-                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
-                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
-                }`}
-              >
-                <FolderKanban className="w-4 h-4" />
-                {t.tab1}
-              </button>
-              <button 
-                onClick={() => setPortfolioTab('forms')}
-                className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
-                  portfolioTab === 'forms' 
-                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
-                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
-                }`}
-              >
-                <FileText className="w-4 h-4" />
-                {t.tab2}
-              </button>
-              <button 
-                onClick={() => setPortfolioTab('leads')}
-                className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
-                  portfolioTab === 'leads' 
-                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
-                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                {t.tab3}
-              </button>
-              <button 
-                onClick={() => setPortfolioTab('projects')}
-                className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
-                  portfolioTab === 'projects' 
-                    ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
-                    : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
-                }`}
-              >
-                <Layers className="w-4 h-4" />
-                {t.tab4}
-              </button>
-            </div>
+            {/* --- GALLERY CASOS DE ÉXITO --- */}
+            <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.csBadge}</span>
+                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 ${themeStyles.title}`}>
+                  {t.csTitle}
+                </h1>
+                <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
+                  {t.csSub}
+                </p>
+              </div>
 
-            {/* TAB 1: CASOS DE ÉXITO & FORM DE ONBOARDING */}
-            {portfolioTab === 'casos' && (
-              <div className="fade-in">
-                {/* --- GALLERY CASOS DE ÉXITO --- */}
-                <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
-                  <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.csBadge}</span>
-                    <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 ${themeStyles.title}`}>
-                      {t.csTitle}
-                    </h1>
-                    <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                      {t.csSub}
-                    </p>
-                  </div>
+              {/* Grid of Case Studies */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
+                {CASE_STUDIES.map((c, i) => (
+                  <CaseStudyCard key={i} c={c} isDark={isDark} themeStyles={themeStyles} lang={lang} />
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
 
-                  {/* Grid of Case Studies */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
-                    {CASE_STUDIES.map((c, i) => (
-                      <CaseStudyCard key={i} c={c} isDark={isDark} themeStyles={themeStyles} lang={lang} />
-                    ))}
-                  </div>
-                </section>
+        {/* ======================================= */}
+        {/*         PAGE 4: LOGIN & SISTEMA         */}
+        {/* ======================================= */}
+        {activePage === 'login' && (
+          <div className="fade-in">
+            {!currentUser ? (
+              /* PREMIUM LOGIN CARD */
+              <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto flex items-center justify-center min-h-[60vh]">
+                <div className="text-center max-w-xl mx-auto w-full">
+                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
+                    {lang === 'es' ? 'Acceso al Sistema' : 'System Access'}
+                  </span>
+                  <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 mb-4 ${themeStyles.title}`}>
+                    {lang === 'es' ? 'Iniciar Sesión' : 'Login'}
+                  </h1>
+                  <p className={`text-sm font-sans font-light mb-10 ${themeStyles.textMuted}`}>
+                    {lang === 'es' 
+                      ? 'Si eres miembro del equipo, accede para gestionar leads, formularios y proyectos. Si eres cliente, inicia sesión para monitorear el progreso de tus desarrollos.'
+                      : 'If you are a team member, access to manage leads, forms, and projects. If you are a client, log in to monitor the progress of your developments.'}
+                  </p>
 
-                {/* --- ONBOARDING FORM MULTI-STEP --- */}
-                <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto border-t border-white/5" id="onboarding-form">
-                  <div className="max-w-3xl mx-auto">
+                  <div className={`p-8 sm:p-12 rounded-2xl border backdrop-blur-md relative overflow-hidden ${themeStyles.card}`}>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#C17F4E]/5 via-transparent to-transparent pointer-events-none" />
                     
-                    <div className="text-center mb-12">
-                      <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.onbBadge}</span>
-                      <h2 className={`font-display font-bold text-3xl uppercase mt-2 ${themeStyles.title}`}>
-                        {t.onbTitle}
-                      </h2>
-                      <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                        {t.onbSub}
-                      </p>
+                    <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6 border border-[#C17F4E]/20">
+                      <LogIn className="w-8 h-8" />
+                    </div>
+                    
+                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>
+                      {lang === 'es' ? 'Autenticación Protegida' : 'Secure Authentication'}
+                    </h3>
+                    
+                    <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
+                      {lang === 'es'
+                        ? 'Utiliza tu cuenta corporativa o de cliente autorizada por Google para acceder.'
+                        : 'Use your authorized corporate or client Google account to gain access.'}
+                    </p>
+                    
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="w-full inline-flex items-center justify-center gap-3 bg-[#C17F4E] hover:bg-[#D79663] text-white px-8 py-4 rounded font-mono text-xs font-bold uppercase tracking-widest transition-all shadow-lg cursor-pointer"
+                    >
+                      <span className="w-4 h-4 flex items-center justify-center bg-white rounded-full p-0.5">
+                        <svg viewBox="0 0 24 24" className="w-full h-full text-zinc-950 fill-current">
+                          <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114-3.51 0-6.38-2.87-6.38-6.38s2.87-6.38 6.38-6.38c1.53 0 2.98.54 4.12 1.53l3.07-3.07C19.06 1.89 15.8 0 12.24 0 5.48 0 0 5.48 0 12.24s5.48 12.24 12.24 12.24c6.76 0 12.24-5.48 12.24-12.24 0-.84-.09-1.68-.26-2.455H12.24z"/>
+                        </svg>
+                      </span>
+                      {lang === 'es' ? 'Entrar con Google' : 'Sign In with Google'}
+                    </button>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              /* LOGGED IN SYSTEM / DASHBOARD */
+              <div className="py-10 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+                {/* Header de Bienvenida y Perfil */}
+                <div className={`p-6 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 ${themeStyles.card}`}>
+                  <div className="flex items-center gap-4">
+                    {currentUser.photoURL ? (
+                      <img src={currentUser.photoURL} alt={currentUser.displayName || ''} className="w-12 h-12 rounded-full border border-[#C17F4E]/30" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center font-bold">
+                        {currentUser.displayName?.charAt(0) || 'U'}
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <div className="flex items-center gap-2">
+                        <h3 className={`font-display font-bold text-sm uppercase ${themeStyles.title}`}>{currentUser.displayName || 'Usuario Google'}</h3>
+                        <span className={`font-mono text-[9px] px-2 py-0.5 rounded tracking-wider uppercase font-bold ${
+                          isAdminUser ? 'text-emerald-500 bg-emerald-500/10' : 'text-blue-500 bg-blue-500/10'
+                        }`}>
+                          {isAdminUser ? (lang === 'es' ? 'Administrador' : 'Administrator') : (lang === 'es' ? 'Cliente' : 'Client')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-500 font-mono">{currentUser.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 items-center self-stretch sm:self-auto justify-between sm:justify-end">
+                    {googleAccessToken && (
+                      <span className="font-mono text-[9px] text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded tracking-wider">{t.gfAuthStatus}</span>
+                    )}
+                    <button
+                      onClick={handleSignOut}
+                      className="p-2 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider"
+                      title={lang === 'es' ? 'Cerrar Sesión' : 'Sign Out'}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>{lang === 'es' ? 'Cerrar Sesión' : 'Log Out'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dashboard Contents */}
+                {isAdminUser ? (
+                  /* VISTA DE ADMINISTRADOR */
+                  <div className="space-y-6">
+                    {/* Tabs de Navegación del Sistema (Solo para Admin) */}
+                    <div className="flex border-b border-white/5 gap-6 text-[11px] font-semibold tracking-widest text-zinc-500 uppercase overflow-x-auto pb-0.5">
+                      <button 
+                        onClick={() => setPortfolioTab('leads')}
+                        className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
+                          portfolioTab === 'leads' 
+                            ? `${themeStyles.title} border-[#C17F4E] border-b-2` 
+                            : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
+                        }`}
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        {lang === 'es' ? 'Bandeja de Leads' : 'Leads Inbox'}
+                      </button>
+                      <button 
+                        onClick={() => setPortfolioTab('forms')}
+                        className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
+                          portfolioTab === 'forms' 
+                            ? `${themeStyles.title} border-[#C17F4E] border-b-2` 
+                            : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
+                        }`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        {lang === 'es' ? 'Sincronizador Google' : 'Google Forms Sync'}
+                      </button>
+                      <button 
+                        onClick={() => setPortfolioTab('projects')}
+                        className={`pb-4 transition-all uppercase flex items-center gap-2 shrink-0 ${
+                          portfolioTab === 'projects' 
+                            ? `${themeStyles.title} border-[#C17F4E] border-b-2` 
+                            : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
+                        }`}
+                      >
+                        <Layers className="w-4 h-4" />
+                        {lang === 'es' ? 'Gestión de Proyectos' : 'Projects Admin'}
+                      </button>
                     </div>
 
-                    {/* Form Progress Indicator Header */}
-                    <div className="flex items-center justify-between mb-8 px-4 font-mono text-[10px] tracking-wider text-zinc-500 border-b border-white/5 pb-4">
-                      {[
-                        { step: 1, label: t.onbSteps[0] },
-                        { step: 2, label: t.onbSteps[1] },
-                        { step: 3, label: t.onbSteps[2] },
-                        { step: 4, label: t.onbSteps[3] }
-                      ].map((s) => (
-                        <div key={s.step} className="flex items-center gap-2">
-                          <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold ${
-                            onboardingStep >= s.step ? 'bg-[#C17F4E] text-white' : 'bg-zinc-800 text-zinc-500'
-                          }`}>
-                            {s.step}
-                          </span>
-                          <span className={onboardingStep === s.step ? `${isDark ? 'text-white' : 'text-[#020813]'} font-bold` : ''}>{s.label}</span>
-                        </div>
-                      ))}
-                    </div>
+                    {/* Contenidos de las Pestañas de Admin */}
+                    {portfolioTab === 'leads' && (
+                      <div className="fade-in">
+                        {/* TAB 3 CONTENT: LEADS RECIBIDOS */}
+                        <section className="py-8">
+                          <div className="text-left mb-8">
+                            <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.crmBadge}</span>
+                            <h2 className={`font-display font-extrabold text-2xl sm:text-3xl uppercase mt-1 ${themeStyles.title}`}>
+                              {t.crmTitle}
+                            </h2>
+                            <p className={`text-xs sm:text-sm font-sans font-light mt-1 ${themeStyles.textMuted}`}>
+                              {t.crmSub}
+                            </p>
+                          </div>
 
-                    {/* Form Frame */}
-                    <div className={`p-8 rounded-xl border relative overflow-hidden shadow-2xl ${themeStyles.card}`}>
-                      
-                      {/* Validation Error Warnings */}
-                      {validationError && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg mb-6 text-xs sm:text-sm font-sans flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4" />
-                          <span>{validationError}</span>
-                        </div>
-                      )}
-
-                      {!formSubmitted ? (
-                        <form onSubmit={handleFormSubmit} className="space-y-6">
-                          
-                          {/* STEP 1: PERFIL NEGOCIO */}
-                          {onboardingStep === 1 && (
-                            <div className="space-y-4 fade-in">
-                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep1Title}</h3>
-                              
-                              <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                                  <span>{t.onbStep1Label1}</span>
-                                  {touchedFields.companyName && isCompanyNameValid && (
-                                    <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
-                                      <Check className="w-3.5 h-3.5" /> {t.onbStep1Val}
-                                    </span>
-                                  )}
-                                </label>
-                                <input
-                                  type="text"
-                                  value={companyName}
-                                  onChange={(e) => setCompanyName(e.target.value)}
-                                  onBlur={() => handleFieldBlur('companyName')}
-                                  placeholder="Ej. Amy Tevet TM"
-                                  className={getInputClass('companyName', isCompanyNameValid, themeStyles)}
-                                />
+                          <div className="space-y-6">
+                            {receivedLeads.length === 0 ? (
+                              <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
+                                <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                                <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">
+                                  {lang === 'es' ? 'Sin Leads' : 'No Leads'}
+                                </h4>
+                                <p className="text-xs text-zinc-500 font-sans">
+                                  {lang === 'es' ? 'No se encontraron cotizaciones registradas.' : 'No quotes found.'}
+                                </p>
                               </div>
-
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    {t.onbStep1Label2}
-                                  </label>
-                                  <select
-                                    value={industry}
-                                    onChange={(e) => setIndustry(e.target.value)}
-                                    className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
-                                  >
-                                    {['Tecnología', 'Salud y Clínicas', 'Retail / E-commerce', 'Inmobiliaria', 'Educación', 'Servicios Profesionales'].map((ind) => (
-                                      <option key={ind} value={ind} className={isDark ? "bg-[#020813] text-white" : "bg-[#FAF8F5] text-slate-800"}>{lang === 'es' ? ind : (ind === 'Tecnología' ? 'Technology' : ind === 'Salud y Clínicas' ? 'Health & Clinics' : ind === 'Retail / E-commerce' ? 'Retail / E-commerce' : ind === 'Inmobiliaria' ? 'Real Estate' : ind === 'Educación' ? 'Education' : 'Professional Services')}</option>
-                                    ))}
-                                  </select>
-                                </div>
-
-                                <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                    {t.onbStep1Label3}
-                                  </label>
-                                  <select
-                                    value={companySize}
-                                    onChange={(e) => setCompanySize(e.target.value)}
-                                    className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
-                                  >
-                                    {['1-10 empleados', '11-50 empleados', '51+ empleados'].map((size) => (
-                                      <option key={size} value={size} className={isDark ? "bg-[#020813] text-white" : "bg-[#FAF8F5] text-slate-800"}>{lang === 'es' ? size : size.replace('empleados', 'employees')}</option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* STEP 2: CUELLO DE BOTELLA */}
-                          {onboardingStep === 2 && (
-                            <div className="space-y-4 fade-in">
-                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep2Title}</h3>
-
-                              <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                                  <span>{t.onbStep2Label1}</span>
-                                  {touchedFields.bottleneck && isBottleneckValid && (
-                                    <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
-                                      <Check className="w-3.5 h-3.5" /> {t.onbStep2Val}
-                                    </span>
-                                  )}
-                                </label>
-                                <textarea
-                                  rows={3}
-                                  value={bottleneck}
-                                  onChange={(e) => setBottleneck(e.target.value)}
-                                  onBlur={() => handleFieldBlur('bottleneck')}
-                                  placeholder={lang === 'es' ? 'Ej. Mi catálogo no sincroniza automáticamente con Meta Ads y perdemos compras manuales...' : 'e.g. My catalog does not sync automatically with Meta Ads and we lose manual sales...'}
-                                  className={getInputClass('bottleneck', isBottleneckValid, themeStyles)}
-                                />
-                              </div>
-
-                              <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  {t.onbStep2Label2}
-                                </label>
-                                <div className="grid grid-cols-3 gap-2">
-                                  {['Bajo', 'Medio', 'Avanzado'].map((lvl) => (
-                                    <button
-                                      key={lvl}
-                                      type="button"
-                                      onClick={() => setDigitalMaturity(lvl)}
-                                      className={`py-2 rounded font-mono text-xs uppercase transition-all border ${
-                                        digitalMaturity === lvl
-                                          ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}`
-                                          : isDark ? 'border-white/5 bg-zinc-900/20 text-zinc-400' : 'border-slate-200 bg-slate-100 text-slate-600 hover:bg-slate-200/80'
-                                      }`}
-                                    >
-                                      {lang === 'es' ? lvl : (lvl === 'Bajo' ? 'Low' : lvl === 'Medio' ? 'Medium' : 'Advanced')}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* STEP 3: INFRAESTRUCTURA */}
-                          {onboardingStep === 3 && (
-                            <div className="space-y-4 fade-in">
-                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep3Title}</h3>
-                              <p className="text-xs text-zinc-500 font-sans leading-relaxed">
-                                {t.onbStep3Sub}
-                              </p>
-
-                              <div className="space-y-2">
-                                {MODULES.map((m) => {
-                                  const checked = selectedModules.includes(m.id);
-                                  const translatedName = lang === 'es' ? m.name : (m.id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : m.id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : m.id === 'custom_ml' ? 'Custom AI & ML Model' : m.id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync');
+                            ) : (
+                              <div className="grid grid-cols-1 gap-6 font-sans">
+                                {receivedLeads.map((lead) => {
+                                  const dateStr = lead.createdAt && typeof lead.createdAt.toDate === 'function' 
+                                    ? lead.createdAt.toDate().toLocaleString() 
+                                    : 'Reciente';
                                   return (
-                                    <div
-                                      key={m.id}
-                                      onClick={() => toggleModule(m.id)}
-                                      className={`p-3 rounded border cursor-pointer flex items-center justify-between text-xs transition-all ${
-                                        checked 
-                                          ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}` 
-                                          : isDark ? 'border-white/5 bg-zinc-900/10 text-zinc-400' : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-350'
-                                      }`}
-                                    >
-                                      <div className="flex items-center gap-3">
-                                        <span className={`w-4 h-4 rounded border flex items-center justify-center ${checked ? 'bg-[#C17F4E] border-[#C17F4E]' : 'border-zinc-500'}`}>
-                                          {checked && <Check className="w-2.5 h-2.5 text-white" />}
-                                        </span>
-                                        <span>{translatedName}</span>
+                                    <div key={lead.id} className={`p-6 rounded-xl border text-left ${themeStyles.card}`}>
+                                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/5 pb-4 mb-4 gap-2">
+                                        <div>
+                                          <h3 className={`font-display font-black text-lg uppercase tracking-tight ${themeStyles.title}`}>{lead.companyName || lead.fullName || 'Empresa Anónima'}</h3>
+                                          <p className="text-xs text-zinc-500 font-mono">{lead.fullName} • {lead.email}</p>
+                                        </div>
+                                        <div className="text-right sm:text-right">
+                                          <span className="text-[10px] text-zinc-500 font-mono block">{dateStr}</span>
+                                          <span className="text-[10px] text-[#C17F4E] font-mono block font-bold uppercase tracking-wider">{lead.selectedTier || 'Tier Personalizado'}</span>
+                                        </div>
                                       </div>
-                                      <span className="font-mono text-[#C17F4E] font-semibold">${m.price}</span>
+
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="space-y-2">
+                                          <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{lang === 'es' ? 'Especificaciones del Proyecto' : 'Project Specifications'}</h4>
+                                          <div className="space-y-1 text-xs">
+                                            <p><span className={`${themeStyles.textMuted}`}>{lang === 'es' ? 'Tipo:' : 'Type:'}</span> <span className="font-semibold">{lead.projectType || 'No especificado'}</span></p>
+                                            <p><span className={`${themeStyles.textMuted}`}>{lang === 'es' ? 'Duración:' : 'Duration:'}</span> <span className="font-semibold">{lead.estimatedDurationWeeks || 'No especificado'} {lang === 'es' ? 'semanas' : 'weeks'}</span></p>
+                                            <p><span className={`${themeStyles.textMuted}`}>{lang === 'es' ? 'Presupuesto:' : 'Budget:'}</span> <span className="font-semibold text-emerald-500">${lead.estimatedPrice || '0'}</span></p>
+                                          </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                          <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{lang === 'es' ? 'Módulos Seleccionados' : 'Selected Modules'}</h4>
+                                          <div className="flex flex-wrap gap-1.5">
+                                            {lead.selectedModules && Array.isArray(lead.selectedModules) && lead.selectedModules.length > 0 ? (
+                                              lead.selectedModules.map((m: any, idx: number) => (
+                                                <span key={idx} className="text-[9px] bg-zinc-800 border border-white/5 text-zinc-300 px-2 py-0.5 rounded font-mono uppercase">
+                                                  {m.name || m}
+                                                </span>
+                                              ))
+                                            ) : (
+                                              <span className="text-xs text-zinc-500 italic">{lang === 'es' ? 'Ninguno' : 'None'}</span>
+                                            )}
+                                          </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                          <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{lang === 'es' ? 'Contacto Adicional' : 'Additional Contact'}</h4>
+                                          <div className="space-y-1 text-xs">
+                                            <p><span className={`${themeStyles.textMuted}`}>{lang === 'es' ? 'Teléfono:' : 'Phone:'}</span> <span className="font-semibold">{lead.phone || 'No especificado'}</span></p>
+                                            <p><span className={`${themeStyles.textMuted}`}>{lang === 'es' ? 'Mensaje:' : 'Message:'}</span> <span className="font-light">{lead.message || 'Sin mensaje adicional'}</span></p>
+                                          </div>
+                                          <div className="pt-2">
+                                            <a 
+                                              href={`https://wa.me/${lead.phone?.replace(/[^0-9]/g, '')}`} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer" 
+                                              className="inline-flex items-center gap-1 bg-[#25D366] text-white px-3 py-1 rounded text-[10px] font-mono font-bold uppercase hover:bg-[#20ba59] transition-all"
+                                            >
+                                              WhatsApp
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                   );
                                 })}
                               </div>
-
-                              <div className="pt-2 flex justify-between font-mono text-xs text-[#C17F4E] font-bold">
-                                <span>{t.onbStep3Budget}</span>
-                                <span>${configuratorTotal} USD</span>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* STEP 4: CONTACT DATA */}
-                          {onboardingStep === 4 && (
-                            <div className="space-y-4 fade-in">
-                              <h3 className={`font-display font-bold text-base uppercase tracking-wider mb-2 ${themeStyles.title}`}>{t.onbStep4Title}</h3>
-
-                              {/* Ficha Técnica Resumen para Reducción de Fricción (CRO) */}
-                              <div className={`p-4 rounded-lg border space-y-2 text-xs font-mono mb-4 ${themeStyles.cardInner}`}>
-                                <p className={`text-[10px] text-zinc-500 uppercase tracking-widest font-bold border-b pb-1.5 mb-2 flex items-center justify-between ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                  <span>{t.onbStep4Ficha}</span>
-                                  <span className="text-[#C17F4E]">{t.onbStep4FichaEco}</span>
-                                </p>
-                                <div className="flex justify-between">
-                                  <span className="text-zinc-500">🏢 {lang === 'es' ? 'Negocio' : 'Business'}:</span>
-                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>{companyName || (lang === 'es' ? 'No especificado' : 'Not specified')}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-zinc-500">🛠️ {lang === 'es' ? 'Módulos' : 'Modules'}:</span>
-                                  <span className={`max-w-[220px] text-right truncate ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>
-                                    {selectedModules.map(id => lang === 'es' ? MODULES.find(m => m.id === id)?.name : (id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : id === 'custom_ml' ? 'Custom AI & ML Model' : id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync')).join(', ')}
-                                  </span>
-                                </div>
-                                <div className={`flex justify-between border-t pt-1.5 mt-1.5 font-bold text-[#C17F4E] ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                  <span>💰 {lang === 'es' ? 'Presupuesto estimado' : 'Estimated budget'}:</span>
-                                  <span>${configuratorTotal} USD</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-zinc-500">⏱️ {lang === 'es' ? 'Tiempo estimado' : 'Estimated time'}:</span>
-                                  <span className={isDark ? 'text-zinc-400' : 'text-slate-750'}>~{configuratorDuration} {t.confSumTimeWeeks}</span>
-                                </div>
-                              </div>
-
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                                    <span>{t.onbStep4Label1}</span>
-                                    {touchedFields.contactName && isContactNameValid && (
-                                      <span className="text-emerald-500 text-[10px]">✓</span>
-                                    )}
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={contactName}
-                                    onChange={(e) => setContactName(e.target.value)}
-                                    onBlur={() => handleFieldBlur('contactName')}
-                                    placeholder={lang === 'es' ? 'Ej. Psic. Damaris Pazmiño' : 'e.g. Dr. Jane Doe'}
-                                    className={getInputClass('contactName', isContactNameValid, themeStyles)}
-                                  />
-                                </div>
-
-                                <div>
-                                  <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                                    <span>{t.onbStep4Label2}</span>
-                                    {touchedFields.contactEmail && isContactEmailValid && (
-                                      <span className="text-emerald-500 text-[10px]">✓</span>
-                                    )}
-                                  </label>
-                                  <input
-                                    type="email"
-                                    value={contactEmail}
-                                    onChange={(e) => setContactEmail(e.target.value)}
-                                    onBlur={() => handleFieldBlur('contactEmail')}
-                                    placeholder="contacto@empresa.com"
-                                    className={getInputClass('contactEmail', isContactEmailValid, themeStyles)}
-                                  />
-                                </div>
-                              </div>
-
-                              <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                                  <span>{t.onbStep4Label3}</span>
-                                  {touchedFields.contactPhone && isContactPhoneValid && (
-                                    <span className="text-emerald-500 text-[10px]">✓ {lang === 'es' ? 'Teléfono Válido' : 'Valid Phone'}</span>
-                                  )}
-                                </label>
-                                <input
-                                  type="text"
-                                  value={contactPhone}
-                                  onChange={(e) => setContactPhone(e.target.value)}
-                                  onBlur={() => handleFieldBlur('contactPhone')}
-                                  placeholder={lang === 'es' ? 'Ej. +593983186044' : 'e.g. +1234567890'}
-                                  className={getInputClass('contactPhone', isContactPhoneValid, themeStyles)}
-                                />
-                              </div>
-
-                              <div>
-                                <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                                  {t.onbStep4Label4}
-                                </label>
-                                <textarea
-                                  rows={2}
-                                  value={customMessage}
-                                  onChange={(e) => setCustomMessage(e.target.value)}
-                                  placeholder={lang === 'es' ? 'Alguna preferencia para la pasarela de pagos, geolocalización o APIs...' : 'Any preferences for payment gateway, geolocation or APIs...'}
-                                  className={`w-full p-3 rounded text-sm ${themeStyles.input}`}
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Navigation Stepper buttons footer */}
-                          <div className="flex flex-col gap-4 pt-6 border-t border-white/5">
-                            <div className="flex justify-between items-center w-full">
-                              {onboardingStep > 1 ? (
-                                <button
-                                  type="button"
-                                  onClick={handlePrevStep}
-                                  className="px-5 py-2.5 rounded border border-white/5 text-zinc-400 hover:bg-white/5 font-mono text-xs uppercase transition-colors"
-                                >
-                                  <span>{t.onbBtnBack}</span>
-                                </button>
-                              ) : (
-                                <div></div>
-                              )}
-
-                              {onboardingStep < 4 ? (
-                                <button
-                                  type="button"
-                                  onClick={handleNextStep}
-                                  className="bg-[#C17F4E] hover:bg-[#D79663] text-white px-6 py-2.5 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-colors"
-                                >
-                                  <span>{t.onbBtnNext}</span>
-                                  <ArrowRight className="w-3.5 h-3.5" />
-                                </button>
-                              ) : (
-                                <button
-                                  type="submit"
-                                  className="bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white px-8 py-3 rounded font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-[#C17F4E]/25 transition-all transform hover:-translate-y-0.5"
-                                >
-                                  <span>{t.onbBtnSubmit}</span>
-                                  <Send className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </div>
-
-                            {onboardingStep === 4 && (
-                              <p className="text-[10px] text-center text-zinc-500 font-sans tracking-wide">
-                                {t.onbStep4Privacy}
-                              </p>
                             )}
                           </div>
-
-                        </form>
-                      ) : (
-                        // Success View
-                        <div className="text-center py-10 space-y-6">
-                          <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
-                            <CheckCircle2 className="w-10 h-10" />
-                          </div>
-                          <h3 className={`font-display font-black text-xl uppercase ${themeStyles.title}`}>{t.onbSuccessTitle}</h3>
-                          <p className={`text-xs sm:text-sm max-w-md mx-auto leading-relaxed ${themeStyles.textMuted}`}>
-                            {t.onbSuccessSub}
-                          </p>
-                          <div className="flex gap-4 justify-center">
-                            <button
-                              onClick={resetForm}
-                              className="px-5 py-2.5 border border-[#C17F4E] text-[#C17F4E] rounded text-xs font-mono uppercase font-bold"
-                            >
-                              {t.onbSuccessReset}
-                            </button>
-                            <a
-                              href="https://wa.me/593983186044"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-5 py-2.5 bg-[#C17F4E] text-white rounded text-xs font-mono uppercase font-bold hover:bg-[#D79663]"
-                            >
-                              {t.onbSuccessWa}
-                            </a>
-                          </div>
-                        </div>
-                      )}
-
-                    </div>
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {/* TAB 2: GOOGLE FORMS SYNCHRONIZER */}
-            {portfolioTab === 'forms' && (
-              <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.gfBadge}</span>
-                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {t.gfTitle}
-                  </h1>
-                  <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    {t.gfSub}
-                  </p>
-                </div>
-
-                {!currentUser ? (
-                  /* Vista No Autenticado */
-                  <div className={`p-12 rounded-xl border text-center max-w-2xl mx-auto ${themeStyles.card}`}>
-                    <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
-                      <FileText className="w-8 h-8" />
-                    </div>
-                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>{t.gfNoAuthTitle}</h3>
-                    <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
-                      {t.gfNoAuthSub}
-                    </p>
-                    <button
-                      onClick={handleGoogleSignIn}
-                      className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
-                    >
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                      </svg>
-                      <span>{t.gfNoAuthBtn}</span>
-                    </button>
-                    {formsError && (
-                      <p className="text-red-400 font-mono text-xs mt-4">{formsError}</p>
+                        </section>
+                      </div>
                     )}
-                  </div>
-                ) : (
-                  /* Vista Autenticado */
-                  <div className="space-y-10">
-                    
-                    {/* Header de Usuario */}
-                    <div className={`p-6 rounded-xl border flex flex-col sm:flex-row justify-between items-center gap-4 ${themeStyles.card}`}>
-                      <div className="flex items-center gap-4">
-                        {currentUser.photoURL ? (
-                          <img src={currentUser.photoURL} alt={currentUser.displayName || ''} className="w-12 h-12 rounded-full border border-[#C17F4E]/30" />
-                        ) : (
-                          <div className="w-12 h-12 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center font-bold">
-                            {currentUser.displayName?.charAt(0) || 'U'}
+
+                    {portfolioTab === 'forms' && (
+                      <div className="fade-in">
+                        {/* TAB 2 CONTENT: GOOGLE FORMS SYNCHRONIZER */}
+                        <section className="py-8">
+                          <div className="text-left mb-8">
+                            <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.gfBadge}</span>
+                            <h2 className={`font-display font-extrabold text-2xl sm:text-3xl uppercase mt-1 ${themeStyles.title}`}>
+                              {t.gfTitle}
+                            </h2>
+                            <p className={`text-xs sm:text-sm font-sans font-light mt-1 ${themeStyles.textMuted}`}>
+                              {t.gfSub}
+                            </p>
                           </div>
-                        )}
-                        <div className="text-left">
-                          <h3 className={`font-display font-bold text-sm uppercase ${themeStyles.title}`}>{currentUser.displayName || 'Usuario Google'}</h3>
-                          <p className="text-xs text-zinc-500 font-mono">{currentUser.email}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-4 items-center">
-                        <span className="font-mono text-[9px] text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded tracking-wider">{t.gfAuthStatus}</span>
-                        <button
-                          onClick={handleSignOut}
-                          className="p-2 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
-                          title="Cerrar Sesión"
-                        >
-                          <LogOut className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                      {/* Columna Izquierda */}
-                      <div className="lg:col-span-5 space-y-6 flex flex-col justify-start">
-                        
-                        {/* Enlazar Form */}
-                        <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 flex items-center gap-2 ${themeStyles.title}`}>
-                            <Plus className="w-4 h-4 text-[#C17F4E]" />
-                            {t.gfConnectTitle}
-                          </h4>
-                          <form onSubmit={handleConnectForm} className="space-y-4">
-                            <div>
-                              <label className="block text-[10px] uppercase font-mono tracking-wider text-zinc-500 mb-2">
-                                {t.gfConnectLabel}
-                              </label>
-                              <div className="flex gap-2">
-                                <input
-                                  type="text"
-                                  value={formInputId}
-                                  onChange={(e) => setFormInputId(e.target.value)}
-                                  placeholder="Ej. 1FAIpQLSfD..."
-                                  className={`flex-1 p-2.5 rounded text-xs ${themeStyles.input}`}
-                                />
-                                <button
-                                  type="submit"
-                                  disabled={isLoadingForms}
-                                  className="bg-[#C17F4E] hover:bg-[#D79663] text-white px-4 rounded text-xs font-mono font-bold uppercase disabled:opacity-50 cursor-pointer"
-                                >
-                                  {isLoadingForms ? '...' : t.gfConnectBtn}
-                                </button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-
-                        {/* Crear Form Express */}
-                        <div className={`p-6 rounded-xl border border-dashed border-[#C17F4E]/30 bg-[#C17F4E]/5 text-center`}>
-                          <Zap className="w-6 h-6 text-[#C17F4E] mx-auto mb-3" />
-                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-2 ${themeStyles.title}`}>
-                            {t.gfExpressTitle}
-                          </h4>
-                          <p className="text-[11px] text-zinc-400 leading-relaxed mb-4 font-sans">
-                            {t.gfExpressSub}
-                          </p>
-                          <button
-                            onClick={handleCreateAutoForm}
-                            disabled={isCreatingForm}
-                            className="w-full bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white py-2.5 rounded text-xs font-mono font-bold uppercase tracking-widest disabled:opacity-50 cursor-pointer"
-                          >
-                            {isCreatingForm ? t.gfExpressBtn2 : t.gfExpressBtn1}
-                          </button>
-                        </div>
-
-                        {/* Lista de Forms Conectados */}
-                        <div className={`p-6 rounded-xl border flex-1 ${themeStyles.card}`}>
-                          <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 ${themeStyles.title}`}>
-                            {t.gfLinkedTitle} ({connectedForms.length})
-                          </h4>
-                          {connectedForms.length === 0 ? (
-                            <p className="text-[11px] text-zinc-500 font-sans italic">{t.gfLinkedEmpty}</p>
-                          ) : (
-                            <div className="space-y-2 max-h-60 overflow-y-auto">
-                              {connectedForms.map((f) => (
-                                <button
-                                  key={f.id}
-                                  onClick={() => setSelectedFormId(f.formId)}
-                                  className={`w-full p-3 rounded text-left flex items-center justify-between border text-xs transition-all ${
-                                    selectedFormId === f.formId
-                                      ? `border-[#C17F4E] bg-[#C17F4E]/10 ${isDark ? 'text-white' : 'text-[#020813] font-bold'}`
-                                      : isDark ? 'border-white/5 bg-zinc-900/15 text-zinc-400 hover:bg-zinc-900/30' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
-                                  }`}
-                                >
-                                  <div className="truncate flex-1 pr-2">
-                                    <p className="truncate font-sans font-medium">{f.formTitle}</p>
-                                    <p className="text-[9px] font-mono text-zinc-500 truncate">{f.formId}</p>
+                          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                            {/* Columna Izquierda */}
+                            <div className="lg:col-span-5 space-y-6 flex flex-col justify-start">
+                              
+                              {/* Enlazar Form */}
+                              <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
+                                <h3 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 ${themeStyles.title}`}>
+                                  {lang === 'es' ? 'Enlazar Nuevo Formulario' : 'Link New Form'}
+                                </h3>
+                                <div className="space-y-4">
+                                  <div>
+                                    <label className="block text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">Google Form ID</label>
+                                    <input 
+                                      type="text" 
+                                      placeholder="e.g. 1FAIpQLSfD..." 
+                                      value={formInputId}
+                                      onChange={(e) => setFormInputId(e.target.value)}
+                                      className={`w-full p-3 rounded text-xs font-mono outline-none border transition-all ${themeStyles.input}`}
+                                    />
+                                    <span className="text-[10px] text-zinc-500 block mt-1.5 font-light leading-relaxed">
+                                      {lang === 'es'
+                                        ? 'Copia el ID largo de la URL de tu Google Form de edición.'
+                                        : 'Copy the long ID from the URL of your editing Google Form.'}
+                                    </span>
                                   </div>
-                                  <ChevronRight className="w-4 h-4 text-zinc-500" />
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                      </div>
-
-                      {/* Columna Derecha */}
-                      <div className="lg:col-span-7 flex flex-col justify-start">
-                        {formsError && (
-                          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg mb-6 text-xs flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4" />
-                            <span>{formsError}</span>
-                          </div>
-                        )}
-
-                        {!selectedFormId ? (
-                          <div className={`p-12 rounded-xl border text-center h-full flex flex-col justify-center items-center ${themeStyles.card}`}>
-                            <HelpCircle className="w-12 h-12 text-zinc-600 mb-4" />
-                            <h5 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">{t.gfNoSelectedTitle}</h5>
-                            <p className="text-xs text-zinc-500 font-sans max-w-sm">{t.gfNoSelectedSub}</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-6">
-                            
-                            {/* Panel Principal de Control */}
-                            <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                              <div className="flex justify-between items-start gap-4 mb-4">
-                                <div className="text-left">
-                                  <span className="text-zinc-500 font-mono text-[9px] uppercase tracking-wider block">{t.gfActiveTitle}</span>
-                                  <h3 className={`font-display font-black text-lg uppercase mt-1 leading-tight ${themeStyles.title}`}>
-                                    {activeFormDetails?.info?.title || 'Cargando formulario de Google...'}
-                                  </h3>
-                                  <p className="text-[10px] text-zinc-500 font-mono truncate max-w-md mt-1">ID: {selectedFormId}</p>
+                                  <button
+                                    onClick={async () => {
+                                      if (!formInputId || isCreatingForm) return;
+                                      setIsCreatingForm(true);
+                                      try {
+                                        const newFormDoc = {
+                                          formId: formInputId,
+                                          userId: currentUser.uid,
+                                          createdAt: serverTimestamp()
+                                        };
+                                        await setDoc(doc(db, 'userForms', formInputId), newFormDoc);
+                                        setFormInputId('');
+                                        alert(lang === 'es' ? "Formulario registrado con éxito." : "Form registered successfully.");
+                                      } catch (err: any) {
+                                        alert("Error: " + err.message);
+                                      } finally {
+                                        setIsCreatingForm(false);
+                                      }
+                                    }}
+                                    disabled={isCreatingForm || !formInputId}
+                                    className="w-full flex items-center justify-center gap-2 bg-[#C17F4E] hover:bg-[#D79663] text-white py-3 rounded text-xs font-mono font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                    <span>{lang === 'es' ? 'Conectar Formulario' : 'Connect Form'}</span>
+                                  </button>
                                 </div>
-                                <div className="flex gap-2 shrink-0">
+                              </div>
+
+                              {/* Formularios Conectados */}
+                              <div className={`p-6 rounded-xl border flex-1 ${themeStyles.card}`}>
+                                <div className="flex justify-between items-center mb-4">
+                                  <h3 className={`font-display font-bold text-xs uppercase tracking-wider ${themeStyles.title}`}>
+                                    {lang === 'es' ? 'Formularios Activos' : 'Active Forms'}
+                                  </h3>
                                   <button
                                     onClick={fetchActiveFormFromGoogle}
-                                    disabled={isLoadingForms}
-                                    className="p-2 bg-zinc-900 hover:bg-zinc-800 rounded border border-white/5 text-zinc-400 hover:text-[#C17F4E] transition-all cursor-pointer"
-                                    title="Sincronizar Datos"
+                                    className="p-1.5 hover:bg-white/5 rounded transition-colors text-zinc-500 hover:text-white"
+                                    title="Sincronizar manual"
                                   >
-                                    <RefreshCw className={`w-4 h-4 ${isLoadingForms ? 'animate-spin' : ''}`} />
+                                    <RefreshCw className="w-3.5 h-3.5" />
                                   </button>
-                                  <a
-                                    href={`https://docs.google.com/forms/d/${selectedFormId}/viewform`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-2 bg-zinc-900 hover:bg-zinc-800 rounded border border-white/5 text-zinc-400 hover:text-[#C17F4E] transition-all flex items-center justify-center"
-                                    title="Ver Formulario"
-                                  >
-                                    <ExternalLink className="w-4 h-4" />
-                                  </a>
                                 </div>
-                              </div>
 
-                               <div className={`grid grid-cols-3 gap-4 border-t pt-4 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveResponses}</span>
-                                  <span className={`font-mono text-lg font-bold ${themeStyles.title}`}>{activeFormResponses.length}</span>
-                                </div>
-                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveSync}</span>
-                                  <span className="font-mono text-[10px] font-bold text-emerald-500 flex items-center justify-center gap-1 mt-1">
-                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                    ONLINE
-                                  </span>
-                                </div>
-                                <div className={`p-3 rounded border text-center ${themeStyles.cardInner}`}>
-                                  <span className="text-[9px] text-zinc-500 font-mono block uppercase">{t.gfActiveQuestions}</span>
-                                  <span className="font-mono text-lg font-bold text-[#C17F4E]">
-                                    {activeFormDetails?.items?.length || 0}
-                                  </span>
-                                </div>
+                                {connectedForms.length === 0 ? (
+                                  <div className="py-8 text-center border border-dashed border-white/5 rounded-lg">
+                                    <p className="text-xs text-zinc-500 font-sans italic">{lang === 'es' ? 'Sin formularios vinculados en Firestore' : 'No forms linked in Firestore'}</p>
+                                  </div>
+                                ) : (
+                                  <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                                    {connectedForms.map((f: any) => (
+                                      <button
+                                        key={f.id}
+                                        onClick={() => setSelectedFormId(f.formId)}
+                                        className={`w-full p-3 rounded border text-left text-xs font-mono flex items-center justify-between transition-all ${
+                                          selectedFormId === f.formId 
+                                            ? 'border-[#C17F4E] bg-[#C17F4E]/5 text-white' 
+                                            : isDark ? 'border-white/5 bg-zinc-950/20 text-zinc-400 hover:border-white/10' : 'border-slate-200 bg-white/20 text-slate-700 hover:border-slate-300'
+                                        }`}
+                                      >
+                                        <div className="truncate pr-2">
+                                          <p className="font-bold text-[10px] uppercase tracking-wider truncate">ID: {f.formId}</p>
+                                          <p className="text-[9px] text-zinc-500 mt-0.5">
+                                            {lang === 'es' ? 'Registrado: ' : 'Linked: '}
+                                            {f.createdAt && typeof f.createdAt.toDate === 'function' ? f.createdAt.toDate().toLocaleDateString() : 'Reciente'}
+                                          </p>
+                                        </div>
+                                        <ChevronRight className="w-4 h-4 shrink-0" />
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             </div>
 
-                            {/* visualizador de Respuestas en Tiempo Real */}
-                            <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                              <h4 className={`font-display font-bold text-xs uppercase tracking-wider mb-4 flex justify-between items-center ${themeStyles.title}`}>
-                                <span>{t.gfRecentResponses} ({activeFormResponses.length})</span>
-                                <span className="text-[9px] text-zinc-500 font-mono font-normal">{t.gfRecentResponsesSync}</span>
-                              </h4>
-                              
-                              {activeFormResponses.length === 0 ? (
-                                <div className="text-center py-8">
-                                  <p className="text-xs text-zinc-500 font-sans italic">{t.gfRecentResponsesEmpty}</p>
-                                  <p className="text-[10px] text-zinc-600 font-sans mt-1">{t.gfRecentResponsesEmptySub}</p>
-                                </div>
-                              ) : (
-                                <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
-                                  {activeFormResponses.map((resp: any, rIdx) => {
-                                    const timestamp = resp.lastSubmittedTime ? new Date(resp.lastSubmittedTime).toLocaleDateString() : 'N/A';
-                                    return (
-                                      <div key={rIdx} className={`p-4 rounded border space-y-2 text-left text-xs ${themeStyles.cardInner}`}>
-                                        <div className={`flex justify-between items-center text-[10px] font-mono border-b pb-1 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                          <span className="text-[#C17F4E] font-bold">{t.gfRecentResponsesTag} #{activeFormResponses.length - rIdx}</span>
-                                          <span className="text-zinc-500">{timestamp}</span>
-                                        </div>
-                                        <div className="space-y-1">
-                                          {Object.keys(resp.answers || {}).slice(0, 3).map((ansKey) => {
-                                            const ansObj = resp.answers[ansKey];
-                                            const questionItem = activeFormDetails?.items?.find((it: any) => it.questionItem?.question?.questionId === ansKey);
-                                            const questionTitle = questionItem?.title || 'Pregunta';
-                                            const answersList = ansObj.textAnswers?.answers?.map((a: any) => a.value).join(', ');
-                                            return (
-                                              <p key={ansKey} className="text-[11px] font-sans leading-relaxed">
-                                                <span className="text-zinc-500 font-medium block">{questionTitle}:</span>
-                                                <span className={`block pl-2 border-l border-[#C17F4E]/30 ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>{answersList || 'N/A'}</span>
-                                              </p>
-                                            );
-                                          })}
+                            {/* Columna Derecha */}
+                            <div className="lg:col-span-7 flex flex-col justify-start">
+                              <div className={`p-6 rounded-xl border flex-1 flex flex-col justify-between ${themeStyles.card}`}>
+                                <div>
+                                  <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/5">
+                                    <h3 className={`font-display font-black text-sm uppercase tracking-wider ${themeStyles.title}`}>
+                                      {lang === 'es' ? 'Estructura & Respuestas en Tiempo Real' : 'Structure & Real-Time Responses'}
+                                    </h3>
+                                    <span className="text-[9px] font-mono text-[#C17F4E] bg-[#C17F4E]/10 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                                      {selectedFormId ? (lang === 'es' ? 'Seleccionado' : 'Selected') : (lang === 'es' ? 'Ninguno' : 'None')}
+                                    </span>
+                                  </div>
+
+                                  {isLoadingForms ? (
+                                    <div className="py-24 text-center">
+                                      <RefreshCw className="w-8 h-8 text-[#C17F4E] animate-spin mx-auto mb-4" />
+                                      <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest">{lang === 'es' ? 'Consultando Google API...' : 'Querying Google API...'}</p>
+                                    </div>
+                                  ) : formsError ? (
+                                    <div className="py-16 text-center max-w-md mx-auto">
+                                      <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                                      <h4 className="text-sm font-display font-bold text-zinc-400 uppercase mb-2">{lang === 'es' ? 'Error de Sincronización' : 'Sync Error'}</h4>
+                                      <p className="text-xs text-zinc-500 font-sans leading-relaxed">{formsError}</p>
+                                      <button
+                                        onClick={handleGoogleSignIn}
+                                        className="mt-6 bg-[#C17F4E]/10 border border-[#C17F4E]/20 text-[#C17F4E] hover:bg-[#C17F4E]/20 px-5 py-2.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider transition-all"
+                                      >
+                                        {lang === 'es' ? 'Re-Autorizar Google' : 'Re-Authorize Google'}
+                                      </button>
+                                    </div>
+                                  ) : !selectedFormId ? (
+                                    <div className="py-20 text-center text-zinc-500 font-sans italic">
+                                      <p className="text-xs">{lang === 'es' ? 'Selecciona un formulario de la lista izquierda para consultar la API de Google.' : 'Select a form from the left list to query the Google API.'}</p>
+                                    </div>
+                                  ) : activeFormDetails ? (
+                                    <div className="space-y-6 text-left">
+                                      {/* Info Básica */}
+                                      <div className={`p-4 rounded-lg border ${themeStyles.cardInner}`}>
+                                        <h4 className={`font-display font-black text-sm uppercase ${themeStyles.title}`}>{activeFormDetails.info?.title || 'Formulario sin Título'}</h4>
+                                        {activeFormDetails.info?.description && (
+                                          <p className="text-xs text-zinc-500 font-sans mt-1 leading-relaxed">{activeFormDetails.info.description}</p>
+                                        )}
+                                        <div className="mt-4 flex gap-4 text-[9px] font-mono text-zinc-500 uppercase font-bold tracking-wider">
+                                          <span>{lang === 'es' ? 'Preguntas:' : 'Questions:'} {activeFormDetails.items?.length || 0}</span>
+                                          <span>{lang === 'es' ? 'Respuestas en Google:' : 'Responses in Google:'} {activeFormResponses.length}</span>
                                         </div>
                                       </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
-                            </div>
 
+                                      {/* Preguntas */}
+                                      <div className="space-y-3">
+                                        <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{lang === 'es' ? 'Estructura Analizada' : 'Parsed Structure'}</h4>
+                                        <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                                          {activeFormDetails.items?.map((item: any, idx: number) => (
+                                            <div key={idx} className="p-3 bg-white/5 border border-white/5 rounded text-xs">
+                                              <p className="font-mono text-zinc-400 text-[10px]">{lang === 'es' ? 'Item' : 'Item'} {idx + 1} • {item.questionItem?.question?.required ? 'Requerido' : 'Opcional'}</p>
+                                              <p className={`font-semibold mt-0.5 ${themeStyles.title}`}>{item.title}</p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="py-20 text-center text-zinc-500 font-sans italic">
+                                      <p className="text-xs">{lang === 'es' ? 'Conectado a la API. Sin datos parseados todavía.' : 'Connected to API. No parsed data yet.'}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        )}
+                        </section>
                       </div>
-                    </div>
+                    )}
 
-                  </div>
-                )}
-              </section>
-            )}
-
-            {/* TAB 3: LEADS RECIBIDOS (CRM GENERAL DE FIRESTORE) */}
-            {portfolioTab === 'leads' && (
-              <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.crmBadge}</span>
-                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {t.crmTitle}
-                  </h1>
-                  <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    {t.crmSub}
-                  </p>
-                </div>
-
-                {!currentUser ? (
-                  <div className={`p-12 rounded-xl border text-center max-w-2xl mx-auto ${themeStyles.card}`}>
-                    <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
-                      <Users className="w-8 h-8" />
-                    </div>
-                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>{t.crmNoAuthTitle}</h3>
-                    <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
-                      {t.crmNoAuthSub}
-                    </p>
-                    <button
-                      onClick={handleGoogleSignIn}
-                      className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
-                    >
-                      {t.gfNoAuthBtn}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    {receivedLeads.length === 0 ? (
-                      <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
-                        <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                        <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">{t.crmEmpty}</h4>
-                        <p className="text-xs text-zinc-500 font-sans">{t.crmEmptySub}</p>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {receivedLeads.map((lead) => {
-                          const dateStr = lead.createdAt && typeof lead.createdAt.toDate === 'function' 
-                            ? lead.createdAt.toDate().toLocaleString() 
-                            : 'Registrado';
-                          return (
-                            <div key={lead.id} className={`p-6 rounded-xl border flex flex-col justify-between text-left ${themeStyles.card}`}>
-                              <div className="space-y-4">
-                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                                  <span className="text-[10px] text-zinc-500 font-mono font-bold uppercase tracking-wider">{lead.industry}</span>
-                                  <span className="font-mono text-[9px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded uppercase font-bold">{lead.status}</span>
-                                </div>
-
-                                <div>
-                                  <h4 className={`font-display font-black text-base uppercase tracking-tight leading-tight ${themeStyles.title}`}>{lead.companyName}</h4>
-                                  <p className="text-[9px] text-zinc-500 font-mono mt-1">{t.crmCardDate}: {dateStr}</p>
-                                </div>
-
-                                <div className={`space-y-1.5 p-3 rounded border text-[11px] font-sans ${themeStyles.cardInner}`}>
-                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Cuello de Botella:</strong> {lead.bottleneck}</p>
-                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Presupuesto:</strong> ${lead.configuratorTotal} USD</p>
-                                  <p className={`font-light ${themeStyles.textMuted}`}><strong className={`font-medium ${isDark ? 'text-zinc-300' : 'text-slate-850'}`}>Plazo:</strong> {lead.configuratorDuration} semanas</p>
-                                </div>
-
-                                <div className={`space-y-1 border-t pt-3 text-xs ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                  <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest font-bold">{t.crmCardContact}</p>
-                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-[#020813]'}`}>{lead.contactName}</p>
-                                  <p className={`truncate ${themeStyles.textMuted}`}>{lead.contactEmail}</p>
-                                  <p className="text-[#C17F4E] font-mono">{lead.contactPhone}</p>
-                                </div>
-                              </div>
-
-                              <div className={`grid grid-cols-2 gap-2 pt-4 border-t mt-4 ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
-                                <a
-                                  href={`mailto:${lead.contactEmail}`}
-                                  className={`py-2 border rounded text-center transition-colors font-mono text-[10px] font-bold uppercase flex items-center justify-center ${isDark ? 'bg-zinc-900 border-white/5 text-zinc-300 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-800 hover:bg-slate-200'}`}
-                                >
-                                  Email
-                                </a>
-                                <a
-                                  href={`https://wa.me/${lead.contactPhone.replace(/\+/g, '').replace(/\s/g, '')}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="py-2 bg-[#C17F4E]/10 border border-[#C17F4E]/20 rounded text-center text-[#C17F4E] hover:bg-[#C17F4E]/20 transition-all font-mono text-[10px] font-bold uppercase flex items-center justify-center"
-                                >
-                                  WhatsApp
-                                </a>
-                              </div>
-                            </div>
-                          );
-                        })}
+                    {portfolioTab === 'projects' && (
+                      <div className="fade-in">
+                        {/* TAB 4 CONTENT: PROJECTS FOR ADMIN */}
+                        <section className="py-8">
+                          {renderProjectsSection()}
+                        </section>
                       </div>
                     )}
                   </div>
-                )}
-              </section>
-            )}
-
-            {/* TAB 4: MIS PROYECTOS (PROYECTOS DEL CLIENTE EN FIRESTORE) */}
-            {portfolioTab === 'projects' && (
-              <section className="py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto fade-in">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Portal de Clientes' : 'Client Portal'}</span>
-                  <h1 className={`font-display font-extrabold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {lang === 'es' ? 'Mis Proyectos Activos' : 'My Active Projects'}
-                  </h1>
-                  <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    {lang === 'es' 
-                      ? 'Monitorea en tiempo real el progreso de tu desarrollo, entregables y estados.' 
-                      : 'Monitor in real-time the progress of your development, deliverables, and statuses.'}
-                  </p>
-                </div>
-
-                {!currentUser ? (
-                  <div className={`p-12 rounded-xl border text-center max-w-2xl mx-auto ${themeStyles.card}`}>
-                    <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6">
-                      <FolderKanban className="w-8 h-8" />
-                    </div>
-                    <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>
-                      {lang === 'es' ? 'Acceso al Portal' : 'Portal Access'}
-                    </h3>
-                    <p className={`text-xs sm:text-sm leading-relaxed mb-8 ${themeStyles.textMuted}`}>
-                      {lang === 'es' 
-                        ? 'Inicia sesión con tu cuenta de Google autorizada para ver tus proyectos contratados.' 
-                        : 'Sign in with your authorized Google account to view your contracted projects.'}
-                    </p>
-                    <button
-                      onClick={handleGoogleSignIn}
-                      className="inline-flex items-center gap-3 bg-white text-zinc-950 px-8 py-3.5 rounded font-mono text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg cursor-pointer"
-                    >
-                      {t.gfNoAuthBtn}
-                    </button>
-                  </div>
                 ) : (
-                  <div className="space-y-6">
-                    {/* Botón para crear proyecto de prueba en modo de desarrollo / testing */}
-                    <div className="flex justify-end mb-4">
-                      <button
-                        onClick={async () => {
-                          if (isCreatingProject) return;
-                          setIsCreatingProject(true);
-                          try {
-                            const newProj = {
-                              clientId: currentUser.uid,
-                              name: lang === 'es' ? "Ecosistema Digital Especializado" : "Specialized Digital Ecosystem",
-                              description: lang === 'es' 
-                                ? "Desarrollo a medida con integración de base de datos Firestore y autenticación federada de Google Auth."
-                                : "Custom development with Firestore database integration and federated Google Auth authentication.",
-                              progress: 35,
-                              status: "en proceso",
-                              createdAt: serverTimestamp()
-                            };
-                            await addDoc(collection(db, 'projects'), newProj);
-                            alert(lang === 'es' ? "Proyecto de prueba creado en Firestore." : "Test project created in Firestore.");
-                          } catch (e: any) {
-                            console.error("Error creating project:", e);
-                            alert("Error: " + e.message);
-                          } finally {
-                            setIsCreatingProject(false);
-                          }
-                        }}
-                        disabled={isCreatingProject}
-                        className="inline-flex items-center gap-2 bg-[#C17F4E]/10 border border-[#C17F4E]/20 text-[#C17F4E] hover:bg-[#C17F4E]/20 px-4 py-2 rounded text-xs font-mono font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>{lang === 'es' ? 'Crear Proyecto de Prueba' : 'Create Test Project'}</span>
-                      </button>
-                    </div>
-
-                    {clientProjects.length === 0 ? (
-                      <div className={`p-12 rounded-xl border text-center ${themeStyles.card}`}>
-                        <FolderKanban className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                        <h4 className="font-display font-bold text-sm text-zinc-400 uppercase mb-2">
-                          {lang === 'es' ? 'Sin Proyectos Vinculados' : 'No Projects Linked'}
-                        </h4>
-                        <p className="text-xs text-zinc-500 font-sans">
-                          {lang === 'es' 
-                            ? 'No se encontraron proyectos activos vinculados a tu ID de cliente. Tu UID es: ' 
-                            : 'No active projects found linked to your client ID. Your UID is: '}
-                          <span className="font-mono text-[#C17F4E] font-bold">{currentUser.uid}</span>
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
-                        {clientProjects.map((project) => {
-                          const dateStr = project.createdAt && typeof project.createdAt.toDate === 'function' 
-                            ? project.createdAt.toDate().toLocaleDateString() 
-                            : 'Fecha Reciente';
-                          return (
-                            <div key={project.id} className={`p-6 rounded-xl border flex flex-col justify-between text-left ${themeStyles.card}`}>
-                              <div className="space-y-4">
-                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                                  <span className="text-[9px] text-zinc-500 font-mono font-bold uppercase tracking-wider">ID: {project.id.substring(0, 8)}...</span>
-                                  <span className={`font-mono text-[9px] px-2 py-0.5 rounded uppercase font-bold ${
-                                    project.status === 'finalizado' || project.status === 'completado'
-                                      ? 'text-emerald-500 bg-emerald-500/10'
-                                      : 'text-[#C17F4E] bg-[#C17F4E]/10'
-                                  }`}>
-                                    {project.status}
-                                  </span>
-                                </div>
-
-                                <div>
-                                  <h4 className={`font-display font-black text-lg uppercase tracking-tight leading-tight ${themeStyles.title}`}>
-                                    {project.name}
-                                  </h4>
-                                  <p className="text-[9px] text-zinc-500 font-mono mt-1">
-                                    {lang === 'es' ? 'Iniciado' : 'Started'}: {dateStr}
-                                  </p>
-                                </div>
-
-                                <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                                  {project.description}
-                                </p>
-
-                                <div className="space-y-2 pt-2">
-                                  <div className="flex justify-between items-center text-xs font-mono">
-                                    <span className="text-zinc-500">{lang === 'es' ? 'Progreso' : 'Progress'}</span>
-                                    <span className="text-[#C17F4E] font-bold">{project.progress}%</span>
-                                  </div>
-                                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                    <div 
-                                      className="h-full bg-[#C17F4E] rounded-full transition-all duration-500" 
-                                      style={{ width: `${project.progress}%` }}
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                  /* VISTA DE CLIENTE DIRECTA */
+                  <div className="fade-in">
+                    {renderProjectsSection()}
                   </div>
                 )}
-              </section>
+              </div>
             )}
-
           </div>
         )}
 
