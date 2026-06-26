@@ -1477,16 +1477,28 @@ export default function App() {
               {t.contact}
             </button>
 
-            {/* Premium Login / Portal Button */}
+            {/* Premium Login / Portal Button – icono únicamente */}
             <button 
               onClick={() => setActivePage('login')}
-              className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded transition-all border ${
+              title={currentUser ? (isAdminUser ? (lang === 'es' ? 'Sistema' : 'System') : (lang === 'es' ? 'Mi Portal' : 'My Portal')) : (lang === 'es' ? 'Iniciar sesión' : 'Sign in')}
+              className={`relative p-2.5 rounded-full transition-all border ${
                 activePage === 'login'
-                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
-                  : isDark ? 'border-white/10 hover:border-[#C17F4E]/50 text-zinc-300 hover:text-white bg-zinc-950/20' : 'border-slate-300 hover:border-[#C17F4E]/50 text-slate-700 hover:text-slate-900 bg-white/20'
+                  ? 'bg-zinc-800 text-[#C17F4E] border-[#C17F4E]'
+                  : isDark ? 'border-white/10 hover:border-[#C17F4E]/50 text-zinc-400 hover:text-[#C17F4E] bg-zinc-950/20' : 'border-slate-300 hover:border-[#C17F4E]/50 text-slate-500 hover:text-[#C17F4E] bg-white/20'
               }`}
             >
-              {currentUser ? (isAdminUser ? t.system : t.portal) : t.login}
+              {currentUser ? (
+                currentUser.photoURL ? (
+                  <img src={currentUser.photoURL} alt="" className="w-5 h-5 rounded-full" />
+                ) : (
+                  <LayoutDashboard className="w-5 h-5" />
+                )
+              ) : (
+                <LogIn className="w-5 h-5" />
+              )}
+              {currentUser && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900" />
+              )}
             </button>
 
             {/* Language Switcher (ES | EN Toggle Group) */}
@@ -1549,16 +1561,28 @@ export default function App() {
               {t.contact}
             </button>
 
-            {/* Mobile Login / Portal Button */}
+            {/* Mobile Login / Portal Button – icono únicamente */}
             <button 
               onClick={() => setActivePage('login')}
-              className={`px-3 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded border transition-all shrink-0 ${
+              title={currentUser ? (lang === 'es' ? 'Mi cuenta' : 'My account') : (lang === 'es' ? 'Iniciar sesión' : 'Sign in')}
+              className={`relative p-2 rounded-full transition-all border shrink-0 ${
                 activePage === 'login'
-                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
-                  : isDark ? 'border-white/10 text-zinc-300 bg-zinc-950/20' : 'border-slate-300 text-slate-700 bg-white/20'
+                  ? 'bg-zinc-800 text-[#C17F4E] border-[#C17F4E]'
+                  : isDark ? 'border-white/10 text-zinc-400 bg-zinc-950/20 hover:text-[#C17F4E]' : 'border-slate-300 text-slate-500 bg-white/20 hover:text-[#C17F4E]'
               }`}
             >
-              {currentUser ? (isAdminUser ? 'SYS' : 'PORT') : 'LOGIN'}
+              {currentUser ? (
+                currentUser.photoURL ? (
+                  <img src={currentUser.photoURL} alt="" className="w-4 h-4 rounded-full" />
+                ) : (
+                  <LayoutDashboard className="w-4 h-4" />
+                )
+              ) : (
+                <LogIn className="w-4 h-4" />
+              )}
+              {currentUser && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900" />
+              )}
             </button>
 
             {/* Language Switcher (ES | EN Toggle Group for mobile) */}
