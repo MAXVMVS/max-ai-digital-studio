@@ -1164,18 +1164,23 @@ export default function App() {
       <header className={`sticky top-0 z-50 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
-          {/* Brand Logo with Premium Monospace Tag */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActivePage('inicio')}>
-            <div className="w-10 h-10 rounded bg-gradient-to-br from-[#C17F4E] to-[#8B5E3C] flex items-center justify-center shadow-lg shadow-[#C17F4E]/20">
-              <Brain className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`font-display font-black text-xl tracking-tight uppercase ${themeStyles.title}`}>MAX AI</span>
-                <span className="text-[#C17F4E] font-mono text-xs font-bold tracking-wider">DIGITAL STUDIO</span>
-              </div>
-              <p className={`text-[9px] tracking-widest uppercase font-mono ${themeStyles.textMuted}`}>Elite Software Tailoring</p>
-            </div>
+          {/* Brand Logo with Fluid Expanding Image Effect */}
+          <div 
+            className="group relative h-10 w-10 hover:w-[125px] transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0" 
+            onClick={() => setActivePage('inicio')}
+          >
+            {/* Small Logo */}
+            <img 
+              src="/logo_pequeno.png" 
+              alt="MAX AI" 
+              className="absolute left-0 top-0 h-10 w-10 object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
+            />
+            {/* Long Logo */}
+            <img 
+              src="/logo_largo.png" 
+              alt="MAX AI Digital Studio" 
+              className="absolute left-0 top-0 h-10 w-[125px] object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
+            />
           </div>
 
           {/* Desktop Navigation Links */}
@@ -1337,8 +1342,7 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between pb-8 border-b border-white/5">
                 <div className="flex items-center gap-2">
-                  <Brain className="w-6 h-6 text-[#C17F4E]" />
-                  <span className="font-display font-black text-lg tracking-tight text-white">MAX AI</span>
+                  <img src="/logo_largo.png" alt="MAX AI" className="h-8 object-contain" />
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded border border-white/5 text-zinc-400">
                   <X className="w-5 h-5" />
