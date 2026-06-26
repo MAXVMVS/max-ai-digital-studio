@@ -1410,49 +1410,52 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
           {/* Left Side: Language & Theme Switchers + Logo */}
-          <div className="flex items-center gap-3 md:gap-4 h-10 shrink-0">
-            {/* Language Switcher (ES | EN Toggle Group) */}
-            <div className={`flex p-0.5 sm:p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
-              <button
-                onClick={() => setLang('es')}
-                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase transition-all ${
-                  lang === 'es' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Español"
-              >
-                ES
-              </button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase transition-all ${
-                  lang === 'en' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="English"
-              >
-                EN
-              </button>
-            </div>
+          <div className="flex items-center gap-3 md:gap-4 shrink-0">
+            {/* Stacked Switchers: Language (Top) and Theme (Bottom) */}
+            <div className="flex flex-col gap-1 items-center justify-center select-none scale-[0.85] sm:scale-100 origin-center shrink-0">
+              {/* Language Switcher (ES | EN Toggle Group) */}
+              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+                <button
+                  onClick={() => setLang('es')}
+                  className={`px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] font-mono font-bold uppercase transition-all cursor-pointer ${
+                    lang === 'es' 
+                      ? 'bg-[#C17F4E] text-white' 
+                      : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Español"
+                >
+                  ES
+                </button>
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] font-mono font-bold uppercase transition-all cursor-pointer ${
+                    lang === 'en' 
+                      ? 'bg-[#C17F4E] text-white' 
+                      : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="English"
+                >
+                  EN
+                </button>
+              </div>
 
-            {/* Theme Toggle Button */}
-            <div className={`flex p-0.5 sm:p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
-              <button
-                onClick={() => setIsDark(true)}
-                className={`p-1 sm:p-1.5 rounded-full transition-all ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
-              >
-                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </button>
-              <button
-                onClick={() => setIsDark(false)}
-                className={`p-1 sm:p-1.5 rounded-full transition-all ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title={lang === 'es' ? "Modo Claro" : "Light Mode"}
-              >
-                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </button>
+              {/* Theme Toggle Button */}
+              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+                <button
+                  onClick={() => setIsDark(true)}
+                  className={`p-1 rounded-full transition-all cursor-pointer ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
+                >
+                  <Moon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </button>
+                <button
+                  onClick={() => setIsDark(false)}
+                  className={`p-1 rounded-full transition-all cursor-pointer ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  title={lang === 'es' ? "Modo Claro" : "Light Mode"}
+                >
+                  <Sun className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* Brand Logo with Fluid Expanding Image Effect */}
