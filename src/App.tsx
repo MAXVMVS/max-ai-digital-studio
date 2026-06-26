@@ -1406,7 +1406,7 @@ export default function App() {
                     <img 
                       src="/logo_max_ai.png" 
                       alt="MAX AI" 
-                      className="h-48 sm:h-[288px] md:h-96 w-full max-w-[825px] object-contain filter drop-shadow-[0_4px_20px_rgba(193,127,78,0.20)]"
+                      className="h-48 sm:h-[288px] md:h-96 max-w-full aspect-[2/1] rounded-2xl object-cover filter drop-shadow-[0_4px_20px_rgba(193,127,78,0.20)]"
                     />
                   </div>
 
