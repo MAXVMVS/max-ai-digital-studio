@@ -634,6 +634,7 @@ export default function App() {
   const [activePilar, setActivePilar] = useState<number>(0);
   const [activeSymptom, setActiveSymptom] = useState<number>(0);
   const [activeWeek, setActiveWeek] = useState<number>(0);
+  const [activeDiagNode, setActiveDiagNode] = useState<'entrada' | 'ia' | 'db'>('entrada');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Configurator Selected modules state
@@ -2105,99 +2106,289 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Right Dashboard Mockup Replica */}
+                {/* Right Column: Interactive Flow Diagram */}
                 <div className="lg:col-span-5 relative w-full">
-                  <div className={`p-6 rounded-2xl border transition-all duration-500 ${themeStyles.card}`}>
+                  <div className={`p-6 rounded-2xl border transition-all duration-500 flex flex-col justify-between h-[380px] relative overflow-hidden ${themeStyles.card}`}>
                     
                     {/* Header bar */}
-                    <div className="h-10 border-b border-white/10 pb-4 flex items-center justify-between mb-5">
-                      <div className="flex gap-1.5">
+                    <div className="h-10 border-b border-white/10 pb-4 flex items-center justify-between mb-2">
+                      <div className="flex gap-1.5 items-center">
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500/30"></div>
                         <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/30"></div>
                         <div className="w-2.5 h-2.5 rounded-full bg-green-500/30"></div>
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest ml-2">MAX-AI-ANALYTICS-OS</span>
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest ml-2">MAX-AI FLOW ENGINE</span>
                       </div>
-                      <div className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded text-[9px] font-mono">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>REAL-TIME</span>
+                      <div className="flex items-center gap-1.5 bg-[#C17F4E]/10 text-[#C17F4E] px-2 py-0.5 rounded text-[9px] font-mono">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C17F4E] animate-pulse"></span>
+                        <span>LIVE STREAM</span>
                       </div>
                     </div>
 
-                    {/* Selector Buttons */}
-                    <div className="grid grid-cols-3 gap-1.5 mb-4">
-                      {(['trafico', 'conversion', 'latencia'] as const).map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveSparklineTab(tab)}
-                          className={`py-2 rounded text-center font-mono text-[9px] uppercase tracking-wider transition-all ${
-                            activeSparklineTab === tab
-                              ? 'bg-[#C17F4E] text-white font-bold shadow-md'
-                              : isDark ? 'bg-zinc-950/60 text-zinc-400 hover:bg-zinc-800' : 'bg-[#EAE6DB] text-[#4F5568] hover:bg-[#D0C9B8]'
+                    {/* Diagram Board */}
+                    <div className="relative flex-1 w-full h-[200px] mt-4 select-none">
+                      
+                      {/* Connection paths and particles */}
+                      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 200">
+                        <defs>
+                          <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="3.5" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                          </filter>
+                        </defs>
+                        
+                        {/* Connecting Line 1: Entrada -> IA */}
+                        <path 
+                          d="M 90 90 H 180" 
+                          fill="none" 
+                          stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} 
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                        <path 
+                          d="M 90 90 H 180" 
+                          fill="none" 
+                          stroke="#C17F4E" 
+                          strokeWidth="1.5" 
+                          strokeDasharray="4 4"
+                          className="opacity-40"
+                        />
+                        {/* Connecting Line 2: IA -> DB */}
+                        <path 
+                          d="M 220 90 H 310" 
+                          fill="none" 
+                          stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} 
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                        <path 
+                          d="M 220 90 H 310" 
+                          fill="none" 
+                          stroke="#C17F4E" 
+                          strokeWidth="1.5" 
+                          strokeDasharray="4 4"
+                          className="opacity-40"
+                        />
+
+                        {/* Particle 1: Entrada to IA */}
+                        <motion.circle
+                          r="3.5"
+                          fill="#C17F4E"
+                          filter="url(#glow)"
+                          animate={{ cx: [90, 180] }}
+                          transition={{
+                            duration: 2.2,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                          cy="90"
+                        />
+
+                        {/* Particle 2: IA to DB */}
+                        <motion.circle
+                          r="3.5"
+                          fill="#C17F4E"
+                          filter="url(#glow)"
+                          animate={{ cx: [220, 310] }}
+                          transition={{
+                            duration: 2.2,
+                            repeat: Infinity,
+                            ease: "linear",
+                            delay: 1.1
+                          }}
+                          cy="90"
+                        />
+                      </svg>
+
+                      {/* --- FLOATING BUBBLES --- */}
+                      
+                      {/* Node 1: Entrada (Traffic/Web/WhatsApp) */}
+                      <div 
+                        onClick={() => setActiveDiagNode('entrada')}
+                        className={`absolute left-[65px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                      >
+                        <div 
+                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'entrada'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
+                              : isDark 
+                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
+                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
                           }`}
                         >
-                          {tab === 'trafico' ? (lang === 'es' ? 'Tráfico' : 'Traffic') : tab === 'conversion' ? (lang === 'es' ? 'Conversión' : 'Conversion') : (lang === 'es' ? 'Latencia' : 'Latency')}
-                        </button>
-                      ))}
-                    </div>
+                          <Network className="w-6 h-6 animate-pulse" />
+                        </div>
+                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
+                          activeDiagNode === 'entrada' ? 'text-[#C17F4E]' : 'text-zinc-500'
+                        }`}>
+                          {lang === 'es' ? '1. Entrada' : '1. Input'}
+                        </span>
 
-                    {/* Graphic SVGs inside nested card */}
-                    <div className={`p-4 rounded-lg border mb-5 ${themeStyles.cardInner}`}>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="text-[9px] uppercase tracking-wider text-zinc-500 font-mono font-semibold">Live Processing Metric</p>
-                          <h4 className="text-2xl font-mono font-bold text-[#C17F4E]">
-                            {sparklineData[activeSparklineTab].primaryVal}
-                          </h4>
-                        </div>
-                        <div className="p-1.5 rounded bg-[#C17F4E]/10">
-                          <TrendingUp className="w-4 h-4 text-[#C17F4E]" />
-                        </div>
+                        {/* Floating bubbles for Node 1 */}
+                        <AnimatePresence>
+                          {activeDiagNode === 'entrada' && (
+                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-32 pointer-events-none">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
+                                }`}
+                              >
+                                💬 WhatsApp Chat
+                              </motion.div>
+                              <motion.div 
+                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-white/5 text-[#C17F4E]' : 'bg-white border-zinc-200 text-[#C17F4E]'
+                                }`}
+                              >
+                                🌐 Web Visitor
+                              </motion.div>
+                            </div>
+                          )}
+                        </AnimatePresence>
                       </div>
 
-                      <div className="relative h-20 mt-3">
-                        <svg viewBox="0 0 400 130" className="w-full h-full overflow-visible">
-                          <path 
-                            d={sparklineData[activeSparklineTab].path} 
-                            fill="none" 
-                            stroke="#C17F4E" 
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            className="transition-all duration-500"
-                          />
-                          {sparklineData[activeSparklineTab].points.map((pt, idx) => (
-                            <circle 
-                                key={idx}
-                                cx={pt.cx} 
-                                cy={pt.cy} 
-                                r="5" 
-                                fill={isDark ? "#020813" : "#FFFFFF"} 
-                                stroke="#C17F4E" 
-                                strokeWidth="2.5"
-                                className="cursor-pointer hover:r-6"
-                              />
-                            ))}
-                          </svg>
+                      {/* Node 2: Núcleo IA (AI Core) */}
+                      <div 
+                        onClick={() => setActiveDiagNode('ia')}
+                        className={`absolute left-[200px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                      >
+                        <div 
+                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'ia'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
+                              : isDark 
+                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
+                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
+                          }`}
+                        >
+                          <Brain className="w-6 h-6" />
                         </div>
-                        <p className="text-[9px] text-zinc-500 font-mono mt-1">
-                          {sparklineData[activeSparklineTab].subtitle}
+                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
+                          activeDiagNode === 'ia' ? 'text-[#C17F4E]' : 'text-zinc-500'
+                        }`}>
+                          {lang === 'es' ? '2. Núcleo IA' : '2. AI Core'}
+                        </span>
+
+                        {/* Floating bubbles for Node 2 */}
+                        <AnimatePresence>
+                          {activeDiagNode === 'ia' && (
+                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-36 pointer-events-none">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
+                                }`}
+                              >
+                                🧠 Gemini-2.0 Engine
+                              </motion.div>
+                              <motion.div 
+                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-white/5 text-[#C17F4E]' : 'bg-white border-zinc-200 text-[#C17F4E]'
+                                }`}
+                              >
+                                ⚙️ Pre-Qualifying Lead
+                              </motion.div>
+                            </div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Node 3: Base de Datos / CRM */}
+                      <div 
+                        onClick={() => setActiveDiagNode('db')}
+                        className={`absolute left-[335px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                      >
+                        <div 
+                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'db'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
+                              : isDark 
+                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
+                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
+                          }`}
+                        >
+                          <Database className="w-6 h-6" />
+                        </div>
+                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
+                          activeDiagNode === 'db' ? 'text-[#C17F4E]' : 'text-zinc-500'
+                        }`}>
+                          {lang === 'es' ? '3. Sistema DB' : '3. DB System'}
+                        </span>
+
+                        {/* Floating bubbles for Node 3 */}
+                        <AnimatePresence>
+                          {activeDiagNode === 'db' && (
+                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-32 pointer-events-none">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
+                                }`}
+                              >
+                                📁 Firestore CRM
+                              </motion.div>
+                              <motion.div 
+                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
+                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
+                                  isDark ? 'bg-zinc-900/90 border-white/5 text-emerald-500' : 'bg-white border-zinc-200 text-emerald-650'
+                                }`}
+                              >
+                                ✅ Booked / Sync OK
+                              </motion.div>
+                            </div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                    </div>
+
+                    {/* Explanatory Footer Card */}
+                    <div className={`p-4 rounded-xl border font-sans text-xs flex items-start gap-3 transition-colors duration-300 mt-2 ${themeStyles.cardInner}`}>
+                      <Sparkles className="w-5 h-5 text-[#C17F4E] shrink-0 mt-0.5" />
+                      <div>
+                        <p className={`font-semibold uppercase tracking-wider text-[9px] text-[#C17F4E] font-mono`}>
+                          {activeDiagNode === 'entrada' 
+                            ? (lang === 'es' ? 'Canalización de Entrada' : 'Input Orchestration') 
+                            : activeDiagNode === 'ia' 
+                              ? (lang === 'es' ? 'Cerebro Cognitivo' : 'Cognitive Brain') 
+                              : (lang === 'es' ? 'Base de Datos y CRM' : 'Database & CRM')}
+                        </p>
+                        <p className={`text-[11px] leading-relaxed mt-1 ${themeStyles.textMuted}`}>
+                          {activeDiagNode === 'entrada'
+                            ? (lang === 'es' 
+                                ? 'Unifica tus puntos de contacto (Visitas a la Web o chats directos en WhatsApp) en un único embudo de ingreso de datos.' 
+                                : 'Unifies your contact touchpoints (Web traffic or direct WhatsApp chats) into a single data ingress stream.')
+                            : activeDiagNode === 'ia'
+                              ? (lang === 'es' 
+                                  ? 'La Inteligencia Artificial (Gemini API) califica automáticamente la intención de compra del lead y agenda citas de forma autónoma.' 
+                                  : 'The Artificial Intelligence (Gemini API) qualifies buying intent and schedules appointment calls autonomously.')
+                              : (lang === 'es' 
+                                  ? 'Toda la información precalificada se guarda de manera segura en Firestore, sincronizando tus CRM y notificándote de inmediato.' 
+                                  : 'All pre-qualified info is logged securely in Firestore, synchronizing your CRMs and notifying you immediately.')
+                          }
                         </p>
                       </div>
-  
-                      {/* Interactive Realtime Process Stream logs */}
-                      <div>
-                        <p className="text-[9px] uppercase font-mono tracking-widest text-zinc-500 mb-2">Process Logs Engine</p>
-                        <div className="p-3.5 rounded bg-black/95 text-[#C17F4E] font-mono text-[9px] leading-relaxed h-32 overflow-y-auto">
-                          {logs.slice(-5).map((log, index) => (
-                            <div key={index} className="border-b border-white/5 py-1">
-                              <span className="text-emerald-500 mr-1">✓</span> {log}
-                            </div>
-                          ))}
-                          <div className="animate-pulse inline-block w-1.5 h-3 bg-[#C17F4E] ml-1"></div>
-                        </div>
-                      </div>
-  
                     </div>
+
                   </div>
+                </div>
   
                 </div>
               </section>
