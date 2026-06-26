@@ -1409,23 +1409,70 @@ export default function App() {
       <header className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
-          {/* Brand Logo with Fluid Expanding Image Effect */}
-          <div 
-            className="group relative h-10 w-10 hover:w-[125px] rounded-lg transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0" 
-            onClick={() => setActivePage('inicio')}
-          >
-            {/* Small Logo */}
-            <img 
-              src="/logo_pequeno.png" 
-              alt="MAX AI" 
-              className="absolute left-0 top-0 h-10 w-10 rounded-lg object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
-            />
-            {/* Long Logo */}
-            <img 
-              src="/logo_largo.png" 
-              alt="MAX AI Digital Studio" 
-              className="absolute left-0 top-0 h-10 w-[125px] rounded-lg object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
-            />
+          {/* Left Side: Language & Theme Switchers + Logo */}
+          <div className="flex items-center gap-3 md:gap-4 h-10 shrink-0">
+            {/* Language Switcher (ES | EN Toggle Group) */}
+            <div className={`flex p-0.5 sm:p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <button
+                onClick={() => setLang('es')}
+                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase transition-all ${
+                  lang === 'es' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Español"
+              >
+                ES
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase transition-all ${
+                  lang === 'en' 
+                    ? 'bg-[#C17F4E] text-white' 
+                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="English"
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Theme Toggle Button */}
+            <div className={`flex p-0.5 sm:p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <button
+                onClick={() => setIsDark(true)}
+                className={`p-1 sm:p-1.5 rounded-full transition-all ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
+              >
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </button>
+              <button
+                onClick={() => setIsDark(false)}
+                className={`p-1 sm:p-1.5 rounded-full transition-all ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title={lang === 'es' ? "Modo Claro" : "Light Mode"}
+              >
+                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </button>
+            </div>
+
+            {/* Brand Logo with Fluid Expanding Image Effect */}
+            <div 
+              className="group relative h-10 w-10 hover:w-[125px] rounded-lg transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
+              onClick={() => setActivePage('inicio')}
+            >
+              {/* Small Logo */}
+              <img 
+                src="/logo_pequeno.png" 
+                alt="MAX AI" 
+                className="absolute left-0 top-0 h-10 w-10 rounded-lg object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
+              />
+              {/* Long Logo */}
+              <img 
+                src="/logo_largo.png" 
+                alt="MAX AI Digital Studio" 
+                className="absolute left-0 top-0 h-10 w-[125px] rounded-lg object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
+              />
+            </div>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -1462,7 +1509,7 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Action Tools: Contact + Login + Language + Theme */}
+          {/* Action Tools: Contact + Login */}
           <div className="hidden md:flex items-center gap-4">
             
             {/* Premium Contact Button */}
@@ -1500,50 +1547,6 @@ export default function App() {
                 <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900" />
               )}
             </button>
-
-            {/* Language Switcher (ES | EN Toggle Group) */}
-            <div className={`flex p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
-              <button
-                onClick={() => setLang('es')}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-all ${
-                  lang === 'es' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Español"
-              >
-                ES
-              </button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-all ${
-                  lang === 'en' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-660 hover:text-slate-900'
-                }`}
-                title="English"
-              >
-                EN
-              </button>
-            </div>
-
-            {/* Theme Toggle Button (On the right) */}
-            <div className={`flex p-1 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
-              <button
-                onClick={() => setIsDark(true)}
-                className={`p-1.5 rounded-full transition-all ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
-              >
-                <Moon className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setIsDark(false)}
-                className={`p-1.5 rounded-full transition-all ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                title={lang === 'es' ? "Modo Claro" : "Light Mode"}
-              >
-                <Sun className="w-4 h-4" />
-              </button>
-            </div>
 
           </div>
 
@@ -1585,48 +1588,12 @@ export default function App() {
               )}
             </button>
 
-            {/* Language Switcher (ES | EN Toggle Group for mobile) */}
-            <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
-              <button
-                onClick={() => setLang('es')}
-                className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold transition-all ${
-                  lang === 'es' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                ES
-              </button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold transition-all ${
-                  lang === 'en' 
-                    ? 'bg-[#C17F4E] text-white' 
-                    : isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-            
-            {/* Theme Toggle Button for mobile */}
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className={`p-2 rounded-full border transition-all ${
-                isDark 
-                  ? 'border-white/5 bg-zinc-900/40 text-[#C17F4E] hover:text-[#D79663]' 
-                  : 'border-[#D6D0C1] bg-[#FAF8F5] text-[#C17F4E] hover:bg-[#F2EFE9]'
-              }`}
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`p-2 rounded border transition-all ${
                 isDark
-                  ? 'border-white/5 bg-zinc-900/40 text-zinc-305 hover:text-white'
+                  ? 'border-white/5 bg-zinc-900/40 text-zinc-300 hover:text-white'
                   : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:bg-[#F2EFE9]'
               }`}
             >
