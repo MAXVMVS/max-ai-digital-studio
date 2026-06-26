@@ -1402,9 +1402,12 @@ export default function App() {
                 
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-start gap-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900/80 border border-white/10 rounded-full">
-                    <span className="w-2 h-2 rounded-full bg-[#C17F4E] animate-pulse"></span>
-                    <span className="text-[10px] font-mono tracking-tighter text-[#C17F4E] uppercase">{t.heroBadge}</span>
+                  <div className="mb-2 select-none">
+                    <img 
+                      src="/logo_max_ai.png" 
+                      alt="MAX AI" 
+                      className="h-16 sm:h-20 md:h-24 object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]"
+                    />
                   </div>
 
                   <h1 className={`font-display font-extrabold text-5xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
