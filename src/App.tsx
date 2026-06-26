@@ -3,7 +3,8 @@ import {
   Brain, Cpu, Layers, Zap, Sparkles, Code2, Database, Network, 
   ArrowRight, Check, CheckCircle2, ArrowLeft, Sun, Moon, Menu, X, 
   ExternalLink, TrendingUp, Users, ChevronRight, Send, AlertTriangle, HelpCircle,
-  FolderKanban, LayoutDashboard, LogOut, Plus, RefreshCw, FileText, CheckCircle
+  FolderKanban, LayoutDashboard, LogOut, Plus, RefreshCw, FileText, CheckCircle,
+  Mail, MapPin, Phone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -277,7 +278,21 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio'>('inicio');
+  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto'>('inicio');
+
+  // --- Contact page state ---
+  const [contactFormName, setContactFormName] = useState<string>('');
+  const [contactFormEmail, setContactFormEmail] = useState<string>('');
+  const [contactFormPhone, setContactFormPhone] = useState<string>('');
+  const [contactFormSubject, setContactFormSubject] = useState<string>('');
+  const [contactFormMessage, setContactFormMessage] = useState<string>('');
+  const [contactFormSubmitted, setContactFormSubmitted] = useState<boolean>(false);
+  const [contactFormValidationError, setContactFormValidationError] = useState<string>('');
+  const [contactFormLoading, setContactFormLoading] = useState<boolean>(false);
+
+  const isContactFormNameValid = contactFormName.trim().length >= 3;
+  const isContactFormEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactFormEmail);
+  const isContactFormPhoneValid = contactFormPhone.trim().length >= 8;
   const [isDark, setIsDark] = useState<boolean>(true);
   const [lang, setLang] = useState<'es' | 'en'>('es');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -835,6 +850,65 @@ export default function App() {
     setFormSubmitted(false);
   };
 
+  const handleContactFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactFormValidationError('');
+
+    if (!isContactFormNameValid) {
+      setContactFormValidationError(lang === 'es' ? 'Por favor ingresa tu nombre (mínimo 3 caracteres).' : 'Please enter your name (minimum 3 characters).');
+      return;
+    }
+    if (!isContactFormEmailValid) {
+      setContactFormValidationError(lang === 'es' ? 'Por favor ingresa un correo electrónico válido.' : 'Please enter a valid email address.');
+      return;
+    }
+    if (!isContactFormPhoneValid) {
+      setContactFormValidationError(lang === 'es' ? 'Por favor ingresa un número de WhatsApp válido (mínimo 8 dígitos).' : 'Please enter a valid WhatsApp number (minimum 8 digits).');
+      return;
+    }
+    if (contactFormMessage.trim().length < 10) {
+      setContactFormValidationError(lang === 'es' ? 'Por favor ingresa un mensaje detallado (mínimo 10 caracteres).' : 'Please enter a detailed message (minimum 10 characters).');
+      return;
+    }
+
+    setContactFormLoading(true);
+
+    const contactId = `contact_${Math.random().toString(36).substring(2, 11)}`;
+    const contactData = {
+      name: contactFormName.trim(),
+      email: contactFormEmail.trim(),
+      phone: contactFormPhone.trim(),
+      subject: contactFormSubject.trim() || 'Consulta General',
+      message: contactFormMessage.trim(),
+      createdAt: serverTimestamp(),
+      userId: currentUser?.uid || null,
+      status: 'new'
+    };
+
+    try {
+      await setDoc(doc(db, 'contacts', contactId), contactData);
+    } catch (error) {
+      console.error('Error saving contact request:', error);
+    }
+
+    const textPayload = `✉️ *MAX AI - NUEVO CONTACTO* ✉️\n\n` +
+      `👤 *Nombre:* ${contactFormName.trim()}\n` +
+      `📧 *Email:* ${contactFormEmail.trim()}\n` +
+      `📱 *WhatsApp:* ${contactFormPhone.trim()}\n` +
+      `📋 *Asunto:* ${contactFormSubject.trim() || 'Consulta General'}\n\n` +
+      `📝 *Mensaje:* ${contactFormMessage.trim()}\n\n` +
+      `_Enviado desde el portal de contacto de MAX AI._`;
+
+    const whatsappUrl = `https://wa.me/593983186044?text=${encodeURIComponent(textPayload)}`;
+
+    setContactFormLoading(false);
+    setContactFormSubmitted(true);
+
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank');
+    }, 1500);
+  };
+
   // Sparkline coordinates based on active tab
   const sparklineData = {
     trafico: {
@@ -1137,6 +1211,27 @@ export default function App() {
     crmCardDate: lang === 'es' ? 'Fecha' : 'Date',
     crmCardContact: lang === 'es' ? 'Contacto Directo' : 'Direct Contact',
 
+    // Contact Page
+    contactTitle: lang === 'es' ? 'Contacto Cognitivo' : 'Cognitive Contact',
+    contactSub: lang === 'es' 
+      ? 'Conecta con nuestro equipo de ingenieros y diseñadores para materializar tu visión digital.' 
+      : 'Connect with our team of software engineers and designers to materialize your digital vision.',
+    contactLabelName: lang === 'es' ? 'Nombre Completo' : 'Full Name',
+    contactLabelEmail: lang === 'es' ? 'Correo Electrónico' : 'Email Address',
+    contactLabelPhone: lang === 'es' ? 'WhatsApp Directo' : 'Direct WhatsApp',
+    contactLabelSubject: lang === 'es' ? 'Asunto / Proyecto' : 'Subject / Project',
+    contactLabelMessage: lang === 'es' ? 'Mensaje / Detalles' : 'Message / Details',
+    contactBtnSubmit: lang === 'es' ? 'ENVIAR MENSAJE' : 'SEND MESSAGE',
+    contactBtnSubmitting: lang === 'es' ? 'ENVIANDO...' : 'SENDING...',
+    contactSuccessTitle: lang === 'es' ? '¡Mensaje Transmitido!' : 'Message Transmitted!',
+    contactSuccessSub: lang === 'es' 
+      ? 'Hemos registrado tu solicitud en el núcleo. Un arquitecto cognitivo se pondrá en contacto contigo en menos de 2 horas y te redireccionaremos a WhatsApp.' 
+      : 'We have registered your request in the core. A cognitive architect will contact you in less than 2 hours and we will redirect you to WhatsApp.',
+    contactDetailsTitle: lang === 'es' ? 'Canales Directos' : 'Direct Channels',
+    contactOffice: lang === 'es' ? 'Sede Central' : 'Headquarters',
+    contactOfficeLoc: lang === 'es' ? 'Quito, Ecuador • Cobertura Global' : 'Quito, Ecuador • Global Coverage',
+    contactSocials: lang === 'es' ? 'Redes de la Agencia' : 'Agency Networks',
+
     // Footer
     footText: lang === 'es' ? 'ESTRATEGIA • CÓDIGO • DISEÑO' : 'STRATEGY • CODE • DESIGN',
     footServer: lang === 'es' ? 'ESTADO DEL SERVIDOR: ÓPTIMO' : 'SERVER STATUS: OPTIMAL',
@@ -1222,14 +1317,12 @@ export default function App() {
             
             {/* Premium Contact Button */}
             <button 
-              onClick={() => {
-                setActivePage('portafolio');
-                setTimeout(() => {
-                  const el = document.getElementById('onboarding-form');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
-              className="px-6 py-2.5 bg-[#C17F4E] text-white text-xs font-bold uppercase tracking-widest rounded hover:bg-[#D79663] transition-colors"
+              onClick={() => setActivePage('contacto')}
+              className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded transition-all ${
+                activePage === 'contacto'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
+              }`}
             >
               {t.contact}
             </button>
@@ -1370,6 +1463,12 @@ export default function App() {
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'portafolio' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
                   {t.portHeader}
+                </button>
+                <button
+                  onClick={() => { setActivePage('contacto'); setMobileMenuOpen(false); }}
+                  className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'contacto' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
+                >
+                  {t.contact}
                 </button>
               </div>
             </div>
@@ -2836,6 +2935,274 @@ export default function App() {
                 )}
               </section>
             )}
+
+          </div>
+        )}
+
+        {activePage === 'contacto' && (
+          <div className="fade-in py-16 lg:py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto relative">
+            
+            {/* Background Orbs */}
+            <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#C17F4E]/10 rounded-full blur-[100px] pointer-events-none animate-pulse-glow-1"></div>
+            
+            {/* Header */}
+            <div className="text-center mb-16 relative z-10">
+              <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'NÚCLEO DE COMUNICACIÓN' : 'COMMUNICATION CORE'}</span>
+              <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-3 tracking-tight ${themeStyles.title}`}>
+                {t.contactTitle}
+              </h1>
+              <p className={`text-sm sm:text-base font-sans font-light mt-4 max-w-2xl mx-auto leading-relaxed ${themeStyles.textMuted}`}>
+                {t.contactSub}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 items-start">
+              
+              {/* Left Side: Contact Information & Socials */}
+              <div className="lg:col-span-5 space-y-8">
+                
+                {/* Channels card */}
+                <div className={`p-8 rounded-xl border ${themeStyles.card}`}>
+                  <h3 className={`font-display font-bold text-lg uppercase tracking-wider mb-6 ${themeStyles.title}`}>
+                    {t.contactDetailsTitle}
+                  </h3>
+                  
+                  <div className="space-y-6 font-sans">
+                    
+                    {/* WhatsApp */}
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded bg-emerald-500/10 text-emerald-500 shrink-0">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider font-semibold">WhatsApp</h4>
+                        <a 
+                          href="https://wa.me/593983186044" 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className={`text-base font-medium hover:text-[#C17F4E] transition-colors mt-1 block ${themeStyles.title}`}
+                        >
+                          +593 98 318 6044
+                        </a>
+                        <span className="text-[10px] text-zinc-500 font-mono">{lang === 'es' ? 'Soporte Inmediato 24/7' : 'Immediate Support 24/7'}</span>
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded bg-[#C17F4E]/10 text-[#C17F4E] shrink-0">
+                        <Mail className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider font-semibold">Email</h4>
+                        <a 
+                          href="mailto:contacto@maxai.studio" 
+                          className={`text-base font-medium hover:text-[#C17F4E] transition-colors mt-1 block ${themeStyles.title}`}
+                        >
+                          contacto@maxai.studio
+                        </a>
+                        <span className="text-[10px] text-zinc-500 font-mono">{lang === 'es' ? 'Respuesta en < 1 Hora' : 'Response in < 1 Hour'}</span>
+                      </div>
+                    </div>
+
+                    {/* Address */}
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded bg-blue-500/10 text-blue-400 shrink-0">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider font-semibold">{t.contactOffice}</h4>
+                        <p className={`text-sm mt-1 leading-relaxed ${themeStyles.textMuted}`}>
+                          {t.contactOfficeLoc}
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* Social Networks card */}
+                <div className={`p-8 rounded-xl border ${themeStyles.card}`}>
+                  <h3 className={`font-display font-bold text-sm uppercase tracking-wider mb-5 ${themeStyles.title}`}>
+                    {t.contactSocials}
+                  </h3>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Instagram */}
+                    <a 
+                      href="https://www.instagram.com/maxai.studio" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-3 p-3 rounded border hover:border-[#C17F4E] transition-all group ${themeStyles.cardInner}`}
+                    >
+                      <svg className="w-5 h-5 text-pink-500 group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                      </svg>
+                      <span className="text-xs font-mono uppercase tracking-wider font-semibold">Instagram</span>
+                    </a>
+
+                    {/* Facebook */}
+                    <a 
+                      href="https://facebook.com/maxai.studio" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-3 p-3 rounded border hover:border-[#C17F4E] transition-all group ${themeStyles.cardInner}`}
+                    >
+                      <svg className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                      </svg>
+                      <span className="text-xs font-mono uppercase tracking-wider font-semibold">Facebook</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Side: Contact Form */}
+              <div className="lg:col-span-7">
+                <div className={`p-8 rounded-xl border shadow-2xl relative ${themeStyles.card}`}>
+                  
+                  {contactFormValidationError && (
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg mb-6 text-xs sm:text-sm font-sans flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span>{contactFormValidationError}</span>
+                    </div>
+                  )}
+
+                  {!contactFormSubmitted ? (
+                    <form onSubmit={handleContactFormSubmit} className="space-y-6">
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {/* Name */}
+                        <div>
+                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                            <span>{t.contactLabelName} *</span>
+                            {isContactFormNameValid && (
+                              <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                                <Check className="w-3.5 h-3.5" /> Ok
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={contactFormName}
+                            onChange={(e) => setContactFormName(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormName')}
+                            placeholder="Ej. Juan Pérez"
+                            className={getInputClass('contactFormName', isContactFormNameValid, themeStyles)}
+                          />
+                        </div>
+
+                        {/* Email */}
+                        <div>
+                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                            <span>{t.contactLabelEmail} *</span>
+                            {isContactFormEmailValid && (
+                              <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                                <Check className="w-3.5 h-3.5" /> Ok
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            value={contactFormEmail}
+                            onChange={(e) => setContactFormEmail(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormEmail')}
+                            placeholder="juan@empresa.com"
+                            className={getInputClass('contactFormEmail', isContactFormEmailValid, themeStyles)}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {/* Phone */}
+                        <div>
+                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                            <span>{t.contactLabelPhone} *</span>
+                            {isContactFormPhoneValid && (
+                              <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                                <Check className="w-3.5 h-3.5" /> Ok
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="tel"
+                            required
+                            value={contactFormPhone}
+                            onChange={(e) => setContactFormPhone(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormPhone')}
+                            placeholder="Ej. +593 98 318 6044"
+                            className={getInputClass('contactFormPhone', isContactFormPhoneValid, themeStyles)}
+                          />
+                        </div>
+
+                        {/* Subject */}
+                        <div>
+                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
+                            {t.contactLabelSubject}
+                          </label>
+                          <input
+                            type="text"
+                            value={contactFormSubject}
+                            onChange={(e) => setContactFormSubject(e.target.value)}
+                            placeholder="Ej. Desarrollo de Software / Consultoría"
+                            className={`w-full p-3 rounded text-sm transition-all duration-300 outline-none border ${themeStyles.input}`}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Message */}
+                      <div>
+                        <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
+                          <span>{t.contactLabelMessage} *</span>
+                          {contactFormMessage.trim().length >= 10 && (
+                            <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
+                              <Check className="w-3.5 h-3.5" /> Ok
+                            </span>
+                          )}
+                        </label>
+                        <textarea
+                          required
+                          rows={5}
+                          value={contactFormMessage}
+                          onChange={(e) => setContactFormMessage(e.target.value)}
+                          onBlur={() => handleFieldBlur('contactFormMessage')}
+                          placeholder="Cuéntanos sobre tu proyecto o consulta en detalle..."
+                          className={getInputClass('contactFormMessage', contactFormMessage.trim().length >= 10, themeStyles)}
+                        ></textarea>
+                      </div>
+
+                      {/* Submit Button */}
+                      <button
+                        type="submit"
+                        disabled={contactFormLoading}
+                        className="w-full py-4 bg-[#C17F4E] text-white text-xs font-mono font-bold uppercase tracking-widest rounded hover:bg-[#D79663] disabled:bg-zinc-800 disabled:text-zinc-500 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#C17F4E]/10"
+                      >
+                        <Send className="w-4 h-4 animate-pulse" />
+                        <span>{contactFormLoading ? t.contactBtnSubmitting : t.contactBtnSubmit}</span>
+                      </button>
+
+                    </form>
+                  ) : (
+                    <div className="text-center py-12 space-y-6 fade-in">
+                      <div className="w-16 h-16 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20">
+                        <CheckCircle className="w-8 h-8 animate-bounce" />
+                      </div>
+                      <h3 className={`font-display font-bold text-2xl uppercase ${themeStyles.title}`}>
+                        {t.contactSuccessTitle}
+                      </h3>
+                      <p className={`text-sm leading-relaxed max-w-md mx-auto ${themeStyles.textMuted}`}>
+                        {t.contactSuccessSub}
+                      </p>
+                    </div>
+                  )}
+
+                </div>
+              </div>
+
+            </div>
 
           </div>
         )}
