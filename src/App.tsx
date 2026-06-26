@@ -1161,7 +1161,7 @@ export default function App() {
       </div>
 
       {/* --- HEADER / NAVBAR --- */}
-      <header className={`sticky top-0 z-50 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
+      <header className={`relative z-50 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
           {/* Brand Logo with Fluid Expanding Image Effect */}
