@@ -166,6 +166,7 @@ function Interactive3DNetwork() {
 }
 
 interface CaseStudyCardProps {
+  key?: React.Key;
   c: CaseStudy;
   isDark: boolean;
   themeStyles: any;
@@ -287,12 +288,6 @@ export default function App() {
     localStorage.setItem('maxai_active_page', activePage);
   }, [activePage]);
 
-  // Si activePage es 'login' y el tab seleccionado es 'casos' (que es para el portafolio), cambiar a 'leads' para el dashboard de admin
-  useEffect(() => {
-    if (activePage === 'login' && portfolioTab === 'casos') {
-      setPortfolioTab('leads');
-    }
-  }, [activePage, portfolioTab]);
 
   // --- Contact page state ---
   const [contactFormName, setContactFormName] = useState<string>('');
@@ -315,6 +310,15 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(null);
   const [portfolioTab, setPortfolioTab] = useState<'casos' | 'forms' | 'leads' | 'projects'>('casos');
+
+  // Si activePage es 'login' y el tab seleccionado es 'casos' (para portafolio), cambiar a 'leads' para el dashboard de admin
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (activePage === 'login' && portfolioTab === 'casos') {
+      setPortfolioTab('leads');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePage]);
   const [connectedForms, setConnectedForms] = useState<any[]>([]);
   const [selectedFormId, setSelectedFormId] = useState<string>('');
   const [formInputId, setFormInputId] = useState<string>('');
