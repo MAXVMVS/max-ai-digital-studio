@@ -3,7 +3,7 @@ import {
   Brain, Cpu, Layers, Zap, Sparkles, Code2, Database, Network, 
   ArrowRight, Check, CheckCircle2, ArrowLeft, Sun, Moon, Menu, X, 
   ExternalLink, TrendingUp, Users, ChevronRight, Send, AlertTriangle, HelpCircle,
-  FolderKanban, LayoutDashboard, LogOut, LogIn, Plus, RefreshCw, FileText, CheckCircle,
+  FolderKanban, LayoutDashboard, LogOut, LogIn, Plus, RefreshCw, FileText, CheckCircle, CircleUser,
   Mail, MapPin, Phone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -1494,7 +1494,7 @@ export default function App() {
                   <LayoutDashboard className="w-5 h-5" />
                 )
               ) : (
-                <LogIn className="w-5 h-5" />
+                <CircleUser className="w-5 h-5" />
               )}
               {currentUser && (
                 <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900" />
@@ -1578,7 +1578,7 @@ export default function App() {
                   <LayoutDashboard className="w-4 h-4" />
                 )
               ) : (
-                <LogIn className="w-4 h-4" />
+                <CircleUser className="w-4 h-4" />
               )}
               {currentUser && (
                 <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900" />
@@ -2242,7 +2242,7 @@ export default function App() {
                     <div className="absolute inset-0 bg-gradient-to-tr from-[#C17F4E]/5 via-transparent to-transparent pointer-events-none" />
                     
                     <div className="w-16 h-16 rounded-full bg-[#C17F4E]/10 text-[#C17F4E] flex items-center justify-center mx-auto mb-6 border border-[#C17F4E]/20">
-                      <LogIn className="w-8 h-8" />
+                      <CircleUser className="w-8 h-8" />
                     </div>
                     
                     <h3 className={`font-display font-black text-xl uppercase mb-3 ${themeStyles.title}`}>
