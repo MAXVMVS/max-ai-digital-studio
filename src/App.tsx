@@ -2105,7 +2105,7 @@ export default function App() {
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
                 <div className="lg:col-span-5 relative w-full select-none flex flex-col items-center gap-4">
                   {/* Centered Logo above the diagram */}
-                  <div className="w-full max-w-[260px] sm:max-w-[320px] flex justify-center mb-1">
+                  <div className="w-full flex justify-center mb-1">
                     <img 
                       src="/logo_max_ai_hero.png" 
                       alt="MAX AI" 
