@@ -632,6 +632,7 @@ export default function App() {
 
   // Interactive 4 Pilares state
   const [activePilar, setActivePilar] = useState<number>(0);
+  const [activeSymptom, setActiveSymptom] = useState<number>(0);
   const [activeWeek, setActiveWeek] = useState<number>(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -1504,6 +1505,99 @@ export default function App() {
         ]
       }
     ],
+
+    // Google Forms
+    gfBadge: lang === 'es' ? 'Integración Google Forms' : 'Google Forms Integration',
+    gfTitle: lang === 'es' ? 'Sincronizador Google Forms' : 'Google Forms Synchronizer',
+    gfSub: lang === 'es'
+      ? 'Sincroniza tus formularios de Google Workspace con nuestro motor NoSQL. Genera análisis en tiempo real y gestiona prospectos corporativos.'
+      : 'Sync your Google Workspace forms with our NoSQL engine. Generate real-time analytics and manage enterprise leads.',
+    gfNoAuthTitle: lang === 'es' ? 'Conectar Google Workspace' : 'Connect Google Workspace',
+    gfNoAuthSub: lang === 'es'
+      ? 'Autentícate de forma segura con tu cuenta de Google para otorgarle a MAX AI acceso a tus formularios y sincronizar respuestas en tiempo real.'
+      : 'Authenticate securely with your Google account to grant MAX AI access to your forms and sync responses in real time.',
+    gfNoAuthBtn: lang === 'es' ? 'Iniciar Sesión con Google' : 'Sign In with Google',
+    gfAuthStatus: lang === 'es' ? 'ESPACIO DE TRABAJO CONECTADO' : 'WORKSPACE CONNECTED',
+    gfConnectTitle: lang === 'es' ? 'Conectar Formulario de Google' : 'Connect Google Form',
+    gfConnectLabel: lang === 'es' ? 'ID del Formulario en Google Forms' : 'Google Form ID',
+    gfConnectBtn: lang === 'es' ? 'Enlazar' : 'Link',
+    gfExpressTitle: lang === 'es' ? 'Creación Express de Diagnóstico' : 'Express Diagnostic Creation',
+    gfExpressSub: lang === 'es'
+      ? 'MAX AI creará un formulario en tu Google Drive estructurado con preguntas de cualificación para prospectos corporativos y lo enlazará automáticamente.'
+      : 'MAX AI will create a structured qualification Google Form in your Google Drive and automatically link it to the platform.',
+    gfExpressBtn1: lang === 'es' ? 'Generar Formulario 1-Click' : 'Generate Form 1-Click',
+    gfExpressBtn2: lang === 'es' ? 'Creando en Google...' : 'Creating in Google...',
+    gfLinkedTitle: lang === 'es' ? 'Formularios Enlazados' : 'Linked Forms',
+    gfLinkedEmpty: lang === 'es' ? 'No has conectado ningún formulario todavía.' : 'You have not connected any forms yet.',
+    gfActiveTitle: lang === 'es' ? 'Formulario Activo' : 'Active Form',
+    gfActiveResponses: lang === 'es' ? 'Respuestas' : 'Responses',
+    gfActiveQuestions: lang === 'es' ? 'Preguntas' : 'Questions',
+    gfRecentResponses: lang === 'es' ? 'Respuestas Recientes' : 'Recent Responses',
+    gfRecentResponsesSync: lang === 'es' ? 'Sincronización Live' : 'Live Sync',
+    gfRecentResponsesEmpty: lang === 'es' ? 'Tu formulario no tiene ninguna respuesta todavía.' : 'Your form does not have any responses yet.',
+    gfRecentResponsesEmptySub: lang === 'es' ? 'Comparte el enlace del formulario para recibir solicitudes de leads.' : 'Share the form link to start receiving lead requests.',
+    gfNoSelectedTitle: lang === 'es' ? 'Ningún Formulario Seleccionado' : 'No Form Selected',
+    gfNoSelectedSub: lang === 'es' ? 'Conecta un formulario existente ingresando su identificador o presiona el botón de generación express de 1-click.' : 'Connect an existing form by entering its ID or press the 1-click express generation button.',
+    gfActiveSync: lang === 'es' ? 'Estado Sync' : 'Sync Status',
+    gfRecentResponsesTag: lang === 'es' ? 'RESPUESTA' : 'RESPONSE',
+
+    // CRM
+    crmBadge: lang === 'es' ? 'CRM Corporativo' : 'Corporate CRM',
+    crmTitle: lang === 'es' ? 'Leads Recibidos' : 'Received Leads',
+    crmSub: lang === 'es'
+      ? 'Bandeja de entrada en tiempo real con las cotizaciones de tu onboarding configuradas en Firestore.'
+      : 'Real-time inbox with your onboarding quotes configured in Firestore.',
+    crmNoAuthTitle: lang === 'es' ? 'Acceso al CRM' : 'CRM Access',
+    crmNoAuthSub: lang === 'es'
+      ? 'Inicia sesión de forma segura para revisar las propuestas de diagnóstico y presupuestos estimados.'
+      : 'Sign in securely to review diagnostic proposals and estimated budgets.',
+    crmEmpty: lang === 'es' ? 'No se encontraron leads' : 'No leads found',
+    crmEmptySub: lang === 'es'
+      ? 'Los leads que configures y envíes en el protocolo de Onboarding aparecerán aquí instantáneamente.'
+      : 'Leads you configure and submit in the Onboarding protocol will appear here instantly.',
+    crmCardDate: lang === 'es' ? 'Fecha' : 'Date',
+    crmCardContact: lang === 'es' ? 'Contacto Directo' : 'Direct Contact',
+
+    // Contact Page
+    contactTitle: lang === 'es' ? 'Contacto Cognitivo' : 'Cognitive Contact',
+    contactSub: lang === 'es' 
+      ? 'Conecta con nuestro equipo de ingenieros y diseñadores para materializar tu visión digital.' 
+      : 'Connect with our team of software engineers and designers to materialize your digital vision.',
+    contactLabelName: lang === 'es' ? 'Nombre Completo' : 'Full Name',
+    contactLabelEmail: lang === 'es' ? 'Correo Electrónico' : 'Email Address',
+    contactLabelPhone: lang === 'es' ? 'WhatsApp Directo' : 'Direct WhatsApp',
+    contactLabelSubject: lang === 'es' ? 'Asunto / Proyecto' : 'Subject / Project',
+    contactLabelMessage: lang === 'es' ? 'Mensaje / Detalles' : 'Message / Details',
+    contactBtnSubmit: lang === 'es' ? 'ENVIAR MENSAJE' : 'SEND MESSAGE',
+    contactBtnSubmitting: lang === 'es' ? 'ENVIANDO...' : 'SENDING...',
+    contactSuccessTitle: lang === 'es' ? '¡Mensaje Transmitido!' : 'Message Transmitted!',
+    contactSuccessSub: lang === 'es' 
+      ? 'Hemos registrado tu solicitud en el núcleo. Un arquitecto cognitivo se pondrá en contacto contigo en menos de 2 horas y te redireccionaremos a WhatsApp.' 
+      : 'We have registered your request in the core. A cognitive architect will contact you in less than 2 hours and we will redirect you to WhatsApp.',
+    contactDetailsTitle: lang === 'es' ? 'Canales Directos' : 'Direct Channels',
+    contactOffice: lang === 'es' ? 'Sede Central' : 'Headquarters',
+    contactOfficeLoc: lang === 'es' ? 'Quito, Ecuador • Cobertura Global' : 'Quito, Ecuador • Global Coverage',
+    contactSocials: lang === 'es' ? 'Redes de la Agencia' : 'Agency Networks',
+
+    // Configurator
+    confBadge: lang === 'es' ? 'Configurador Inteligente' : 'Smart Configurator',
+    confTitle: lang === 'es' ? 'Crea tu Ecosistema Técnico' : 'Build Your Technical Ecosystem',
+    confSub: lang === 'es'
+      ? 'Selecciona los módulos tecnológicos que demanda tu negocio y obtén una estimación de recursos y tiempos del Ingeniero Principal.'
+      : 'Select the technical modules your business demands and obtain an estimate of resources and time from the Principal Engineer.',
+    confSumTitle: lang === 'es' ? 'RESUMEN DE INFRAESTRUCTURA' : 'INFRASTRUCTURE SUMMARY',
+    confSumMod: lang === 'es' ? 'Módulos Solicitados' : 'Requested Modules',
+    confSumTime: lang === 'es' ? 'Tiempo de Producción' : 'Production Time',
+    confSumTimeWeeks: lang === 'es' ? 'semanas' : 'weeks',
+    confSumBudget: lang === 'es' ? 'Presupuesto Estimado' : 'Estimated Budget',
+    confSumCta: lang === 'es' ? 'PROCEDER AL ONBOARDING' : 'PROCEED TO ONBOARDING',
+
+    // Case Studies Page
+    csBadge: lang === 'es' ? 'Showcase Real' : 'Real Showcase',
+    csTitle: lang === 'es' ? 'CASOS DE ÉXITO MAX AI' : 'MAX AI CASE STUDIES',
+    csSub: lang === 'es'
+      ? 'Plataformas reales y estables producidas bajo ingeniería de alto desempeño para marcas sofisticadas.'
+      : 'Real and stable platforms built under high-performance engineering for sophisticated brands.',
   };
 
   // Render Projects Helper
@@ -2108,7 +2202,7 @@ export default function App() {
                 </div>
               </section>
   
-              {/* --- SECCIÓN DE SÍNTOMAS DEL PROBLEMA --- */}
+              {/* --- SECCIÓN DE SÍNTOMAS DEL PROBLEMA (INTERACTIVO SCANNER) --- */}
               <motion.section 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -2124,32 +2218,99 @@ export default function App() {
                     <h2 className={`font-display font-bold text-3xl sm:text-4xl tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                       {t.probTitle}
                     </h2>
-                    <p className={`text-sm font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
+                    <p className={`text-sm font-sans font-light mt-4 leading-relaxed max-w-2xl mx-auto ${themeStyles.textMuted}`}>
                       {t.probSub}
                     </p>
                   </div>
-  
-                  {/* Grid of 5 Symptoms */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                    {t.probSymptoms.map((symptom, idx) => (
-                      <div 
-                        key={idx} 
-                        className={`p-6 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#C17F4E]/5 ${themeStyles.card}`}
-                      >
-                        <div>
-                          <div className="text-[#C17F4E] font-mono text-3xl font-black mb-4">0{idx + 1}</div>
-                          <h3 className={`font-display font-bold text-sm uppercase mb-2 leading-snug tracking-wider ${themeStyles.title}`}>
-                            {symptom.title}
-                          </h3>
-                          <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                            {symptom.desc}
-                          </p>
+   
+                  {/* Interactive Problem Scanner */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    {/* Left Side: Symptom Selectors */}
+                    <div className="lg:col-span-5 flex flex-col gap-3">
+                      {t.probSymptoms.map((symptom, idx) => (
+                        <div
+                          key={idx}
+                          onMouseEnter={() => setActiveSymptom(idx)}
+                          onClick={() => setActiveSymptom(idx)}
+                          className={`p-4 rounded-xl border text-left transition-all duration-300 flex items-center gap-4 cursor-pointer ${
+                            activeSymptom === idx
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/5 shadow-lg'
+                              : isDark ? 'border-zinc-800 bg-zinc-900/10 hover:bg-zinc-800/30' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:bg-[#F2EFE9]'
+                          }`}
+                        >
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold transition-all ${
+                            activeSymptom === idx ? 'bg-[#C17F4E] text-white' : 'bg-zinc-800/20 text-zinc-500'
+                          }`}>
+                            0{idx + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className={`text-xs sm:text-sm font-bold uppercase tracking-wide truncate ${
+                              activeSymptom === idx ? (isDark ? 'text-white' : 'text-[#020813]') : 'text-zinc-500'
+                            }`}>
+                              {symptom.title}
+                            </h4>
+                          </div>
+                          <AlertTriangle className={`w-4 h-4 transition-all ${activeSymptom === idx ? 'text-red-500 animate-pulse' : 'text-zinc-700'}`} />
                         </div>
-                        <div className="mt-6 flex justify-end text-red-500/20">
-                          <AlertTriangle className="w-5 h-5" />
+                      ))}
+                    </div>
+
+                    {/* Right Side: Diagnosis Visualizer Panel */}
+                    <div className="lg:col-span-7">
+                      <div className={`p-8 rounded-2xl border h-full flex flex-col justify-between transition-all duration-300 relative overflow-hidden ${themeStyles.card}`}>
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-red-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <div className="space-y-6">
+                          <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                            <span className="text-red-500 font-mono text-[9px] uppercase tracking-widest font-black flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+                              Diagnóstico de Riesgo
+                            </span>
+                            <span className="font-mono text-xs text-zinc-500">SÍNTOMA 0{activeSymptom + 1} / 05</span>
+                          </div>
+
+                          <div className="space-y-3">
+                            <h3 className={`text-xl sm:text-2xl font-display font-black uppercase ${themeStyles.title}`}>
+                              {t.probSymptoms[activeSymptom].title}
+                            </h3>
+                            <p className={`text-xs sm:text-sm leading-relaxed ${themeStyles.textMuted}`}>
+                              {t.probSymptoms[activeSymptom].desc}
+                            </p>
+                          </div>
+
+                          {/* Level Indicator bar */}
+                          <div className="space-y-2 pt-4">
+                            <div className="flex justify-between text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                              <span>Impacto Comercial</span>
+                              <span className="text-[#C17F4E] font-bold">Crítico</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-gradient-to-r from-red-500 via-orange-500 to-[#C17F4E]"
+                                initial={{ width: "0%" }}
+                                animate={{ width: activeSymptom === 0 ? "75%" : activeSymptom === 1 ? "85%" : activeSymptom === 2 ? "90%" : activeSymptom === 3 ? "65%" : "80%" }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                              ></motion.div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-6 border-t border-white/5 mt-8 flex justify-between items-center text-[10px] font-mono uppercase tracking-wider">
+                          <span className="text-zinc-500">{lang === 'es' ? 'Solución sugerida:' : 'Suggested Solution:'}</span>
+                          <span 
+                            onClick={() => {
+                              const target = document.getElementById('sistema');
+                              if (target) {
+                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }}
+                            className="text-[#C17F4E] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                          >
+                            {lang === 'es' ? 'Ver Pilar del Sistema' : 'See System Pillar'} <ArrowRight className="w-3 h-3" />
+                          </span>
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
               </motion.section>
@@ -2173,7 +2334,7 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* Cyclic Diagram Representation */}
+                {/* Cyclic Diagram Connection Stepper */}
                 <div className="hidden lg:flex justify-between items-center max-w-4xl mx-auto mb-16 p-4 bg-zinc-950/20 border border-white/5 rounded-xl font-mono text-[9px] uppercase tracking-widest text-zinc-500">
                   <button 
                     onClick={() => setActivePilar(0)}
@@ -2205,7 +2366,7 @@ export default function App() {
                 </div>
   
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-                  {/* Pilar Selector Buttons */}
+                  {/* Pillar Selector Buttons */}
                   <div className="lg:col-span-5 flex flex-col gap-3">
                     {[
                       { number: '01', title: t.systPillar1Title, label: t.systPillar1Sub },
@@ -2236,20 +2397,99 @@ export default function App() {
                     ))}
                   </div>
   
-                  {/* Pillar Detail Content Panel */}
+                  {/* Pillar Detail Content Panel & Simulation Widget */}
                   <div className="lg:col-span-7">
                     <div className={`p-8 rounded-xl border h-full flex flex-col justify-between transition-all duration-300 ${themeStyles.card}`}>
                       <div className="space-y-4">
-                        <span className="text-[#C17F4E] font-mono text-[10px] uppercase tracking-widest font-bold">Detalle del Pilar</span>
+                        <span className="text-[#C17F4E] font-mono text-[9px] uppercase tracking-widest font-bold">Detalle del Pilar</span>
                         <h3 className={`text-xl sm:text-2xl font-display font-black uppercase ${themeStyles.title}`}>
                           {t.systPillarDetails[activePilar].title}
                         </h3>
-                        <p className={`text-sm leading-relaxed font-semibold text-[#C17F4E]`}>
+                        <p className={`text-xs sm:text-sm leading-relaxed font-semibold text-[#C17F4E]`}>
                           {t.systPillarDetails[activePilar].concept}
                         </p>
                         <p className={`text-xs sm:text-sm leading-relaxed ${themeStyles.textMuted}`}>
                           {t.systPillarDetails[activePilar].focus}
                         </p>
+                      </div>
+
+                      {/* Simulation Widget */}
+                      <div className="mt-6 pt-6 border-t border-white/5">
+                        {activePilar === 0 && (
+                          <div className="p-4 rounded-lg bg-zinc-950/60 border border-white/5 font-mono text-[10px] space-y-3">
+                            <div className="flex justify-between items-center text-zinc-500 uppercase">
+                              <span>Brand Identity System</span>
+                              <span>Autoridad: 100%</span>
+                            </div>
+                            <div className="flex gap-4 items-center">
+                              <div className="w-10 h-10 rounded bg-gradient-to-br from-[#C17F4E] to-[#D79663] flex items-center justify-center text-white font-display font-bold text-lg select-none">
+                                M
+                              </div>
+                              <div>
+                                <div className="font-bold text-white text-xs">MAX AI Digital</div>
+                                <div className="text-[9px] text-zinc-500">Silent Luxury Design Language</div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="w-3 h-3 rounded-full bg-[#020813] border border-white/10" title="#020813"></span>
+                              <span className="w-3 h-3 rounded-full bg-[#C17F4E]" title="#C17F4E"></span>
+                              <span className="w-3 h-3 rounded-full bg-white" title="#FFFFFF"></span>
+                              <span className="w-3 h-3 rounded-full bg-zinc-500" title="#71717A"></span>
+                            </div>
+                          </div>
+                        )}
+                        {activePilar === 1 && (
+                          <div className="p-4 rounded-lg bg-zinc-950/60 border border-white/5 font-mono text-[10px] space-y-3">
+                            <div className="flex justify-between items-center text-zinc-500 uppercase">
+                              <span>Vercel Deploy Probe</span>
+                              <span>Uptime: 100%</span>
+                            </div>
+                            <div className="p-2.5 rounded bg-black/60 border border-white/5 space-y-1.5">
+                              <div className="flex justify-between text-zinc-400">
+                                <span>tuproyecto.com</span>
+                                <span className="text-emerald-500">Online</span>
+                              </div>
+                              <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500 w-full"></div>
+                              </div>
+                            </div>
+                            <div className="flex justify-between text-[9px] text-zinc-500">
+                              <span>TTFB: 18ms</span>
+                              <span>LCP: 0.8s (Excelente)</span>
+                            </div>
+                          </div>
+                        )}
+                        {activePilar === 2 && (
+                          <div className="p-4 rounded-lg bg-zinc-950/60 border border-white/5 font-mono text-[10px] space-y-3">
+                            <div className="flex justify-between items-center text-zinc-500 uppercase">
+                              <span>Funnel Conversion Rate</span>
+                              <span>ROI: +340%</span>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-zinc-300">
+                                <span>Visitas del Mes</span>
+                                <span className="text-white font-bold">12,450</span>
+                              </div>
+                              <div className="flex justify-between text-zinc-300">
+                                <span>Leads Calificados</span>
+                                <span className="text-[#C17F4E] font-bold">1,820 (14.6%)</span>
+                              </div>
+                              <div className="flex justify-between text-zinc-300">
+                                <span>Costo Adquisición (CAC)</span>
+                                <span className="text-emerald-500 font-bold">-45% Mínimo</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {activePilar === 3 && (
+                          <div className="p-4 rounded-lg bg-zinc-950/60 border border-white/5 font-mono text-[10px] space-y-2 h-28 overflow-y-auto">
+                            <div className="text-zinc-500 uppercase text-[9px] mb-1">AI Agent Process Logs</div>
+                            <div className="text-[#C17F4E]"><span className="text-zinc-600">[system]</span> Init Gemini-2.0-Flash...</div>
+                            <div className="text-emerald-400"><span className="text-zinc-600">[agent]</span> Analizando WhatsApp lead...</div>
+                            <div className="text-zinc-300"><span className="text-zinc-600">[agent]</span> Calificación: Apta (Presupuesto OK)</div>
+                            <div className="text-zinc-300"><span className="text-zinc-600">[system]</span> Agendado Calendy 24/7 de forma autónoma.</div>
+                          </div>
+                        )}
                       </div>
   
                       <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5 mt-6">
@@ -2291,8 +2531,68 @@ export default function App() {
                     </p>
                   </div>
 
-                  {/* Timeline Tabs */}
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-8">
+                  {/* Progress Line Stepper (Desktop) */}
+                  <div className="relative mb-20 max-w-5xl mx-auto hidden md:block px-6">
+                    {/* Background line */}
+                    <div className={`absolute top-5 left-6 right-6 h-[2px] -translate-y-1/2 ${
+                      isDark ? 'bg-zinc-800/80' : 'bg-[#D0C9B8]'
+                    }`}></div>
+                    {/* Active progress line */}
+                    <div 
+                      className="absolute top-5 left-6 right-6 h-[2px] -translate-y-1/2 overflow-hidden pointer-events-none"
+                    >
+                      <div 
+                        className="h-full bg-[#C17F4E] transition-all duration-500 ease-out"
+                        style={{ width: `${(activeWeek / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    
+                    {/* Dots */}
+                    <div className="relative flex justify-between">
+                      {t.metWeeks.map((wk, idx) => {
+                        const isActive = activeWeek === idx;
+                        const isCompleted = activeWeek > idx;
+                        return (
+                          <div 
+                            key={idx} 
+                            onClick={() => setActiveWeek(idx)}
+                            className="flex flex-col items-center select-none cursor-pointer group w-24 relative"
+                          >
+                            <div 
+                              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-mono text-xs font-bold transition-all z-10 ${
+                                isActive
+                                  ? `border-[#C17F4E] text-[#C17F4E] scale-110 shadow-lg shadow-[#C17F4E]/25 ${
+                                      isDark ? 'bg-zinc-950' : 'bg-[#FAF8F5]'
+                                    }`
+                                  : isCompleted
+                                    ? 'border-[#C17F4E] bg-[#C17F4E] text-zinc-950'
+                                    : isDark 
+                                      ? 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-[#C17F4E]' 
+                                      : 'border-[#D6D0C1] bg-[#FAF8F5] text-zinc-500 hover:border-[#C17F4E]'
+                              }`}
+                            >
+                              <span>{idx + 1}</span>
+                            </div>
+                            <div className="absolute top-12 text-center w-24 flex flex-col items-center">
+                              <span className={`font-mono text-[9px] uppercase tracking-wider block font-bold transition-colors ${
+                                isActive ? 'text-[#C17F4E]' : 'text-zinc-500 group-hover:text-zinc-400'
+                              }`}>
+                                {wk.number}
+                              </span>
+                              <span className={`text-[9px] leading-snug font-semibold transition-colors mt-0.5 max-h-8 overflow-hidden text-ellipsis ${
+                                isActive ? (isDark ? 'text-white' : 'text-[#020813]') : 'text-zinc-555'
+                              }`}>
+                                {wk.title}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Mobile Timeline Grid Fallback */}
+                  <div className="grid grid-cols-2 gap-2 mb-8 md:hidden">
                     {t.metWeeks.map((wk, idx) => (
                       <button
                         key={idx}
@@ -2331,7 +2631,7 @@ export default function App() {
                 </div>
               </motion.section>
   
-              {/* --- SECCIÓN STACKS TECNOLÓGICOS --- */}
+              {/* --- SECCIÓN STACKS TECNOLÓGICOS (COMPARATIVA BENTO) --- */}
               <motion.section 
                 id="stacks"
                 initial={{ opacity: 0, y: 40 }}
@@ -2352,37 +2652,53 @@ export default function App() {
   
                 {/* 4 Levels Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-                  {t.stackLevels.map((lvl, idx) => (
-                    <div 
-                      key={idx} 
-                      className={`p-6 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${themeStyles.card}`}
-                    >
-                      <div>
-                        <span className="text-[#C17F4E] font-mono text-[9px] uppercase tracking-widest font-black block mb-1">{lvl.target}</span>
-                        <h3 className={`font-display font-black text-base uppercase mb-4 ${themeStyles.title}`}>{lvl.level}</h3>
-                        
-                        <div className="space-y-4 font-sans text-xs mb-6">
-                          <div>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">Arquitectura</span>
-                            <p className={`mt-0.5 ${isDark ? 'text-zinc-200' : 'text-slate-800'}`}>{lvl.arch}</p>
+                  {t.stackLevels.map((lvl, idx) => {
+                    const icons = [
+                      <Zap className="w-5 h-5" />,
+                      <Layers className="w-5 h-5" />,
+                      <Database className="w-5 h-5" />,
+                      <Cpu className="w-5 h-5" />
+                    ];
+                    return (
+                      <div 
+                        key={idx} 
+                        className={`p-6 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
+                          idx === 3 ? 'border-[#C17F4E] bg-gradient-to-b from-[#C17F4E]/10 to-transparent' : themeStyles.card
+                        }`}
+                      >
+                        <div>
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[#C17F4E] font-mono text-[9px] uppercase tracking-widest font-black block">{lvl.target}</span>
+                            <div className="p-2 rounded bg-[#C17F4E]/10 text-[#C17F4E] shrink-0">
+                              {icons[idx]}
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">Costo de servidores</span>
-                            <p className="font-mono font-bold text-[#C17F4E] mt-0.5">{lvl.cost}</p>
-                          </div>
-                          <div>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">Uso Recomendado</span>
-                            <p className={`mt-0.5 ${themeStyles.textMuted}`}>{lvl.use}</p>
+                          
+                          <h3 className={`font-display font-black text-base uppercase mb-4 ${themeStyles.title}`}>{lvl.level}</h3>
+                          
+                          <div className="space-y-4 font-sans text-xs mb-6">
+                            <div>
+                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Arquitectura</span>
+                              <p className={`mt-0.5 font-medium leading-relaxed ${isDark ? 'text-zinc-200' : 'text-slate-800'}`}>{lvl.arch}</p>
+                            </div>
+                            <div>
+                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Costo de servidores</span>
+                              <p className="font-mono font-bold text-[#C17F4E] mt-0.5 text-xs">{lvl.cost}</p>
+                            </div>
+                            <div>
+                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Uso Recomendado</span>
+                              <p className={`mt-0.5 leading-relaxed ${themeStyles.textMuted}`}>{lvl.use}</p>
+                            </div>
                           </div>
                         </div>
+    
+                        <div className="pt-4 border-t border-white/5 mt-auto font-sans text-xs">
+                          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Diferenciador</span>
+                          <p className="italic text-emerald-500 font-semibold mt-0.5">“{lvl.diff}”</p>
+                        </div>
                       </div>
-  
-                      <div className="pt-4 border-t border-white/5 mt-auto font-sans text-xs">
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">Diferenciador</span>
-                        <p className="italic text-emerald-500 font-semibold mt-0.5">“{lvl.diff}”</p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </motion.section>
   
