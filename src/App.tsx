@@ -1512,7 +1512,7 @@ export default function App() {
             {/* --- HERO & DASHBOARD REPLICA ROW --- */}
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <Interactive3DNetwork />
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-start items-center relative z-10">
                 
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-start gap-6">
