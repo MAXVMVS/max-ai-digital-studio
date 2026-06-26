@@ -2103,8 +2103,16 @@ export default function App() {
                 </div>
 
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
-                <div className="lg:col-span-5 relative w-full select-none">
-                  <div className={`p-6 rounded-2xl border transition-all duration-500 flex flex-col justify-between h-[380px] relative overflow-hidden ${themeStyles.card}`}>
+                <div className="lg:col-span-5 relative w-full select-none flex flex-col items-center gap-4">
+                  {/* Centered Logo above the diagram */}
+                  <div className="w-full max-w-[260px] sm:max-w-[320px] flex justify-center mb-1">
+                    <img 
+                      src="/logo_max_ai_hero.png" 
+                      alt="MAX AI" 
+                      className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]"
+                    />
+                  </div>
+                  <div className={`p-6 rounded-2xl border transition-all duration-500 flex flex-col justify-between h-[380px] w-full relative overflow-hidden ${themeStyles.card}`}>
                     
                     {/* Header bar */}
                     <div className="h-10 border-b border-[#C17F4E]/10 pb-4 flex items-center justify-between">
