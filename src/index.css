@@ -36,3 +36,23 @@
 .animate-pulse-glow-2 {
   animation: pulseGlow 16s infinite ease-in-out alternate;
 }
+
+/* Light mode high-contrast overrides for gray text classes */
+.light-theme .text-zinc-500,
+.light-theme .text-slate-500,
+.light-theme .text-gray-500 {
+  color: #4A5262 !important;
+}
+
+.light-theme .text-zinc-400,
+.light-theme .text-slate-400,
+.light-theme .text-gray-400 {
+  color: #333946 !important;
+}
+
+.light-theme .text-zinc-600,
+.light-theme .text-slate-600,
+.light-theme .text-gray-650 {
+  color: #242933 !important;
+}
+

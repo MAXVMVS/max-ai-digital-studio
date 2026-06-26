@@ -985,7 +985,7 @@ export default function App() {
     card: 'bg-[#FAF8F5] border-[#D6D0C1] backdrop-blur-xl shadow-lg shadow-[#D6D0C1]/40',
     cardInner: 'bg-[#EAE6DB] border-[#D0C9B8]',
     input: 'bg-white border-[#D6D0C1] text-slate-800 focus:border-[#C17F4E]',
-    textMuted: 'text-[#4F5568]',
+    textMuted: 'text-[#2D3340]',
     title: 'text-[#020813]'
   };
 
@@ -1729,7 +1729,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${themeStyles.bg}`}>
+    <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${themeStyles.bg} ${isDark ? 'dark-theme' : 'light-theme'}`}>
       
       {/* Background Image Layer */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
@@ -2580,7 +2580,7 @@ export default function App() {
                                 {wk.number}
                               </span>
                               <span className={`text-[9px] leading-snug font-semibold transition-colors mt-0.5 max-h-8 overflow-hidden text-ellipsis ${
-                                isActive ? (isDark ? 'text-white' : 'text-[#020813]') : 'text-zinc-555'
+                                isActive ? (isDark ? 'text-white' : 'text-[#020813]') : 'text-zinc-500'
                               }`}>
                                 {wk.title}
                               </span>
