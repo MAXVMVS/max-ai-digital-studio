@@ -2028,17 +2028,45 @@ export default function App() {
             {/* --- HERO & DASHBOARD REPLICA ROW --- */}
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <Interactive3DNetwork />
+              
+              {/* Hero Top Bar: Logo on Left, Sub-pillars on Right */}
+              <div className="w-full flex flex-col sm:flex-row justify-between items-center border-b border-[#C17F4E]/10 pb-6 mb-12 gap-4 relative z-10">
+                <div className="flex items-center gap-3">
+                  <img src="/logo_pequeno.png" alt="MAX AI" className="h-10 w-10 object-contain rounded-lg shadow-md shadow-[#C17F4E]/10" />
+                  <div className="flex flex-col">
+                    <span className={`text-xl font-display font-black tracking-tight leading-none uppercase ${themeStyles.title}`}>
+                      MAX <span className="text-[#C17F4E]">AI</span>
+                    </span>
+                    <span className="text-[7px] font-mono text-zinc-500 tracking-widest mt-1">
+                      DIGITAL STUDIO
+                    </span>
+                  </div>
+                </div>
+                <div className={`text-[10px] sm:text-xs font-mono font-bold tracking-wider text-right uppercase flex flex-wrap justify-end items-center gap-x-3 gap-y-1.5 ${themeStyles.textMuted}`}>
+                  {lang === 'es' ? (
+                    <>
+                      <span className="text-[#C17F4E]">Branding & Marketing Digital</span>
+                      <span className="opacity-30">•</span>
+                      <span>Desarrollo Web</span>
+                      <span className="opacity-30">•</span>
+                      <span className="text-[#C17F4E]">IA & Automatización</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[#C17F4E]">Branding & Digital Marketing</span>
+                      <span className="opacity-30">•</span>
+                      <span>Web Development</span>
+                      <span className="opacity-30">•</span>
+                      <span className="text-[#C17F4E]">AI & Automation</span>
+                    </>
+                  )}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-start items-center relative z-10">
                 
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-start gap-6">
-                  <div className="mb-2 select-none w-full flex justify-center">
-                    <img 
-                      src="/logo_max_ai.png" 
-                      alt="MAX AI" 
-                      className="w-full h-auto max-w-[320px] sm:max-w-[576px] lg:max-w-[825px] aspect-[2/1] rounded-2xl object-cover filter drop-shadow-[0_4px_20px_rgba(193,127,78,0.20)]"
-                    />
-                  </div>
 
                   <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
                     {t.heroTitle1} <br/> 
