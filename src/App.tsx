@@ -1498,7 +1498,7 @@ export default function App() {
                 href="https://wa.me/593983186044"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full text-center block bg-[#C17F4E] hover:bg-[#D79663] text-white py-3 rounded font-mono text-xs font-bold uppercase tracking-widest shadow-lg"
+                className="w-full text-center block bg-[#25D366] hover:bg-[#20ba5a] text-white py-3 rounded font-mono text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#25D366]/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 {t.whatsappBtn}
               </a>
