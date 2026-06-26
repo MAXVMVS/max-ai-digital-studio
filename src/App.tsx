@@ -278,7 +278,14 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto'>('inicio');
+  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto'>(() => {
+    const saved = localStorage.getItem('maxai_active_page');
+    return (saved as 'inicio' | 'servicios' | 'portafolio' | 'contacto') || 'inicio';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('maxai_active_page', activePage);
+  }, [activePage]);
 
   // --- Contact page state ---
   const [contactFormName, setContactFormName] = useState<string>('');
