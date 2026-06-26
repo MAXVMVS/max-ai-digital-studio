@@ -3033,40 +3033,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Social Networks card */}
-                <div className={`p-8 rounded-xl border ${themeStyles.card}`}>
-                  <h3 className={`font-display font-bold text-sm uppercase tracking-wider mb-5 ${themeStyles.title}`}>
-                    {t.contactSocials}
-                  </h3>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* Instagram */}
-                    <a 
-                      href="https://www.instagram.com/maxai.studio" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className={`flex items-center gap-3 p-3 rounded border hover:border-[#C17F4E] transition-all group ${themeStyles.cardInner}`}
-                    >
-                      <svg className="w-5 h-5 text-pink-500 group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                      </svg>
-                      <span className="text-xs font-mono uppercase tracking-wider font-semibold">Instagram</span>
-                    </a>
 
-                    {/* Facebook */}
-                    <a 
-                      href="https://facebook.com/maxai.studio" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className={`flex items-center gap-3 p-3 rounded border hover:border-[#C17F4E] transition-all group ${themeStyles.cardInner}`}
-                    >
-                      <svg className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24">
-                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                      </svg>
-                      <span className="text-xs font-mono uppercase tracking-wider font-semibold">Facebook</span>
-                    </a>
-                  </div>
-                </div>
 
               </div>
 
@@ -3236,7 +3203,6 @@ export default function App() {
               <span className="text-zinc-400">{t.footServer}</span>
             </div>
             <span className="text-zinc-700">|</span>
-            <a href="https://www.instagram.com/amytevet.tm" target="_blank" rel="noopener noreferrer" className="hover:text-[#C17F4E] transition-colors">INSTAGRAM</a>
             <a href="https://wa.me/593983186044" target="_blank" rel="noopener noreferrer" className="hover:text-[#C17F4E] transition-colors">WHATSAPP</a>
           </div>
         </div>
