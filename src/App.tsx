@@ -2106,285 +2106,255 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Right Column: Interactive Flow Diagram */}
-                <div className="lg:col-span-5 relative w-full">
+                {/* Right Column: Dynamic Agentic Ecosystem Hub */}
+                <div className="lg:col-span-5 relative w-full select-none">
                   <div className={`p-6 rounded-2xl border transition-all duration-500 flex flex-col justify-between h-[380px] relative overflow-hidden ${themeStyles.card}`}>
                     
                     {/* Header bar */}
-                    <div className="h-10 border-b border-white/10 pb-4 flex items-center justify-between mb-2">
+                    <div className="h-10 border-b border-[#C17F4E]/10 pb-4 flex items-center justify-between">
                       <div className="flex gap-1.5 items-center">
-                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/30"></div>
-                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/30"></div>
-                        <div className="w-2.5 h-2.5 rounded-full bg-green-500/30"></div>
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest ml-2">MAX-AI FLOW ENGINE</span>
+                        <div className="w-2 h-2 rounded-full bg-[#C17F4E] animate-pulse"></div>
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">MAX-AI SYSTEM ORCHESTRATOR</span>
                       </div>
-                      <div className="flex items-center gap-1.5 bg-[#C17F4E]/10 text-[#C17F4E] px-2 py-0.5 rounded text-[9px] font-mono">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#C17F4E] animate-pulse"></span>
-                        <span>LIVE STREAM</span>
+                      <div className="flex items-center gap-1.5 bg-[#C17F4E]/10 text-[#C17F4E] px-2 py-0.5 rounded text-[8px] font-mono font-bold tracking-wider">
+                        <span>PIPELINE: ACTIVE</span>
                       </div>
                     </div>
 
-                    {/* Diagram Board */}
-                    <div className="relative flex-1 w-full h-[200px] mt-4 select-none">
+                    {/* Diagram Hub Board */}
+                    <div className="relative flex-1 w-full h-[240px] mt-2 overflow-hidden">
+                      
+                      {/* Subtle background glow centered on the brain core */}
+                      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none w-36 h-36 bg-[#C17F4E]/5 rounded-full blur-3xl animate-pulse"></div>
                       
                       {/* Connection paths and particles */}
-                      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 200">
+                      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 240">
                         <defs>
-                          <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-                            <feGaussianBlur stdDeviation="3.5" result="blur" />
-                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                          <filter id="glow-subtle" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feMerge>
+                              <feMergeNode in="blur" />
+                              <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                          </filter>
+                          <filter id="glow-heavy" x="-40%" y="-40%" width="180%" height="180%">
+                            <feGaussianBlur stdDeviation="6" result="blur" />
+                            <feMerge>
+                              <feMergeNode in="blur" />
+                              <feMergeNode in="SourceGraphic" />
+                            </feMerge>
                           </filter>
                         </defs>
                         
-                        {/* Connecting Line 1: Entrada -> IA */}
+                        {/* --- Base Inactive Paths (Circuit layout) --- */}
+                        {/* Web <-> Brain */}
+                        <path d="M 70 60 C 130 60, 140 120, 200 120" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
+                        {/* Android <-> Brain */}
+                        <path d="M 70 180 C 130 180, 140 120, 200 120" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
+                        {/* Brain <-> Firestore DB */}
+                        <path d="M 200 120 C 260 120, 270 60, 330 60" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
+                        {/* Brain <-> APIs */}
+                        <path d="M 200 120 C 260 120, 270 180, 330 180" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
+
+                        {/* --- Active Glowing Connection Paths --- */}
+                        {/* Web <-> Brain active */}
                         <path 
-                          d="M 90 90 H 180" 
+                          d="M 70 60 C 130 60, 140 120, 200 120" 
                           fill="none" 
-                          stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} 
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                        />
-                        <path 
-                          d="M 90 90 H 180" 
-                          fill="none" 
-                          stroke="#C17F4E" 
+                          stroke={activeDiagNode === 'web' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
                           strokeWidth="1.5" 
-                          strokeDasharray="4 4"
-                          className="opacity-40"
+                          className="transition-all duration-500 opacity-60" 
+                          filter="url(#glow-subtle)" 
                         />
-                        {/* Connecting Line 2: IA -> DB */}
+                        {/* Android <-> Brain active */}
                         <path 
-                          d="M 220 90 H 310" 
+                          d="M 70 180 C 130 180, 140 120, 200 120" 
                           fill="none" 
-                          stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} 
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                        />
-                        <path 
-                          d="M 220 90 H 310" 
-                          fill="none" 
-                          stroke="#C17F4E" 
+                          stroke={activeDiagNode === 'android' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
                           strokeWidth="1.5" 
-                          strokeDasharray="4 4"
-                          className="opacity-40"
+                          className="transition-all duration-500 opacity-60" 
+                          filter="url(#glow-subtle)" 
+                        />
+                        {/* Brain <-> DB active */}
+                        <path 
+                          d="M 200 120 C 260 120, 270 60, 330 60" 
+                          fill="none" 
+                          stroke={activeDiagNode === 'db' || activeDiagNode === 'ia' ? "#2563EB" : "transparent"} 
+                          strokeWidth="1.5" 
+                          className="transition-all duration-500 opacity-60" 
+                          filter="url(#glow-subtle)" 
+                        />
+                        {/* Brain <-> APIs active */}
+                        <path 
+                          d="M 200 120 C 260 120, 270 180, 330 180" 
+                          fill="none" 
+                          stroke={activeDiagNode === 'api' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
+                          strokeWidth="1.5" 
+                          className="transition-all duration-500 opacity-60" 
+                          filter="url(#glow-subtle)" 
                         />
 
-                        {/* Particle 1: Entrada to IA */}
-                        <motion.circle
-                          r="3.5"
-                          fill="#C17F4E"
-                          filter="url(#glow)"
-                          animate={{ cx: [90, 180] }}
-                          transition={{
-                            duration: 2.2,
-                            repeat: Infinity,
-                            ease: "linear"
-                          }}
-                          cy="90"
-                        />
+                        {/* --- Flowing Particles (Native SVG Hardware Accelerated) --- */}
+                        {/* Web -> Brain (Request Inputs) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 70 60 C 130 60, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="0s" />
+                        </circle>
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 70 60 C 130 60, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="1.2s" />
+                        </circle>
 
-                        {/* Particle 2: IA to DB */}
-                        <motion.circle
-                          r="3.5"
-                          fill="#C17F4E"
-                          filter="url(#glow)"
-                          animate={{ cx: [220, 310] }}
-                          transition={{
-                            duration: 2.2,
-                            repeat: Infinity,
-                            ease: "linear",
-                            delay: 1.1
-                          }}
-                          cy="90"
-                        />
+                        {/* Android -> Brain (Request Inputs) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 70 180 C 130 180, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="0.6s" />
+                        </circle>
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 70 180 C 130 180, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="1.8s" />
+                        </circle>
+
+                        {/* Brain -> DB (Cloud Storage Query - Blue) */}
+                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 260 120, 270 60, 330 60" dur="2.4s" repeatCount="indefinite" begin="0.3s" />
+                        </circle>
+                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 260 120, 270 60, 330 60" dur="2.4s" repeatCount="indefinite" begin="1.5s" />
+                        </circle>
+
+                        {/* Brain -> APIs (Integrations Action) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 260 120, 270 180, 330 180" dur="2.4s" repeatCount="indefinite" begin="0.9s" />
+                        </circle>
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 260 120, 270 180, 330 180" dur="2.4s" repeatCount="indefinite" begin="2.1s" />
+                        </circle>
+
+                        {/* DB -> Brain (Data Return - Blue) */}
+                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
+                          <animateMotion path="M 330 60 C 270 60, 260 120, 200 120" dur="2.8s" repeatCount="indefinite" begin="0.7s" />
+                        </circle>
+
+                        {/* API -> Brain (Action Callback) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 330 180 C 270 180, 260 120, 200 120" dur="2.8s" repeatCount="indefinite" begin="1.4s" />
+                        </circle>
+
+                        {/* Brain -> Web UI (Render Update) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 140 120, 130 60, 70 60" dur="2.8s" repeatCount="indefinite" begin="2.1s" />
+                        </circle>
+
+                        {/* Brain -> Android UI (Render Update) */}
+                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
+                          <animateMotion path="M 200 120 C 140 120, 130 180, 70 180" dur="2.8s" repeatCount="indefinite" begin="2.8s" />
+                        </circle>
                       </svg>
 
-                      {/* --- FLOATING BUBBLES --- */}
+                      {/* --- NODE BUTTONS --- */}
                       
-                      {/* Node 1: Entrada (Traffic/Web/WhatsApp) */}
+                      {/* Node 1: Web (Top-Left) */}
                       <div 
-                        onClick={() => setActiveDiagNode('entrada')}
-                        className={`absolute left-[65px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                        onClick={() => setActiveDiagNode('web')}
+                        className="absolute left-[17.5%] top-[25%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
                       >
                         <div 
-                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'entrada'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
-                              : isDark 
-                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
-                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
+                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'web'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
+                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
                           }`}
                         >
-                          <Network className="w-6 h-6 animate-pulse" />
+                          <Code2 className="w-5 h-5" />
                         </div>
-                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
-                          activeDiagNode === 'entrada' ? 'text-[#C17F4E]' : 'text-zinc-500'
-                        }`}>
-                          {lang === 'es' ? '1. Entrada' : '1. Input'}
-                        </span>
-
-                        {/* Floating bubbles for Node 1 */}
-                        <AnimatePresence>
-                          {activeDiagNode === 'entrada' && (
-                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-32 pointer-events-none">
-                              <motion.div 
-                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
-                                }`}
-                              >
-                                💬 WhatsApp Chat
-                              </motion.div>
-                              <motion.div 
-                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 0.1 }}
-                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-white/5 text-[#C17F4E]' : 'bg-white border-zinc-200 text-[#C17F4E]'
-                                }`}
-                              >
-                                🌐 Web Visitor
-                              </motion.div>
-                            </div>
-                          )}
-                        </AnimatePresence>
+                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'web' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>WEB</span>
                       </div>
 
-                      {/* Node 2: Núcleo IA (AI Core) */}
+                      {/* Node 2: Android (Bottom-Left) */}
+                      <div 
+                        onClick={() => setActiveDiagNode('android')}
+                        className="absolute left-[17.5%] top-[75%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
+                      >
+                        <div 
+                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'android'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
+                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
+                          }`}
+                        >
+                          <Phone className="w-5 h-5" />
+                        </div>
+                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'android' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>ANDROID</span>
+                      </div>
+
+                      {/* Node 3: AI Core Brain (Center) */}
                       <div 
                         onClick={() => setActiveDiagNode('ia')}
-                        className={`absolute left-[200px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                        className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
                       >
-                        <div 
-                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'ia'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
-                              : isDark 
-                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
-                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
-                          }`}
-                        >
-                          <Brain className="w-6 h-6" />
+                        <div className="relative">
+                          <div className={`absolute -inset-1.5 rounded-full bg-[#C17F4E]/10 animate-ping opacity-75 ${activeDiagNode === 'ia' ? 'block' : 'hidden group-hover:block'}`}></div>
+                          <div 
+                            className={`relative w-13 h-13 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                              activeDiagNode === 'ia'
+                                ? 'border-[#C17F4E] bg-[#C17F4E]/25 scale-115 shadow-lg shadow-[#C17F4E]/30 text-[#C17F4E]'
+                                : isDark ? 'border-zinc-700 bg-zinc-950 text-[#C17F4E] group-hover:border-[#C17F4E] group-hover:scale-105' : 'border-[#C17F4E]/50 bg-[#FAF8F5] text-[#C17F4E] group-hover:border-[#C17F4E] group-hover:scale-105'
+                            }`}
+                          >
+                            <Brain className="w-6 h-6 animate-pulse" />
+                          </div>
                         </div>
-                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
-                          activeDiagNode === 'ia' ? 'text-[#C17F4E]' : 'text-zinc-500'
-                        }`}>
-                          {lang === 'es' ? '2. Núcleo IA' : '2. AI Core'}
-                        </span>
-
-                        {/* Floating bubbles for Node 2 */}
-                        <AnimatePresence>
-                          {activeDiagNode === 'ia' && (
-                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-36 pointer-events-none">
-                              <motion.div 
-                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
-                                }`}
-                              >
-                                🧠 Gemini-2.0 Engine
-                              </motion.div>
-                              <motion.div 
-                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 0.1 }}
-                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-white/5 text-[#C17F4E]' : 'bg-white border-zinc-200 text-[#C17F4E]'
-                                }`}
-                              >
-                                ⚙️ Pre-Qualifying Lead
-                              </motion.div>
-                            </div>
-                          )}
-                        </AnimatePresence>
+                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'ia' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>AI AGENT</span>
                       </div>
 
-                      {/* Node 3: Base de Datos / CRM */}
+                      {/* Node 4: Firestore Database (Top-Right) */}
                       <div 
                         onClick={() => setActiveDiagNode('db')}
-                        className={`absolute left-[335px] top-[90px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group z-20`}
+                        className="absolute left-[82.5%] top-[25%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
                       >
                         <div 
-                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                             activeDiagNode === 'db'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/10 scale-110 shadow-lg shadow-[#C17F4E]/20 text-[#C17F4E]'
-                              : isDark 
-                                ? 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-[#C17F4E]' 
-                                : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:border-[#C17F4E]'
+                              ? 'border-[#2563EB] bg-[#2563EB]/15 scale-110 shadow-lg shadow-[#2563EB]/25 text-[#2563EB]'
+                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#2563EB]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#2563EB]/60'
                           }`}
                         >
-                          <Database className="w-6 h-6" />
+                          <Database className="w-5 h-5" />
                         </div>
-                        <span className={`text-[8px] font-mono uppercase tracking-wider font-bold mt-2 ${
-                          activeDiagNode === 'db' ? 'text-[#C17F4E]' : 'text-zinc-500'
-                        }`}>
-                          {lang === 'es' ? '3. Sistema DB' : '3. DB System'}
-                        </span>
+                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'db' ? 'text-[#2563EB]' : 'text-zinc-500'}`}>FIRESTORE</span>
+                      </div>
 
-                        {/* Floating bubbles for Node 3 */}
-                        <AnimatePresence>
-                          {activeDiagNode === 'db' && (
-                            <div className="absolute bottom-16 flex flex-col items-center gap-1.5 w-32 pointer-events-none">
-                              <motion.div 
-                                initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -10, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-[#C17F4E]/30 text-white' : 'bg-white border-[#C17F4E]/35 text-slate-800'
-                                }`}
-                              >
-                                📁 Firestore CRM
-                              </motion.div>
-                              <motion.div 
-                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 0.1 }}
-                                exit={{ opacity: 0, y: -15, scale: 0.8 }}
-                                className={`px-2.5 py-1 rounded-lg border text-[8px] font-semibold tracking-wide uppercase font-mono shadow-md ${
-                                  isDark ? 'bg-zinc-900/90 border-white/5 text-emerald-500' : 'bg-white border-zinc-200 text-emerald-650'
-                                }`}
-                              >
-                                ✅ Booked / Sync OK
-                              </motion.div>
-                            </div>
-                          )}
-                        </AnimatePresence>
+                      {/* Node 5: APIs / Webhooks (Bottom-Right) */}
+                      <div 
+                        onClick={() => setActiveDiagNode('api')}
+                        className="absolute left-[82.5%] top-[75%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
+                      >
+                        <div 
+                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            activeDiagNode === 'api'
+                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
+                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
+                          }`}
+                        >
+                          <Zap className="w-5 h-5" />
+                        </div>
+                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'api' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>APIs</span>
                       </div>
 
                     </div>
 
-                    {/* Explanatory Footer Card */}
-                    <div className={`p-4 rounded-xl border font-sans text-xs flex items-start gap-3 transition-colors duration-300 mt-2 ${themeStyles.cardInner}`}>
-                      <Sparkles className="w-5 h-5 text-[#C17F4E] shrink-0 mt-0.5" />
-                      <div>
-                        <p className={`font-semibold uppercase tracking-wider text-[9px] text-[#C17F4E] font-mono`}>
-                          {activeDiagNode === 'entrada' 
-                            ? (lang === 'es' ? 'Canalización de Entrada' : 'Input Orchestration') 
-                            : activeDiagNode === 'ia' 
-                              ? (lang === 'es' ? 'Cerebro Cognitivo' : 'Cognitive Brain') 
-                              : (lang === 'es' ? 'Base de Datos y CRM' : 'Database & CRM')}
-                        </p>
-                        <p className={`text-[11px] leading-relaxed mt-1 ${themeStyles.textMuted}`}>
-                          {activeDiagNode === 'entrada'
-                            ? (lang === 'es' 
-                                ? 'Unifica tus puntos de contacto (Visitas a la Web o chats directos en WhatsApp) en un único embudo de ingreso de datos.' 
-                                : 'Unifies your contact touchpoints (Web traffic or direct WhatsApp chats) into a single data ingress stream.')
-                            : activeDiagNode === 'ia'
-                              ? (lang === 'es' 
-                                  ? 'La Inteligencia Artificial (Gemini API) califica automáticamente la intención de compra del lead y agenda citas de forma autónoma.' 
-                                  : 'The Artificial Intelligence (Gemini API) qualifies buying intent and schedules appointment calls autonomously.')
-                              : (lang === 'es' 
-                                  ? 'Toda la información precalificada se guarda de manera segura en Firestore, sincronizando tus CRM y notificándote de inmediato.' 
-                                  : 'All pre-qualified info is logged securely in Firestore, synchronizing your CRMs and notifying you immediately.')
-                          }
-                        </p>
+                    {/* Explanatory Info Bar (Single highly informative line, zero clutter) */}
+                    <div className={`py-3 px-4 rounded-xl border flex gap-3 items-center text-xs font-mono transition-colors duration-300 ${themeStyles.cardInner}`}>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className={`w-2 h-2 rounded-full animate-pulse ${activeDiagNode === 'db' ? 'bg-[#2563EB]' : 'bg-[#C17F4E]'}`}></span>
+                        <span className={`font-bold text-[9px] uppercase tracking-wider ${activeDiagNode === 'db' ? 'text-[#2563EB]' : 'text-[#C17F4E]'}`}>
+                          {activeDiagNode}
+                        </span>
                       </div>
+                      <span className={`text-[10px] leading-relaxed text-left flex-1 font-sans ${themeStyles.textMuted}`}>
+                        {activeDiagNode === 'web' && (lang === 'es' ? 'Desarrollo Web: Plataformas ultra-rápidas en React/Next.js conectadas a agentes autónomos.' : 'Web Dev: Ultra-fast React/Next.js platforms connected to autonomous backend agents.')}
+                        {activeDiagNode === 'android' && (lang === 'es' ? 'Apps Android: Desarrollo nativo en Kotlin optimizado para flujos y agentes IA.' : 'Android Apps: Native Kotlin apps optimized for AI workflows and mobile agents.')}
+                        {activeDiagNode === 'ia' && (lang === 'es' ? 'Estudio Agéntico IA: Cerebros cognitivos autónomos que automatizan tu negocio 24/7.' : 'Agentic AI Studio: Autonomous cognitive cores that automate business tasks 24/7.')}
+                        {activeDiagNode === 'db' && (lang === 'es' ? 'Bases de Datos: Persistencia en la nube (Firestore) segura y en tiempo real.' : 'Cloud Database: Real-time, secure data persistence powered by Firestore.')}
+                        {activeDiagNode === 'api' && (lang === 'es' ? 'APIs e Integraciones: Canales con WhatsApp, pasarelas de pago y webhooks.' : 'APIs & Integrations: Pipelines connecting WhatsApp, payment gateways, and webhooks.')}
+                      </span>
                     </div>
 
                   </div>
