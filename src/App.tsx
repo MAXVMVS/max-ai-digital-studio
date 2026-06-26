@@ -1374,7 +1374,19 @@ export default function App() {
           </div>
 
           {/* Mobile Menu Buttons */}
-          <div className="flex md:hidden items-center gap-3">
+          <div className="flex md:hidden items-center gap-2 sm:gap-3">
+            {/* Mobile Contact Button */}
+            <button 
+              onClick={() => setActivePage('contacto')}
+              className={`px-3 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded transition-all shrink-0 ${
+                activePage === 'contacto'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
+              }`}
+            >
+              {t.contact}
+            </button>
+
             {/* Language Switcher (ES | EN Toggle Group for mobile) */}
             <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
               <button
