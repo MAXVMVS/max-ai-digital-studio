@@ -279,9 +279,9 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'inicio' | 'servicios' | 'portafolio' | 'contacto' | 'login'>(() => {
+  const [activePage, setActivePage] = useState<'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login'>(() => {
     const saved = localStorage.getItem('maxai_active_page');
-    return (saved as 'inicio' | 'servicios' | 'portafolio' | 'contacto' | 'login') || 'inicio';
+    return (saved as 'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login') || 'inicio';
   });
 
   useEffect(() => {
@@ -985,7 +985,7 @@ export default function App() {
   const t = {
     // Nav
     home: lang === 'es' ? 'Inicio' : 'Home',
-    services: lang === 'es' ? 'Servicios' : 'Services',
+    services: lang === 'es' ? 'Precios' : 'Pricing',
     portfolio: lang === 'es' ? 'Portafolio' : 'Portfolio',
     contact: lang === 'es' ? 'Contactar' : 'Contact',
     portHeader: lang === 'es' ? 'Portafolio' : 'Portfolio',
@@ -1491,9 +1491,9 @@ export default function App() {
               {t.home}
             </button>
             <button 
-              onClick={() => setActivePage('servicios')}
+              onClick={() => setActivePage('precios')}
               className={`pb-1 transition-all uppercase ${
-                activePage === 'servicios' 
+                activePage === 'precios' 
                   ? `${themeStyles.title} border-b-2 border-[#C17F4E]` 
                   : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
               }`}
@@ -1633,8 +1633,8 @@ export default function App() {
                   {t.home}
                 </button>
                 <button
-                  onClick={() => { setActivePage('servicios'); setMobileMenuOpen(false); }}
-                  className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'servicios' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
+                  onClick={() => { setActivePage('precios'); setMobileMenuOpen(false); }}
+                  className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'precios' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
                   {t.services}
                 </button>
@@ -1716,8 +1716,13 @@ export default function App() {
                     </button>
                     
                     <button
-                      onClick={() => setActivePage('servicios')}
-                      className={`px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest transition-all text-center border ${
+                      onClick={() => {
+                        const target = document.getElementById('servicios');
+                        if (target) {
+                          target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className={`px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest transition-all text-center border cursor-pointer ${
                         isDark 
                           ? 'border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800' 
                           : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-800 hover:bg-[#F2EFE9]'
@@ -1983,22 +1988,20 @@ export default function App() {
               </div>
             </motion.section>
 
-          </div>
-        )}
-
-        {/* ======================================= */}
-        {/*       PAGE 2: SERVICIOS & DETALLES      */}
-        {/* ======================================= */}
-        {activePage === 'servicios' && (
-          <div className="fade-in">
-            
-            {/* --- HERO TECNOLÓGICO --- */}
-            <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+            {/* --- SECCIÓN DE SERVICIOS (SERVICES GRID) --- */}
+            <motion.section 
+              id="servicios"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto border-t border-white/5 relative z-10"
+            >
               <div className="max-w-4xl">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.servBadge}</span>
-                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
+                <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
                   {t.servTitle}
-                </h1>
+                </h2>
                 <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl ${themeStyles.textMuted}`}>
                   {t.servSub}
                 </p>
@@ -2055,6 +2058,40 @@ export default function App() {
                   </div>
                 </div>
 
+              </div>
+
+              {/* Action button leading to pricing page */}
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={() => setActivePage('precios')}
+                  className="px-8 py-3.5 bg-[#C17F4E]/10 hover:bg-[#C17F4E]/20 text-[#C17F4E] border border-[#C17F4E]/30 rounded text-xs font-bold uppercase tracking-widest transition-all cursor-pointer hover:shadow-lg"
+                >
+                  {lang === 'es' ? 'Ver Precios de Despliegue' : 'View Deployment Pricing'}
+                </button>
+              </div>
+            </motion.section>
+
+          </div>
+        )}
+
+        {/* ======================================= */}
+        {/*           PAGE 2: PRECIOS & COTIZADOR   */}
+        {/* ======================================= */}
+        {activePage === 'precios' && (
+          <div className="fade-in">
+            
+            {/* --- HERO PRECIOS --- */}
+            <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+              <div className="max-w-4xl">
+                <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Cotizador Inteligente' : 'Smart Configurator'}</span>
+                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
+                  {lang === 'es' ? 'Precios y Despliegue' : 'Pricing & Deployment'}
+                </h1>
+                <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl ${themeStyles.textMuted}`}>
+                  {lang === 'es' 
+                    ? 'Selecciona los módulos de software que tu negocio necesita y calcula en tiempo real una estimación de inversión y tiempos de despliegue.'
+                    : 'Select the software modules your business needs and calculate in real-time an investment estimate and deployment timeline.'}
+                </p>
               </div>
             </section>
 
