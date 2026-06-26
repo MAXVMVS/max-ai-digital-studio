@@ -2029,37 +2029,37 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <Interactive3DNetwork />
               
-              {/* Hero Top Bar: Logo on Left, Sub-pillars on Right */}
-              <div className="w-full flex flex-col sm:flex-row justify-between items-center border-b border-[#C17F4E]/10 pb-6 mb-12 gap-4 relative z-10">
-                <div className="flex items-center gap-3">
-                  <img src="/logo_pequeno.png" alt="MAX AI" className="h-10 w-10 object-contain rounded-lg shadow-md shadow-[#C17F4E]/10" />
-                  <div className="flex flex-col">
-                    <span className={`text-xl font-display font-black tracking-tight leading-none uppercase ${themeStyles.title}`}>
-                      MAX <span className="text-[#C17F4E]">AI</span>
-                    </span>
-                    <span className="text-[7px] font-mono text-zinc-500 tracking-widest mt-1">
-                      DIGITAL STUDIO
-                    </span>
-                  </div>
+              {/* Hero Top Bar: Split Translucent Panel (Left: Official Logo, Right: Core Services) */}
+              <div className={`w-full grid grid-cols-1 md:grid-cols-2 rounded-2xl border transition-all duration-500 mb-12 relative z-10 overflow-hidden backdrop-blur-xl ${themeStyles.card}`}>
+                {/* Left Half: Official Brand Logo */}
+                <div className="p-5 flex items-center justify-start">
+                  <img 
+                    src="/logo_largo.png" 
+                    alt="MAX AI" 
+                    className="h-10 sm:h-12 object-contain filter drop-shadow-[0_2px_8px_rgba(193,127,78,0.15)]" 
+                  />
                 </div>
-                <div className={`text-[10px] sm:text-xs font-mono font-bold tracking-wider text-right uppercase flex flex-wrap justify-end items-center gap-x-3 gap-y-1.5 ${themeStyles.textMuted}`}>
-                  {lang === 'es' ? (
-                    <>
-                      <span className="text-[#C17F4E]">Branding & Marketing Digital</span>
-                      <span className="opacity-30">•</span>
-                      <span>Desarrollo Web</span>
-                      <span className="opacity-30">•</span>
-                      <span className="text-[#C17F4E]">IA & Automatización</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-[#C17F4E]">Branding & Digital Marketing</span>
-                      <span className="opacity-30">•</span>
-                      <span>Web Development</span>
-                      <span className="opacity-30">•</span>
-                      <span className="text-[#C17F4E]">AI & Automation</span>
-                    </>
-                  )}
+                {/* Right Half: Core Pillars (Split visually with divider border) */}
+                <div className={`p-5 flex items-center justify-start md:justify-end border-t md:border-t-0 md:border-l ${isDark ? 'border-white/5 bg-white/[0.01]' : 'border-[#D6D0C1]/60 bg-black/[0.01]'}`}>
+                  <div className={`text-[10px] sm:text-xs font-mono font-bold tracking-wider text-left md:text-right uppercase flex flex-wrap justify-start md:justify-end items-center gap-x-3 gap-y-1.5 ${themeStyles.textMuted}`}>
+                    {lang === 'es' ? (
+                      <>
+                        <span className="text-[#C17F4E]">Branding & Marketing Digital</span>
+                        <span className="opacity-30">•</span>
+                        <span>Desarrollo Web</span>
+                        <span className="opacity-30">•</span>
+                        <span className="text-[#C17F4E]">IA & Automatización</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-[#C17F4E]">Branding & Digital Marketing</span>
+                        <span className="opacity-30">•</span>
+                        <span>Web Development</span>
+                        <span className="opacity-30">•</span>
+                        <span className="text-[#C17F4E]">AI & Automation</span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
