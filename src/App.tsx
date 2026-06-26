@@ -1161,7 +1161,7 @@ export default function App() {
       </div>
 
       {/* --- HEADER / NAVBAR --- */}
-      <header className={`relative z-50 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
+      <header className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
           {/* Brand Logo with Fluid Expanding Image Effect */}
@@ -1334,9 +1334,12 @@ export default function App() {
         </div>
       </header>
 
+      {/* Spacer to offset fixed header */}
+      <div className="h-20 w-full" />
+
       {/* --- MOBILE DRAWER SIDEBAR --- */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden flex justify-end">
+        <div className="fixed inset-0 z-50 md:hidden flex justify-end">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
           <div className="relative w-80 max-w-sm h-full p-6 flex flex-col justify-between shadow-2xl z-50 bg-[#041021] text-zinc-100 border-l border-white/5">
             <div>
