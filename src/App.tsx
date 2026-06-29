@@ -1445,9 +1445,9 @@ export default function App() {
                   {/* Centered Logo above the diagram */}
                   <div className="w-full flex justify-center mb-2">
                     <img 
-                      src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_claro.jpeg"} 
+                      src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_hero_light.png"} 
                       alt="MAX AI" 
-                      className={`w-[65%] h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)] ${!isDark ? 'mix-blend-multiply opacity-90' : ''}`}
+                      className={`w-[65%] h-auto object-contain ${isDark ? 'filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]' : ''}`}
                     />
                   </div>
                   {/* Diorama (diagrama pixel art) below */}
