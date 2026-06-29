@@ -550,7 +550,6 @@ export default function App() {
 
   // Interactive 4 Pilares state
   const [activePilar, setActivePilar] = useState<number>(0);
-  const [activeSymptom, setActiveSymptom] = useState<number>(0);
   const [activeWeek, setActiveWeek] = useState<number>(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -1446,119 +1445,7 @@ export default function App() {
 
               </div>
             </section>
-  
-              {/* --- SECCIÓN DE SÍNTOMAS DEL PROBLEMA (INTERACTIVO SCANNER) --- */}
-              <motion.section 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className={`py-24 px-6 sm:px-10 lg:px-16 border-t border-b ${
-                  isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-[#EAE6DB] border-[#D0C9B8]'
-                }`}
-              >
-                <div className="max-w-7xl mx-auto">
-                  <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.probBadge}</span>
-                    <h2 className={`font-display font-bold text-3xl sm:text-4xl tracking-tight uppercase mt-2 ${themeStyles.title}`}>
-                      {t.probTitle}
-                    </h2>
-                    <p className={`text-sm font-sans font-light mt-4 leading-relaxed max-w-2xl mx-auto ${themeStyles.textMuted}`}>
-                      {t.probSub}
-                    </p>
-                  </div>
-   
-                  {/* Interactive Problem Scanner */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                    {/* Left Side: Symptom Selectors */}
-                    <div className="lg:col-span-5 flex flex-col gap-3">
-                      {t.probSymptoms.map((symptom, idx) => (
-                        <div
-                          key={idx}
-                          onMouseEnter={() => setActiveSymptom(idx)}
-                          onClick={() => setActiveSymptom(idx)}
-                          className={`p-4 rounded-xl border text-left transition-all duration-300 flex items-center gap-4 cursor-pointer ${
-                            activeSymptom === idx
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/5 shadow-lg'
-                              : isDark ? 'border-zinc-800 bg-zinc-900/10 hover:bg-zinc-800/30' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:bg-[#F2EFE9]'
-                          }`}
-                        >
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold transition-all ${
-                            activeSymptom === idx ? 'bg-[#C17F4E] text-white' : 'bg-zinc-800/20 text-zinc-500'
-                          }`}>
-                            0{idx + 1}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className={`text-xs sm:text-sm font-bold uppercase tracking-wide truncate ${
-                              activeSymptom === idx ? (isDark ? 'text-white' : 'text-[#020813]') : 'text-zinc-500'
-                            }`}>
-                              {symptom.title}
-                            </h4>
-                          </div>
-                          <AlertTriangle className={`w-4 h-4 transition-all ${activeSymptom === idx ? 'text-red-500 animate-pulse' : 'text-zinc-700'}`} />
-                        </div>
-                      ))}
-                    </div>
 
-                    {/* Right Side: Diagnosis Visualizer Panel */}
-                    <div className="lg:col-span-7">
-                      <div className={`p-8 rounded-2xl border h-full flex flex-col justify-between transition-all duration-300 relative overflow-hidden ${themeStyles.card}`}>
-                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-red-500/5 rounded-full blur-2xl pointer-events-none"></div>
-                        
-                        <div className="space-y-6">
-                          <div className="flex justify-between items-center border-b border-white/5 pb-4">
-                            <span className="text-red-500 font-mono text-[9px] uppercase tracking-widest font-black flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
-                              Diagnóstico de Riesgo
-                            </span>
-                            <span className="font-mono text-xs text-zinc-500">SÍNTOMA 0{activeSymptom + 1} / 05</span>
-                          </div>
-
-                          <div className="space-y-3">
-                            <h3 className={`text-xl sm:text-2xl font-display font-black uppercase ${themeStyles.title}`}>
-                              {t.probSymptoms[activeSymptom].title}
-                            </h3>
-                            <p className={`text-xs sm:text-sm leading-relaxed ${themeStyles.textMuted}`}>
-                              {t.probSymptoms[activeSymptom].desc}
-                            </p>
-                          </div>
-
-                          {/* Level Indicator bar */}
-                          <div className="space-y-2 pt-4">
-                            <div className="flex justify-between text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                              <span>Impacto Comercial</span>
-                              <span className="text-[#C17F4E] font-bold">Crítico</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
-                              <motion.div 
-                                className="h-full bg-gradient-to-r from-red-500 via-orange-500 to-[#C17F4E]"
-                                initial={{ width: "0%" }}
-                                animate={{ width: activeSymptom === 0 ? "75%" : activeSymptom === 1 ? "85%" : activeSymptom === 2 ? "90%" : activeSymptom === 3 ? "65%" : "80%" }}
-                                transition={{ duration: 0.5, ease: "easeOut" }}
-                              ></motion.div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="pt-6 border-t border-white/5 mt-8 flex justify-between items-center text-[10px] font-mono uppercase tracking-wider">
-                          <span className="text-zinc-500">{lang === 'es' ? 'Solución sugerida:' : 'Suggested Solution:'}</span>
-                          <span 
-                            onClick={() => {
-                              const target = document.getElementById('sistema');
-                              if (target) {
-                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                              }
-                            }}
-                            className="text-[#C17F4E] font-bold hover:underline cursor-pointer flex items-center gap-1"
-                          >
-                            {lang === 'es' ? 'Ver Pilar del Sistema' : 'See System Pillar'} <ArrowRight className="w-3 h-3" />
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.section>
   
               {/* --- SECCIÓN EL SISTEMA (4 PILARES DE SOLUCIÓN) --- */}
               <motion.section 
