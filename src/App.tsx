@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Brain, Layers, Sparkles, Code2, Network, 
+  Brain, Layers, Code2, Network, 
   ArrowRight, Check, CheckCircle2, ArrowLeft, Sun, Moon, Menu, X, 
   ExternalLink, TrendingUp, Users, ChevronRight, Send, AlertTriangle, HelpCircle,
   FolderKanban, LayoutDashboard, LogOut, LogIn, Plus, RefreshCw, FileText, CheckCircle, CircleUser,
@@ -1758,49 +1758,6 @@ export default function App() {
                         <p className="leading-relaxed italic">{t.metWeeks[activeWeek].rule}</p>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </motion.section>
-
-  
-              {/* --- SECCIÓN CLIENTES IDEALES --- */}
-              <motion.section 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className={`py-24 px-6 sm:px-10 lg:px-16 border-t border-b ${
-                  isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-[#EAE6DB] border-[#D0C9B8]'
-                }`}
-              >
-                <div className="max-w-7xl mx-auto">
-                  <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.clientBadge}</span>
-                    <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                      {t.clientTitle}
-                    </h2>
-                    <p className={`text-sm font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
-                      {t.clientSub}
-                    </p>
-                  </div>
-  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {t.clientProfiles.map((p, idx) => (
-                      <div key={idx} className={`p-6 rounded-xl border flex flex-col justify-between ${themeStyles.card}`}>
-                        <div>
-                          <div className="w-12 h-12 rounded bg-[#C17F4E]/10 flex items-center justify-center text-[#C17F4E] mb-6">
-                            {idx === 0 ? <Users className="w-6 h-6" /> : idx === 1 ? <Layers className="w-6 h-6" /> : <Sparkles className="w-6 h-6" />}
-                          </div>
-                          <h3 className={`font-display font-bold text-lg uppercase mb-3 ${themeStyles.title}`}>{p.title}</h3>
-                          <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
-                            {p.desc}
-                          </p>
-                        </div>
-                        <div className="pt-6 border-t border-white/5 mt-6 font-mono text-[9px] text-[#C17F4E] font-bold uppercase tracking-wider">
-                          {lang === 'es' ? 'Perfil Calificado' : 'Qualified Profile'}
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </div>
               </motion.section>
