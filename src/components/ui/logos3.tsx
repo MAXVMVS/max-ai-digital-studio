@@ -29,7 +29,7 @@ const Logos3 = ({
     {
       id: "n8n",
       description: "n8n",
-      image: "https://cdn.simpleicons.org/n8n",
+      image: `https://cdn.simpleicons.org/n8n/${isDark ? 'FF6C37' : 'c2410c'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
@@ -48,25 +48,25 @@ const Logos3 = ({
       id: "chatgpt",
       description: "ChatGPT",
       image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/openai.svg",
-      className: "h-11 w-auto text-[#10a37f] hover:scale-105 transition-all duration-300",
+      className: `h-11 w-auto ${isDark ? 'text-[#10a37f]' : 'text-zinc-900'} hover:scale-105 transition-all duration-300`,
       isCustomSvg: true,
     },
     {
       id: "python",
       description: "Python",
-      image: "https://cdn.simpleicons.org/python",
+      image: `https://cdn.simpleicons.org/python/${isDark ? '3776AB' : '1d4ed8'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "supabase",
       description: "Supabase",
-      image: "https://cdn.simpleicons.org/supabase",
+      image: `https://cdn.simpleicons.org/supabase/${isDark ? '3ECF8E' : '047857'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "firebase",
       description: "Firebase",
-      image: "https://cdn.simpleicons.org/firebase",
+      image: `https://cdn.simpleicons.org/firebase/${isDark ? 'FFCA28' : 'b45309'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
@@ -78,7 +78,7 @@ const Logos3 = ({
     {
       id: "hostinger",
       description: "Hostinger",
-      image: "https://cdn.simpleicons.org/hostinger",
+      image: `https://cdn.simpleicons.org/hostinger/${isDark ? '673DE6' : '4f46e5'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
@@ -90,25 +90,25 @@ const Logos3 = ({
     {
       id: "react",
       description: "React",
-      image: "https://cdn.simpleicons.org/react",
+      image: `https://cdn.simpleicons.org/react/${isDark ? '61DAFB' : '0369a1'}`,
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "tailwindcss",
       description: "Tailwind CSS",
-      image: "https://cdn.simpleicons.org/tailwindcss",
+      image: `https://cdn.simpleicons.org/tailwindcss/${isDark ? '06B6D4' : '0f766e'}`,
       className: "h-7 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "antigravity",
       description: "Antigravity",
-      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/antigravity.svg",
+      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/antigravity-color.svg",
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "linux",
       description: "Linux",
-      image: "https://cdn.simpleicons.org/linux",
+      image: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg",
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
   ],
