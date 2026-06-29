@@ -20,6 +20,7 @@ import {
 // --- Modularized Imports ---
 import { IsometricScene } from './components/IsometricScene';
 import { Footer } from './components/Footer';
+import { Logos3 } from './components/ui/logos3';
 import { MODULES, CASE_STUDIES, INITIAL_LOGS, TRANSLATIONS, CaseStudy } from './i18n/translations';
 
 // --- 3D & Premium UI Components (Interactive Skills integration) ---
@@ -1423,21 +1424,8 @@ export default function App() {
                     </button>
                   </div>
 
-                  {/* Metrics Grid inside Hero */}
-                  <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 w-full max-w-lg mt-6 mx-auto">
-                    <div className="text-center px-2">
-                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>3.5X</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat1}</div>
-                    </div>
-                    <div className="text-center px-2">
-                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>99.98%</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat2}</div>
-                    </div>
-                    <div className="text-center px-2">
-                      <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>85ms</div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat3}</div>
-                    </div>
-                  </div>
+                  {/* Ecosystem Logos Marquee inside Hero */}
+                  <Logos3 heading={lang === 'es' ? 'Herramientas de nuestro ecosistema' : 'Our Ecosystem Stack'} isDark={isDark} />
                 </div>
 
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
