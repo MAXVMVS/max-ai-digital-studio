@@ -1123,20 +1123,20 @@ export default function App() {
 
             {/* Brand Logo with Fluid Expanding Image Effect */}
             <div 
-              className="group relative h-10 w-10 hover:w-[122px] rounded-xl transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
+              className="group relative h-14 w-14 hover:w-[171px] rounded-xl transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
               onClick={() => setActivePage('inicio')}
             >
               {/* Small Logo */}
               <img 
                 src={isDark ? "/logo_pequeno.png" : "/logo_pequeno_light.jpeg"} 
                 alt="MAX AI" 
-                className={`absolute left-0 top-0 h-10 w-10 rounded-xl object-cover transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 ${!isDark ? 'mix-blend-multiply' : ''}`} 
+                className={`absolute left-0 top-0 h-14 w-14 rounded-xl object-cover transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
               {/* Long Logo */}
               <img 
                 src={isDark ? "/logo_largo.png" : "/logo_largo_light.jpeg"} 
                 alt="MAX AI Digital Studio" 
-                className={`absolute left-0 top-0 h-10 w-[122px] rounded-xl object-cover opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 ${!isDark ? 'mix-blend-multiply' : ''}`} 
+                className={`absolute left-0 top-0 h-14 w-[171px] rounded-xl object-cover opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
             </div>
           </div>
