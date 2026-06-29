@@ -551,7 +551,6 @@ export default function App() {
   // Interactive 4 Pilares state
   const [activePilar, setActivePilar] = useState<number>(0);
   const [activeWeek, setActiveWeek] = useState<number>(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Configurator Selected modules state
   const [selectedModules, setSelectedModules] = useState<string[]>(['meta_b2c', 'whatsapp_flow']);
@@ -1805,55 +1804,7 @@ export default function App() {
                   </div>
                 </div>
               </motion.section>
-  
-              {/* --- SECCIÓN PREGUNTAS FRECUENTES (FAQ) --- */}
-              <motion.section 
-                id="faq"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
-              >
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.faqBadge}</span>
-                  <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {t.faqTitle}
-                  </h2>
-                </div>
 
-                <div className="max-w-4xl mx-auto space-y-4">
-                  {t.faqItems.map((faq, idx) => {
-                    const isOpen = openFaq === idx;
-                    return (
-                      <div key={idx} className={`rounded-lg border transition-all ${themeStyles.card}`}>
-                        <button
-                          onClick={() => setOpenFaq(isOpen ? null : idx)}
-                          className="w-full p-5 text-left flex justify-between items-center font-display font-bold text-xs sm:text-sm uppercase tracking-wider gap-4 cursor-pointer"
-                        >
-                          <span className={themeStyles.title}>{faq.q}</span>
-                          <ChevronRight className={`w-4 h-4 text-[#C17F4E] shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
-                        </button>
-                        <AnimatePresence initial={false}>
-                          {isOpen && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="p-5 pt-0 border-t border-white/5 font-sans text-xs sm:text-sm leading-relaxed text-zinc-400">
-                                {faq.a}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.section>
   
               {/* --- SECCIÓN 10: FORMULARIO DE DIAGNÓSTICO DIGITAL (CTA FINAL) --- */}
               <motion.section 
