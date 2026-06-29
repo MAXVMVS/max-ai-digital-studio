@@ -611,7 +611,7 @@ export default function App() {
   // Synchronize document.title dynamically with activePage for SEO and UX optimization
   useEffect(() => {
     const titles: Record<string, string> = {
-      inicio: lang === 'es' ? 'MAX AI - Sistemas de Crecimiento Digital | Ecuador' : 'MAX AI - Digital Growth Systems | Ecuador',
+      inicio: 'MAX AI - Digital Studio',
       precios: lang === 'es' ? 'Precios & Servicios | MAX AI Digital Studio' : 'Pricing & Services | MAX AI Digital Studio',
       portafolio: lang === 'es' ? 'Portafolio de Casos | MAX AI Digital Studio' : 'Case Portfolio | MAX AI Digital Studio',
       contacto: lang === 'es' ? 'Contacto | MAX AI Digital Studio' : 'Contact | MAX AI Digital Studio',
