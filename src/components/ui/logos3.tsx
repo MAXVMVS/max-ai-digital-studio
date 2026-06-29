@@ -30,92 +30,92 @@ const Logos3 = ({
       id: "n8n",
       description: "n8n",
       image: "https://cdn.simpleicons.org/n8n",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "google-ai-studio",
       description: "Google AI Studio",
       image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/google-color.svg",
-      className: "h-7 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-10 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "gemini",
       description: "Gemini",
       image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/gemini-color.svg",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "chatgpt",
       description: "ChatGPT",
       image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/openai.svg",
-      className: "h-8 w-auto text-[#10a37f] hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto text-[#10a37f] hover:scale-105 transition-all duration-300",
       isCustomSvg: true,
     },
     {
       id: "python",
       description: "Python",
       image: "https://cdn.simpleicons.org/python",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "supabase",
       description: "Supabase",
       image: "https://cdn.simpleicons.org/supabase",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "firebase",
       description: "Firebase",
       image: "https://cdn.simpleicons.org/firebase",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "vercel",
       description: "Vercel",
       image: `https://cdn.simpleicons.org/vercel/${isDark ? 'FFF' : '000'}`,
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "hostinger",
       description: "Hostinger",
       image: "https://cdn.simpleicons.org/hostinger",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "nextjs",
       description: "Next.js",
       image: `https://cdn.simpleicons.org/nextdotjs/${isDark ? 'FFF' : '000'}`,
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "react",
       description: "React",
       image: "https://cdn.simpleicons.org/react",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "tailwindcss",
       description: "Tailwind CSS",
       image: "https://cdn.simpleicons.org/tailwindcss",
-      className: "h-5 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-7 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "antigravity",
       description: "Antigravity",
       image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/antigravity.svg",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
       id: "linux",
       description: "Linux",
       image: "https://cdn.simpleicons.org/linux",
-      className: "h-8 w-auto hover:scale-105 transition-all duration-300",
+      className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
   ],
 }: Logos3Props) => {
   return (
     <div className="w-full mt-6 pt-6 border-t border-white/5">
-      <div className="relative mx-auto flex items-center justify-center max-w-lg overflow-hidden">
+      <div className="relative mx-auto flex items-center justify-center max-w-2xl overflow-hidden">
         <Carousel
           opts={{ loop: true }}
           plugins={[AutoScroll({ playOnInit: true, speed: 1.2 })]}
