@@ -128,11 +128,21 @@ const Logos3 = ({
                 className="flex basis-1/3 justify-center pl-0 sm:basis-1/4"
               >
                 <div className="mx-4 flex shrink-0 items-center justify-center">
-                  <img
-                    src={logo.image}
-                    alt={logo.description}
-                    className={logo.className}
-                  />
+                  {logo.id === "chatgpt" ? (
+                    <div className="bg-white rounded-full p-1.5 h-11 w-11 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-300">
+                      <img
+                        src={logo.image}
+                        alt={logo.description}
+                        className="h-7 w-7 text-[#10a37f]"
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={logo.image}
+                      alt={logo.description}
+                      className={logo.className}
+                    />
+                  )}
                 </div>
               </CarouselItem>
             ))}
