@@ -1415,8 +1415,8 @@ export default function App() {
                       }}
                       className={`px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest transition-all text-center border cursor-pointer h-fit ${
                         isDark 
-                          ? 'border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800' 
-                          : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-800 hover:bg-[#F2EFE9]'
+                          ? 'border-transparent bg-white text-zinc-950 hover:bg-zinc-200 shadow-lg shadow-white/5' 
+                          : 'border-transparent bg-[#9C927A] text-zinc-950 hover:bg-[#867E6A] shadow-md shadow-[#9C927A]/20'
                       }`}
                     >
                       {t.heroCta2}
