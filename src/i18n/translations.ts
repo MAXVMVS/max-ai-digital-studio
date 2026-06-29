@@ -73,16 +73,6 @@ export const CASE_STUDIES: CaseStudy[] = [
     url: 'https://psicdamaris.vercel.app',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
     category: 'Salud & Automatización'
-  },
-  {
-    client: 'Amy Tevet',
-    tagline: 'Sastrería Premium & Alta Costura B2C',
-    description: 'Lookbook interactivo digital de lujo silencioso, con sincronización automática de catálogos mediante la API Graph de Meta para potenciar campañas de anuncios y conversión directa.',
-    kpis: ['Sincronización diaria activa', '+220k alcance en Instagram', 'Diseño de alto contraste'],
-    stack: ['React 19', 'Meta Graph API', 'Tailwind CSS', 'Cloud Firestore'],
-    url: 'https://www.instagram.com/amytevet.tm',
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-    category: 'Lujo & E-commerce'
   }
 ];
 
@@ -90,7 +80,7 @@ export const INITIAL_LOGS = [
   'SYSTEM: MAX AI Core v5.0 initialized successfully.',
   'INFO: Active cluster Quito, EC connected (lat: -0.1807, lon: -78.4678).',
   'SYNC: Listening to Firestore triggers on Clinic flow (Psic. Damaris Pazmiño)...',
-  'SUCCESS: Meta Pixel Catalog API response status 200 OK (Amy Tevet Product Catalog).',
+  'SUCCESS: Google Maps Geolocation API response status 200 OK (Clinic Locator Sync).',
   'SYSTEM: High-performance React engine ready on port 3000.'
 ];
 
