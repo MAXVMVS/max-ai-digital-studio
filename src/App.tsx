@@ -17,111 +17,10 @@ import {
   doc, setDoc, getDoc, getDocs, collection, query, where, onSnapshot, serverTimestamp, limit, orderBy, addDoc
 } from 'firebase/firestore';
 
-// --- Types & Interfaces ---
-interface Module {
-  id: string;
-  name: string;
-  price: number;
-  durationWeeks: number;
-  description: string;
-  category: string;
-}
-
-interface CaseStudy {
-  client: string;
-  tagline: string;
-  description: string;
-  kpis: string[];
-  stack: string[];
-  url: string;
-  image: string;
-  category: string;
-}
-
-// --- Constant Data ---
-const MODULES: Module[] = [
-  {
-    id: 'meta_b2c',
-    name: 'Ecosistema B2C + Catálogo Meta',
-    price: 1800,
-    durationWeeks: 3,
-    description: 'Sincronización automatizada de inventario a Meta Graph API, píxeles de conversión y lookbooks de Instagram.',
-    category: 'Ventas e Integraciones'
-  },
-  {
-    id: 'landing_crm',
-    name: 'Landing Page Lead Gen + CRM',
-    price: 1200,
-    durationWeeks: 2,
-    description: 'Diseño ultra-rápido optimizado para conversión con indexación SEO y conexión nativa a CRM.',
-    category: 'Infraestructura Web'
-  },
-  {
-    id: 'custom_ml',
-    name: 'Modelo de IA y ML Personalizado',
-    price: 2500,
-    durationWeeks: 4,
-    description: 'Modelos predictivos cognitivos entrenados con los datos de tu negocio para predecir demanda o automatizar flujos.',
-    category: 'Inteligencia Artificial'
-  },
-  {
-    id: 'whatsapp_flow',
-    name: 'Flujos de WhatsApp Cloud API',
-    price: 900,
-    durationWeeks: 2,
-    description: 'Atención automatizada inteligente con agentes híbridos de IA para responder consultas de stock y agendar citas.',
-    category: 'Ventas e Integraciones'
-  },
-  {
-    id: 'dashboard_firestore',
-    name: 'Dashboard Métricas & Firestore Sync',
-    price: 1500,
-    durationWeeks: 3,
-    description: 'Panel interactivo en tiempo real para administración gerencial con base de datos NoSQL de alta velocidad.',
-    category: 'Infraestructura Web'
-  }
-];
-
-const CASE_STUDIES: CaseStudy[] = [
-  {
-    client: 'Psic. Damaris Pazmiño',
-    tagline: 'Salud Mental & Clínica Automatizada',
-    description: 'Ecosistema digital completo para automatizar el agendamiento y flujo de pacientes, integrado con Google Cloud Firestore y geolocalización avanzada en Google Maps.',
-    kpis: ['+140% citas agendadas', 'Cancelaciones reducidas a cero', 'Carga inicial < 1.2s'],
-    stack: ['React 19', 'Tailwind v4', 'Firestore Realtime', 'Google Maps API'],
-    url: 'https://psicdamaris.vercel.app',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    category: 'Salud & Automatización'
-  },
-  {
-    client: 'Amy Tevet',
-    tagline: 'Sastrería Premium & Alta Costura B2C',
-    description: 'Lookbook interactivo digital de lujo silencioso, con sincronización automática de catálogos mediante la API Graph de Meta para potenciar campañas de anuncios y conversión directa.',
-    kpis: ['Sincronización diaria activa', '+220k alcance en Instagram', 'Diseño de alto contraste'],
-    stack: ['React 19', 'Meta Graph API', 'Tailwind CSS', 'Cloud Firestore'],
-    url: 'https://www.instagram.com/amytevet.tm',
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-    category: 'Lujo & E-commerce'
-  },
-  {
-    client: 'Velox Motors',
-    tagline: 'Distribuidor Automotriz & Leads Automatizados',
-    description: 'Inventario inteligente de vehículos de lujo con automatización de calificación de prospectos vía WhatsApp CRM integrado, mejorando el tiempo de respuesta inmediato.',
-    kpis: ['Uptime certificado 99.98%', 'Conversión de leads x3.5', 'Latencia de inferencia 85ms'],
-    stack: ['React 19', 'PostgreSQL', 'AI Lead Agent', 'WhatsApp Cloud API'],
-    url: '#',
-    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
-    category: 'Automotriz & SaaS'
-  }
-];
-
-const INITIAL_LOGS = [
-  'SYSTEM: MAX AI Core v5.0 initialized successfully.',
-  'INFO: Active cluster Quito, EC connected (lat: -0.1807, lon: -78.4678).',
-  'SYNC: Listening to Firestore triggers on Clinic flow (Psic. Damaris Pazmiño)...',
-  'SUCCESS: Meta Pixel Catalog API response status 200 OK (Amy Tevet Product Catalog).',
-  'SYSTEM: High-performance React engine ready on port 3000.'
-];
+// --- Modularized Imports ---
+import { IsometricScene } from './components/IsometricScene';
+import { Footer } from './components/Footer';
+import { MODULES, CASE_STUDIES, INITIAL_LOGS, TRANSLATIONS, CaseStudy } from './i18n/translations';
 
 // --- 3D & Premium UI Components (Interactive Skills integration) ---
 function Interactive3DNetwork() {
@@ -230,6 +129,9 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
             src={c.image} 
             alt={c.client} 
             referrerPolicy="no-referrer"
+            loading="lazy"
+            width={600}
+            height={400}
             className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
           />
           <div className="absolute top-4 left-4 bg-[#C17F4E] text-white font-mono text-[9px] font-bold uppercase px-2 py-1 rounded tracking-widest">
@@ -278,6 +180,7 @@ function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
   );
 }
 
+
 export default function App() {
   const [activePage, setActivePage] = useState<'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login'>(() => {
     const saved = localStorage.getItem('maxai_active_page');
@@ -302,9 +205,23 @@ export default function App() {
   const isContactFormNameValid = contactFormName.trim().length >= 3;
   const isContactFormEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactFormEmail);
   const isContactFormPhoneValid = contactFormPhone.trim().length >= 8;
-  const [isDark, setIsDark] = useState<boolean>(true);
-  const [lang, setLang] = useState<'es' | 'en'>('es');
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem('maxai_is_dark');
+    return saved !== null ? saved === 'true' : true;
+  });
+  const [lang, setLang] = useState<'es' | 'en'>(() => {
+    const saved = localStorage.getItem('maxai_lang');
+    return (saved as 'es' | 'en') || 'es';
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    localStorage.setItem('maxai_is_dark', String(isDark));
+  }, [isDark]);
+
+  useEffect(() => {
+    localStorage.setItem('maxai_lang', lang);
+  }, [lang]);
 
   // --- Firebase & Google Forms Integration State ---
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -634,7 +551,6 @@ export default function App() {
   const [activePilar, setActivePilar] = useState<number>(0);
   const [activeSymptom, setActiveSymptom] = useState<number>(0);
   const [activeWeek, setActiveWeek] = useState<number>(0);
-  const [activeDiagNode, setActiveDiagNode] = useState<'entrada' | 'ia' | 'db'>('entrada');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Configurator Selected modules state
@@ -691,6 +607,18 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activePage]);
 
+  // Synchronize document.title dynamically with activePage for SEO and UX optimization
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      inicio: lang === 'es' ? 'MAX AI - Sistemas de Crecimiento Digital | Ecuador' : 'MAX AI - Digital Growth Systems | Ecuador',
+      precios: lang === 'es' ? 'Precios & Servicios | MAX AI Digital Studio' : 'Pricing & Services | MAX AI Digital Studio',
+      portafolio: lang === 'es' ? 'Portafolio de Casos | MAX AI Digital Studio' : 'Case Portfolio | MAX AI Digital Studio',
+      contacto: lang === 'es' ? 'Contacto | MAX AI Digital Studio' : 'Contact | MAX AI Digital Studio',
+      login: lang === 'es' ? 'Portal de Clientes | MAX AI Digital Studio' : 'Client Portal | MAX AI Digital Studio'
+    };
+    document.title = titles[activePage] || 'MAX AI - Digital Studio';
+  }, [activePage, lang]);
+
   // Append logs dynamically to simulate live SaaS processing
   useEffect(() => {
     const logTemplates = [
@@ -698,7 +626,7 @@ export default function App() {
       'SUCCESS: Lead auto-qualified. Intent confidence score: 98.4%. Dispatching WhatsApp hook...',
       'SYNC: Cloud Firestore synchronized in 23ms for health platform users.',
       'SYSTEM: Resource optimization complete. Cloud Run memory pressure: 14.2%.',
-      'ALERT: Auto-dealer stock updated. Pushing cache invalidation to Velox Motors client frontend.',
+      'ALERT: Auto-dealer stock updated. Pushing cache invalidation to client frontend.',
       'INFO: Ingested lead from Google Maps local listing API.',
       'SUCCESS: Dynamic catalog pixel synced successfully with META Business Suite.',
       'SYSTEM: Hot-reloading AI cognitive pipeline routes (v5.0.2).'
@@ -981,625 +909,16 @@ export default function App() {
     textMuted: 'text-zinc-400',
     title: 'text-white'
   } : {
-    bg: 'bg-[#F2EFE9] text-[#0A1128]',
-    header: 'bg-[#F2EFE9]/90 border-[#D6D0C1]',
-    card: 'bg-[#FAF8F5] border-[#D6D0C1] backdrop-blur-xl shadow-lg shadow-[#D6D0C1]/40',
-    cardInner: 'bg-[#EAE6DB] border-[#D0C9B8]',
-    input: 'bg-white border-[#D6D0C1] text-slate-800 focus:border-[#C17F4E]',
+    bg: 'bg-[#D6CFBE] text-[#0A1128]',
+    header: 'bg-[#D6CFBE]/90 border-[#BDB6A5]',
+    card: 'bg-[#E4DEC8] border-[#BDB6A5] backdrop-blur-xl shadow-lg shadow-[#BDB6A5]/40',
+    cardInner: 'bg-[#C8C0AA] border-[#ACA48F]',
+    input: 'bg-[#EDE7D3] border-[#BDB6A5] text-slate-800 focus:border-[#C17F4E]',
     textMuted: 'text-[#2D3340]',
     title: 'text-[#020813]'
   };
 
-  const t = {
-    // Nav & General
-    home: lang === 'es' ? 'Inicio' : 'Home',
-    services: lang === 'es' ? 'Precios' : 'Pricing',
-    portfolio: lang === 'es' ? 'Portafolio' : 'Portfolio',
-    contact: lang === 'es' ? 'Contacto' : 'Contact',
-    portHeader: lang === 'es' ? 'Portafolio' : 'Portfolio',
-    whatsappBtn: lang === 'es' ? 'WHATSAPP DIRECTO' : 'WHATSAPP DIRECT',
-    login: lang === 'es' ? 'Login' : 'Login',
-    system: lang === 'es' ? 'Sistema' : 'System',
-    dashboard: lang === 'es' ? 'Dashboard' : 'Dashboard',
-    portal: lang === 'es' ? 'Mi Portal' : 'My Portal',
-
-    // Hero
-    heroBadge: lang === 'es' ? 'NÚCLEO v5.0 ACTIVO • QUITO, EC' : 'CORE v5.0 ACTIVE • QUITO, EC',
-    heroTitle1: lang === 'es' ? 'NO CONSTRUIMOS' : 'WE DON\'T BUILD',
-    heroTitle2: lang === 'es' ? 'SITIOS WEB AISLADOS.' : 'ISOLATED WEBSITES.',
-    heroTitle3: lang === 'es' ? 'DISEÑAMOS SISTEMAS' : 'WE DESIGN DIGITAL',
-    heroTitle4: lang === 'es' ? 'DE CRECIMIENTO DIGITAL.' : 'GROWTH SYSTEMS.',
-    heroSub: lang === 'es'
-      ? 'Ayudamos a profesionales independientes, negocios locales y pequeñas empresas a unificar su marca, consolidar su presencia web y automatizar sus operaciones con Inteligencia Artificial. Menos trabajo manual, más clientes y crecimiento sostenible.'
-      : 'We help independent professionals, local businesses, and small companies unify their brand, consolidate their web presence, and automate their operations with Artificial Intelligence. Less manual work, more clients, and sustainable growth.',
-    heroCta1: lang === 'es' ? 'Reservar Diagnóstico Digital (45 Min)' : 'Book Digital Diagnostic (45 Min)',
-    heroCta1Sub: lang === 'es' ? 'Totalmente gratuito. Sin compromisos de contratación.' : 'Totally free. No hiring commitment.',
-    heroCta2: lang === 'es' ? 'Conocer los 4 Pilares' : 'Discover the 4 Pillars',
-    heroTagline: lang === 'es' 
-      ? 'Infraestructura de alto rendimiento: Despliegue moderno, soporte documentado y optimización para motores de IA.'
-      : 'High-performance infrastructure: Modern deployment, documented support, and optimization for AI engines.',
-    heroStat1: lang === 'es' ? 'Conversión' : 'Conversion',
-    heroStat2: lang === 'es' ? 'Uptime' : 'Uptime',
-    heroStat3: lang === 'es' ? 'Latencia' : 'Latency',
-
-    // Section 3: El Problema
-    probBadge: lang === 'es' ? 'El Problema' : 'The Problem',
-    probTitle: lang === 'es' ? '¿Tu negocio sufre de presencia digital fragmentada?' : 'Does your business suffer from a fragmented digital presence?',
-    probSub: lang === 'es'
-      ? 'Muchos profesionales y PYMEs creen que para crecer en internet basta con contratar un logotipo por un lado, una página web básica por otro y pagarle a un tercero para que "suba publicaciones" a redes sociales. El resultado de este enfoque fragmentado suele ser el mismo: poca conversión, procesos ineficientes y dinero desperdiciado.'
-      : 'Many professionals and SMEs believe that to grow online it is enough to hire a logo on one side, a basic website on another, and pay a third party to "post" on social networks. The result of this fragmented approach is usually the same: low conversion, inefficient processes, and wasted money.',
-    probSymptoms: lang === 'es' ? [
-      {
-        title: 'Imagen poco profesional e inconsistente',
-        desc: 'Tu marca no refleja el valor de tu trabajo, transmitiendo desconfianza a los clientes con mayor presupuesto.'
-      },
-      {
-        title: 'Sitios web que no convierten',
-        desc: 'Páginas que actúan como "tarjetas de presentación" bonitas, pero que no retienen la atención de las visitas ni agendan citas.'
-      },
-      {
-        title: 'Procesos manuales ineficientes',
-        desc: 'Sigues respondiendo las mismas dudas en WhatsApp una y otra vez, perdiendo horas valiosas en tareas administrativas repetitivas.'
-      },
-      {
-        title: 'Ausencia de métricas claras',
-        desc: 'No sabes de dónde vienen tus clientes ideales, cuánto te cuesta adquirirlos ni qué canales digitales están funcionando realmente.'
-      },
-      {
-        title: 'Invisibilidad ante las nuevas tecnologías',
-        desc: 'Tu contenido no está optimizado para los buscadores con Inteligencia Artificial (ChatGPT, Gemini, Perplexity), limitando tu captación del futuro.'
-      }
-    ] : [
-      {
-        title: 'Unprofessional & Inconsistent Image',
-        desc: 'Your brand does not reflect the value of your work, transmitting distrust to clients with larger budgets.'
-      },
-      {
-        title: 'Websites that Do Not Convert',
-        desc: 'Pages that act as pretty "business cards" but fail to retain visitors\' attention or book appointments.'
-      },
-      {
-        title: 'Inefficient Manual Processes',
-        desc: 'You keep answering the same questions on WhatsApp over and over, wasting valuable hours on repetitive admin tasks.'
-      },
-      {
-        title: 'Absence of Clear Metrics',
-        desc: 'You do not know where your ideal clients come from, how much it costs to acquire them, or which digital channels actually work.'
-      },
-      {
-        title: 'Invisibility to New Technologies',
-        desc: 'Your content is not optimized for AI search engines (ChatGPT, Gemini, Perplexity), limiting your future customer acquisition.'
-      }
-    ],
-
-    // Section 4: El Sistema (La Solución)
-    systBadge: lang === 'es' ? 'La Solución' : 'The Solution',
-    systTitle: lang === 'es' ? 'Un engranaje unificado. Cuatro pilares de crecimiento.' : 'A unified gear. Four pillars of growth.',
-    systSub: lang === 'es'
-      ? 'En MAX AI - Digital Studio no vendemos tecnología. Vendemos crecimiento empresarial. Un sistema de crecimiento digital es una estructura viva e integrada donde cada pieza ayuda a la siguiente.'
-      : 'At MAX AI - Digital Studio we do not sell technology. We sell business growth. A digital growth system is a living and integrated structure where each piece helps the next.',
-    systPillar1Title: lang === 'es' ? 'Posicionamiento' : 'Positioning',
-    systPillar1Sub: lang === 'es' ? 'Branding Estratégico' : 'Strategic Branding',
-    systPillar2Title: lang === 'es' ? 'Presencia' : 'Presence',
-    systPillar2Sub: lang === 'es' ? 'Web Premium' : 'Premium Web',
-    systPillar3Title: lang === 'es' ? 'Captación' : 'Acquisition',
-    systPillar3Sub: lang === 'es' ? 'Marketing Digital' : 'Digital Marketing',
-    systPillar4Title: lang === 'es' ? 'Escalabilidad' : 'Scalability',
-    systPillar4Sub: lang === 'es' ? 'IA & Automatización' : 'AI & Automation',
-
-    systPillarDetails: lang === 'es' ? [
-      {
-        title: 'Pilar 1: Posicionamiento (Branding Estratégico)',
-        concept: 'La base de la confianza. Diseñamos identidades visuales que comunican autoridad y diferencian tu negocio de la competencia.',
-        focus: 'No diseñamos logotipos sueltos. Construimos sistemas visuales coherentes, tipografías personalizadas y manuales de marca prácticos para que tu negocio sea reconocible al instante.'
-      },
-      {
-        title: 'Pilar 2: Presencia (Desarrollo Web Premium)',
-        concept: 'Tu plataforma comercial central. Desarrollamos portales web de alto rendimiento optimizados para retener al visitante y convertirlo en cliente.',
-        focus: 'Sitios web responsivos que cargan en milisegundos, estructurados de forma estratégica y diseñados con estándares de experiencia de usuario (UX) premium.'
-      },
-      {
-        title: 'Pilar 3: Captación (Marketing Digital)',
-        concept: 'Flujo constante de prospectos. Implementamos embudos de venta y campañas enfocadas en atraer personas con alta intención de compra.',
-        focus: 'Estrategias que unifican el posicionamiento orgánico (SEO) y pauta digital inteligente para llevar tráfico calificado hacia tu sistema de captación.'
-      },
-      {
-        title: 'Pilar 4: Escalabilidad (IA & Automatización)',
-        concept: 'Eficiencia operativa. Integramos herramientas y agentes inteligentes que procesan solicitudes de clientes, agendan citas y eliminan tareas manuales.',
-        focus: 'Automatizamos tus flujos comerciales (chats, correos electrónicos, CRM) para que tu negocio pueda atender clientes 24/7 sin sobrecargar tu agenda.'
-      }
-    ] : [
-      {
-        title: 'Pillar 1: Positioning (Strategic Branding)',
-        concept: 'The foundation of trust. We design visual identities that communicate authority and differentiate your business from the competition.',
-        focus: 'We do not design loose logos. We build coherent visual systems, custom typography, and practical brand guidelines to make your business instantly recognizable.'
-      },
-      {
-        title: 'Pillar 2: Presence (Premium Web Development)',
-        concept: 'Your central business platform. We develop high-performance web portals optimized to retain visitors and convert them into clients.',
-        focus: 'Responsive websites that load in milliseconds, strategically structured and designed with premium User Experience (UX) standards.'
-      },
-      {
-        title: 'Pillar 3: Acquisition (Digital Marketing)',
-        concept: 'Constant flow of prospects. We implement sales funnels and campaigns focused on attracting people with high purchase intent.',
-        focus: 'Strategies that unify organic positioning (SEO) and smart digital ads to drive qualified traffic to your acquisition system.'
-      },
-      {
-        title: 'Pillar 4: Scalability (AI & Automation)',
-        concept: 'Operational efficiency. We integrate smart tools and agents that process client requests, schedule appointments, and eliminate manual tasks.',
-        focus: 'We automate your business workflows (chats, emails, CRM) so your business can serve clients 24/7 without overloading your schedule.'
-      }
-    ],
-
-    // Section 6: Cómo Trabajamos
-    metBadge: lang === 'es' ? 'Metodología' : 'Methodology',
-    metTitle: lang === 'es' ? 'Cronograma en 8 Semanas' : '8-Week Timeline',
-    metSub: lang === 'es'
-      ? 'El desorden retrasa los proyectos. En MAX AI eliminamos la improvisación. Diseñamos tus activos digitales bajo un cronograma estricto que protege tu inversión y nuestro tiempo de entrega.'
-      : 'Disorder delays projects. At MAX AI we eliminate improvisation. We design your digital assets under a strict schedule that protects your investment and our delivery time.',
-    metWeeks: lang === 'es' ? [
-      {
-        number: 'Sem 1-2',
-        title: 'Recolección y Control de Insumos',
-        action: 'Qué hacemos: Damos inicio al proyecto y habilitamos una carpeta compartida en la nube para que deposites tus logotipos, imágenes corporativas, descripciones de servicios, biografías y datos de contacto.',
-        rule: 'Regla Profesional: Bloqueo Operativo Estricto. Si al finalizar la semana 2 los insumos clave no están completos, el cronograma se detiene y se desplaza día a día. Esto nos ayuda a cumplir los plazos de todos los proyectos de manera justa.'
-      },
-      {
-        number: 'Sem 3',
-        title: 'Despliegue en Vivo (Staging)',
-        action: 'Qué hacemos: No esperamos al final para mostrarte el resultado. Desplegamos una versión preliminar funcional en un enlace temporal de pruebas (ej. tuproyecto-staging.vercel.app).',
-        rule: 'Tu beneficio: Puedes revisar el progreso en tiempo real y ver cómo se adaptan los textos y botones directamente desde tu teléfono móvil. El feedback de diseño ocurre sobre código real, no sobre dibujos planos.'
-      },
-      {
-        number: 'Sem 4',
-        title: 'Infraestructura y Dominio Oficial',
-        action: 'Qué hacemos: Vinculamos el dominio de marca oficial (ej. tunegocio.com) con certificado de seguridad SSL activo.',
-        rule: 'Tu beneficio: Adquirimos el dominio bajo tu nombre y datos de facturación para garantizar que seas el dueño legal de tus activos digitales, mientras nosotros realizamos toda la gestión y enrutamiento técnico.'
-      },
-      {
-        number: 'Sem 5-6',
-        title: 'Seguridad de Accesos y Delegación',
-        action: 'Qué hacemos: Conectamos las herramientas de analítica (Google Analytics) y píxeles publicitarios de Meta.',
-        rule: 'Regla Profesional: Seguridad Primero. Jamás solicitamos contraseñas personales de Facebook o Google. Te enseñamos a agregarnos de forma segura como "Socio" o "Editor" delegado desde tus respectivas cuentas comerciales.'
-      },
-      {
-        number: 'Sem 7',
-        title: 'Hand-off Documentado (Entrega)',
-        action: 'Qué hacemos: Realizamos la entrega formal del sitio web, manuales de marca y bases de datos integradas mediante un documento de cierre.',
-        rule: 'Tu beneficio: Recibes un inventario con todas las cuentas, accesos administrativos e instrucciones detalladas. A partir de esta semana comienza tu servicio de soporte y mantenimiento de bajo costo ($15 USD / mes) que protege la seguridad del sitio.'
-      },
-      {
-        number: 'Sem 8',
-        title: 'GEO (Optimización para IA)',
-        action: 'Qué hacemos: Preparamos tu sitio web para el futuro de las búsquedas en internet.',
-        rule: 'Tu beneficio: Agregamos metadatos estructurados en formato JSON-LD (Schema.org), configuramos tu archivo robots.txt para autorizar a los robots conversacionales (GPTBot, Google-Extended) y redactamos el contenido de forma semántica. Tu negocio estará listo para aparecer en ChatGPT, Gemini y Perplexity.'
-      }
-    ] : [
-      {
-        number: 'Wk 1-2',
-        title: 'Asset Collection & Control',
-        action: 'What we do: We kick off the project and enable a shared cloud folder for you to deposit your logos, corporate images, service descriptions, bios, and contact details.',
-        rule: 'Professional Rule: Strict Operational Block. If key inputs are not complete by the end of week 2, the schedule stops and shifts day by day. This helps us meet deadlines for everyone fairly.'
-      },
-      {
-        number: 'Wk 3',
-        title: 'Live Staging Deployment',
-        action: 'What we do: We do not wait until the end to show you the result. We deploy a functional preliminary version on a temporary staging link.',
-        rule: 'Your benefit: You can review progress in real-time and see how text and buttons adapt directly from your mobile phone. Design feedback happens on real code, not flat mockups.'
-      },
-      {
-        number: 'Wk 4',
-        title: 'Infrastructure & Official Domain',
-        action: 'What we do: We link the official brand domain (e.g. yourbusiness.com) with an active SSL security certificate.',
-        rule: 'Your benefit: We acquire the domain under your name and billing details to guarantee you are the legal owner of your digital assets, while we handle all technical routing.'
-      },
-      {
-        number: 'Wk 5-6',
-        title: 'Access Security & Delegation',
-        action: 'What we do: We connect analytics tools (Google Analytics) and Meta advertising pixels.',
-        rule: 'Professional Rule: Security First. We never ask for personal Facebook or Google passwords. We teach you how to add us securely as a delegated "Partner" or "Editor" from your business accounts.'
-      },
-      {
-        number: 'Wk 7',
-        title: 'Documented Hand-off (Delivery)',
-        action: 'What we do: We make the formal delivery of the website, brand manuals, and integrated databases via a closing document.',
-        rule: 'Your benefit: You receive an inventory with all accounts, admin accesses, and detailed instructions. From this week, your low-cost support and maintenance service ($15 USD / month) begins.'
-      },
-      {
-        number: 'Wk 8',
-        title: 'GEO (AI Engine Optimization)',
-        action: 'What we do: We prepare your website for the future of search engines.',
-        rule: 'Your benefit: We add structured metadata in JSON-LD format (Schema.org), configure robots.txt to authorize conversational bots (GPTBot, Google-Extended), and write semantic content. Ready for ChatGPT, Gemini, and Perplexity.'
-      }
-    ],
-
-    // Section 7: Stacks Tecnológicos
-    stackBadge: lang === 'es' ? 'Infraestructura' : 'Infrastructure',
-    stackTitle: lang === 'es' ? 'Stacks Tecnológicos Especializados' : 'Specialized Tech Stacks',
-    stackSub: lang === 'es'
-      ? 'No todas las páginas web necesitan los mismos servidores. En MAX AI clasificamos tu proyecto dentro de cuatro niveles de stacks técnicos especializados para garantizar rendimiento óptimo y costos mínimos.'
-      : 'Not all websites need the same servers. At MAX AI we classify your project into four levels of specialized technical stacks to guarantee optimal performance and minimal costs.',
-    stackLevels: lang === 'es' ? [
-      {
-        level: 'Nivel 1: Validación',
-        target: 'Ideal para marcas que inician',
-        arch: 'React (Vite) + Tailwind CSS + Firebase (Firestore para base de datos de leads) + Despliegue en Vercel.',
-        cost: '$0.00 USD/mes de por vida (utilizando las capas gratuitas seguras de Vercel y Firebase).',
-        use: 'Sitios web informativos, landing pages promocionales rápidas y portafolios interactivos.',
-        diff: 'Velocidad de carga en milisegundos, seguridad SSL gratuita y cero cobros de hosting mensual.'
-      },
-      {
-        level: 'Nivel 2: Dynamic SaaS',
-        target: 'Para portales e interactividad',
-        arch: 'Next.js (React Framework) + Supabase (Relational PostgreSQL, Auth & Storage) + Despliegue en Vercel.',
-        cost: '$0.00 USD/mes inicial (escalable solo si tu tráfico aumenta drásticamente).',
-        use: 'Aplicaciones web que requieren registro de usuarios, portales privados para clientes, directorios interactivos y pasarelas de pago recurrentes.',
-        diff: 'Seguridad de grado bancario para los datos de tus usuarios sin costos iniciales de base de datos.'
-      },
-      {
-        level: 'Nivel 3: Control Total',
-        target: 'Para sistemas internos corporativos',
-        arch: 'React (Frontend) + Backend en Go (Golang) + Base de datos SQLite local + Docker + Servidor VPS Dedicado + Red Privada VPN (Tailscale).',
-        cost: '$4.00 a $6.00 USD/mes (Costo real del VPS en Hetzner o DigitalOcean).',
-        use: 'Sistemas internos de gestión (CRMs / ERPs propios), bases de datos privadas con datos confidenciales y herramientas de administración sin dependencia de nubes corporativas grandes.',
-        diff: 'Privacidad absoluta. Tus datos no se comparten en nubes de terceros y el acceso al panel se restringe a través de una red VPN cifrada.'
-      },
-      {
-        level: 'Nivel 4: IA & Agentes',
-        target: 'Para automatización de vanguardia',
-        arch: 'Python (FastAPI) + PostgreSQL (pgvector para búsqueda semántica e indexación) + APIs de modelos de lenguaje avanzados (Gemini / Google AI Studio) + Canales automatizados (WhatsApp / Telegram / Email).',
-        cost: 'Pago por uso de consumo de tokens del proveedor de IA + VPS básico.',
-        use: 'Asistentes automáticos de atención al cliente en WhatsApp, sistemas inteligentes RAG para consulta de bases de conocimiento y automatización inteligente de flujos comerciales.',
-        diff: 'Tu negocio responde, interactúa y precalifica oportunidades de venta de forma totalmente autónoma las 24 horas del día.'
-      }
-    ] : [
-      {
-        level: 'Level 1: Validation',
-        target: 'Ideal for starting brands',
-        arch: 'React (Vite) + Tailwind CSS + Firebase (Firestore for lead database) + Vercel Deployment.',
-        cost: '$0.00 USD/month lifetime (utilizing the secure free tiers of Vercel and Firebase).',
-        use: 'Informative websites, fast promotional landing pages, and interactive portfolios.',
-        diff: 'Millisecond load speed, free SSL security, and zero monthly hosting charges.'
-      },
-      {
-        level: 'Level 2: Dynamic SaaS',
-        target: 'For portals & interactivity',
-        arch: 'Next.js (React Framework) + Supabase (Relational PostgreSQL, Auth & Storage) + Vercel Deployment.',
-        cost: '$0.00 USD/month initial (scalable only if traffic increases drastically).',
-        use: 'Web apps requiring user registration, private client portals, interactive directories, and recurring payment gateways.',
-        diff: 'Bank-grade security for your user data without initial database costs.'
-      },
-      {
-        level: 'Level 3: Total Control',
-        target: 'For internal corporate systems',
-        arch: 'React (Frontend) + Go (Golang) Backend + Local SQLite database + Docker + Dedicated VPS + Private VPN (Tailscale).',
-        cost: '$4.00 to $6.00 USD/month (Real cost of VPS in Hetzner or DigitalOcean).',
-        use: 'Internal management systems (proprietary CRMs/ERPs), private databases with confidential data, and admin tools without big cloud dependencies.',
-        diff: 'Absolute privacy. Your data is not shared in third-party clouds and dashboard access is restricted via encrypted VPN.'
-      },
-      {
-        level: 'Level 4: AI & Agents',
-        target: 'For cutting-edge automation',
-        arch: 'Python (FastAPI) + PostgreSQL (pgvector for semantic search) + Advanced LLM APIs (Gemini / Google AI Studio) + Automated Channels (WhatsApp / Telegram / Email).',
-        cost: 'Pay-per-use token consumption of the AI provider + basic VPS.',
-        use: 'Automated customer support assistants on WhatsApp, smart RAG systems for knowledge base queries, and intelligent business flow automation.',
-        diff: 'Your business responds, interacts, and pre-qualifies sales opportunities fully autonomously 24/7.'
-      }
-    ],
-
-    // Section 8: Clientes Ideales
-    clientBadge: lang === 'es' ? 'Público Objetivo' : 'Target Audience',
-    clientTitle: lang === 'es' ? '¿A quiénes ayudamos a crecer?' : 'Who do we help grow?',
-    clientSub: lang === 'es'
-      ? 'Nuestros sistemas se diseñan para potenciar negocios sofisticados que valoran la eficiencia y la autoridad digital.'
-      : 'Our systems are designed to empower sophisticated businesses that value efficiency and digital authority.',
-    clientProfiles: lang === 'es' ? [
-      {
-        title: 'Profesionales Independientes Consultivos',
-        desc: 'Psicólogos, Abogados, Consultores de Negocios y Arquitectos que necesitan que su presencia digital iguale o supere la calidad y autoridad de sus servicios reales.'
-      },
-      {
-        title: 'PYMEs de Servicios y Comercio',
-        desc: 'Centros de capacitación, empresas de remodelación y showrooms de moda física que necesitan integrar canales digitales premium para ordenar su captación de leads y su inventario visual en línea de forma interactiva.'
-      },
-      {
-        title: 'Negocios Locales con Enfoque de Experiencia',
-        desc: 'Gimnasios, restaurantes seleccionados y barberías boutique que buscan automatizar la reserva de citas y el contacto de WhatsApp para liberar tiempo operativo de sus equipos de trabajo.'
-      }
-    ] : [
-      {
-        title: 'Consultative Independent Professionals',
-        desc: 'Psychologists, Lawyers, Business Consultants, and Architects who need their digital presence to match or exceed the quality and authority of their real-world services.'
-      },
-      {
-        title: 'SMEs in Services and Commerce',
-        desc: 'Training centers, renovation companies, and fashion showrooms that need to integrate premium digital channels to organize lead capture and visual inventory interactively.'
-      },
-      {
-        title: 'Experience-Focused Local Businesses',
-        desc: 'Gyms, selected restaurants, and boutique barbershops looking to automate appointment booking and WhatsApp contact to free up operational time for their teams.'
-      }
-    ],
-
-    // Section 9: FAQ
-    faqBadge: lang === 'es' ? 'Preguntas Frecuentes' : 'FAQ',
-    faqTitle: lang === 'es' ? 'Resolviendo tus dudas técnicas y comerciales' : 'Answering your technical and business questions',
-    faqItems: lang === 'es' ? [
-      {
-        q: '¿Por qué no venden páginas web o logotipos por separado?',
-        a: 'Porque las herramientas aisladas no generan crecimiento. Un logotipo bonito sin una página web estratégica pasa desapercibido. Una página web excelente sin marketing no recibe visitas. Y un flujo constante de visitas sin automatización colapsa tu tiempo libre. Diseñamos Sistemas de Crecimiento Digital donde cada pilar sostiene al siguiente para garantizar que tu inversión retorne.'
-      },
-      {
-        q: '¿Qué ocurre si no entrego mis fotos o información al inicio?',
-        a: 'En la Semana 2 aplicamos una política de Bloqueo Operativo Estricto. Si el material del negocio no está en la carpeta compartida, el proyecto se detiene de inmediato. Esto garantiza que todos nuestros clientes tengan entregas a tiempo y que no dejemos proyectos incompletos en un limbo operativo.'
-      },
-      {
-        q: '¿Tengo que pagar un hosting muy costoso mensualmente?',
-        a: 'En la mayoría de proyectos (Stacks Nivel 1 y 2) diseñamos sistemas que operan bajo los planes gratuitos de Vercel y Firebase/Supabase. Esto significa que tu costo de hosting de servidores es de $0.00 USD/mes de por vida. El único gasto recurrente de infraestructura que deberás prever es la renovación de tu dominio de marca ($10 a $15 USD anuales) que configuramos a tu nombre.'
-      },
-      {
-        q: '¿Cómo manejan el acceso a mi redes sociales?',
-        a: 'Jamás te pediremos tus contraseñas personales de Google o Facebook. Compartir contraseñas es una práctica poco segura. Te guiaremos paso a paso para que compartas accesos seguros invitándonos a tu cuenta de Meta Business Manager como "Socio" u otorgándonos accesos de "Editor" en tu Google Analytics. Tú mantienes el control de la propiedad en todo momento.'
-      },
-      {
-        q: '¿Qué incluye el servicio de mantenimiento web de $15 USD mensuales?',
-        a: 'A partir de la entrega (Semana 7), el mantenimiento de bajo costo asegura que tu sitio web cuente con monitoreo continuo de seguridad y resolución de incidencias en el servidor. Incluye hasta 1 hora al mes de cambios menores de contenido (como actualizar un texto descriptivo o una imagen de portada). Cualquier cambio estructural de diseño o desarrollo de nuevas secciones se cotiza por separado.'
-      },
-      {
-        q: '¿Qué es GEO y por qué mi negocio lo necesita ahora?',
-        a: 'GEO significa Generative Engine Optimization (Optimización para Motores de Generación). Cada vez más personas utilizan herramientas como ChatGPT o Gemini para realizar preguntas en lugar de buscar links tradicionales en Google. GEO consiste en estructurar el código y el contenido semántico de tu web para que estas inteligencias artificiales puedan leer, comprender y citar tu negocio como la mejor opción de respuesta.'
-      }
-    ] : [
-      {
-        q: 'Why don\'t you sell websites or logos separately?',
-        a: 'Because isolated tools do not generate growth. A beautiful logo without a strategic website goes unnoticed. An excellent website without marketing gets no visits. And a steady flow of visits without automation collapses your free time. We design Digital Growth Systems where each pillar supports the next to ensure your investment returns.'
-      },
-      {
-        q: 'What happens if I don\'t deliver my photos or info at the beginning?',
-        a: 'In Week 2 we apply a strict Operational Block policy. If the business material is not in the shared folder, the project stops immediately. This ensures that all our clients get timely deliveries and we do not leave incomplete projects in operational limbo.'
-      },
-      {
-        q: 'Do I have to pay expensive monthly hosting?',
-        a: 'For most projects (Level 1 and 2 Stacks) we design systems that run on Vercel and Firebase/Supabase free tiers. This means your hosting cost is $0.00 USD/month for life. The only recurring infrastructure cost is your domain renewal ($10 to $15 USD/year) configured in your name.'
-      },
-      {
-        q: 'How do you handle access to my social media?',
-        a: 'We will never ask for your personal Facebook or Google passwords. Sharing passwords is unsafe. We guide you step-by-step to share access securely by inviting us to your Meta Business Manager account as a "Partner" or granting us "Editor" access in Google Analytics. You maintain ownership control at all times.'
-      },
-      {
-        q: 'What does the $15 USD monthly maintenance include?',
-        a: 'From delivery (Week 7), low-cost maintenance ensures your site has continuous security monitoring and server issue resolution. It includes up to 1 hour per month of minor content changes (such as updating descriptive text or a cover image). Structural design edits or new sections are quoted separately.'
-      },
-      {
-        q: 'What is GEO and why does my business need it now?',
-        a: 'GEO stands for Generative Engine Optimization. More and more people use tools like ChatGPT or Gemini to ask questions instead of searching traditional links on Google. GEO consists of structuring your web code and semantic content so these AIs can read, understand, and cite your business as the best answer.'
-      }
-    ],
-
-    // Section 10: Diagnóstico / Formulario
-    diagBadge: lang === 'es' ? 'Diagnóstico Gratis' : 'Free Diagnostic',
-    diagTitle: lang === 'es' ? '¿Listo para construir tu Sistema de Crecimiento Digital?' : 'Ready to build your Digital Growth System?',
-    diagSub: lang === 'es'
-      ? 'Agenda una sesión de diagnóstico gratuita de 45 minutos. Analizaremos tu presencia web actual, identificaremos oportunidades de automatización comercial con IA y te entregaremos una ruta de acción clara. Sin compromisos de compra.'
-      : 'Book a free 45-minute diagnostic session. We will analyze your current web presence, identify commercial automation opportunities with AI, and deliver a clear action roadmap. No purchase commitments.',
-    diagLabelName: lang === 'es' ? 'Nombre Completo' : 'Full Name',
-    diagLabelCompany: lang === 'es' ? 'Nombre del Negocio / Empresa' : 'Business / Company Name',
-    diagLabelEmail: lang === 'es' ? 'Correo Electrónico *' : 'Email Address *',
-    diagLabelPhone: lang === 'es' ? 'WhatsApp de Contacto' : 'Contact WhatsApp',
-    diagLabelWeb: lang === 'es' ? 'Tu Sitio Web Actual (Opcional)' : 'Your Current Website (Optional)',
-    diagLabelObstacle: lang === 'es' ? '¿Cuál es el mayor obstáculo para el crecimiento de tu negocio hoy?' : 'What is the biggest obstacle to your business growth today?',
-    diagObstacles: lang === 'es' ? [
-      'No tengo suficientes prospectos calificados.',
-      'Mi imagen o sitio web actual luce poco profesional.',
-      'Pierdo mucho tiempo respondiendo consultas manualmente.',
-      'Tengo presencia digital fragmentada.'
-    ] : [
-      'I don\'t have enough qualified leads.',
-      'My current image or website looks unprofessional.',
-      'I waste a lot of time answering queries manually.',
-      'I have a fragmented digital presence.'
-    ],
-    diagLabelBudget: lang === 'es' ? 'Presupuesto aproximado estimado para tu proyecto:' : 'Approximate estimated budget for your project:',
-    diagBudgets: lang === 'es' ? [
-      'Menos de $500 USD (Etapa de validación rápida).',
-      'Entre $500 y $1,500 USD (Crecimiento comercial PYME).',
-      'Más de $1,500 USD (Solución robusta / IA integrada).'
-    ] : [
-      'Under $500 USD (Quick validation phase).',
-      'Between $500 and $1,500 USD (SME commercial growth).',
-      'Over $1,500 USD (Robust solution / integrated AI).'
-    ],
-    diagSubmit: lang === 'es' ? 'Agendar Mi Diagnóstico Gratuito' : 'Book My Free Diagnostic',
-    diagSubmitting: lang === 'es' ? 'Procesando en el Núcleo...' : 'Processing in Core...',
-    diagSuccessTitle: lang === 'es' ? '¡Diagnóstico Solicitado con Éxito!' : 'Diagnostic Successfully Requested!',
-    diagSuccessSub: lang === 'es'
-      ? 'Tu solicitud ha sido registrada de forma segura en Firestore. Estamos preparando tu informe de diagnóstico preliminar. Serás redirigido a WhatsApp para coordinar la fecha y hora de la llamada de 45 minutos.'
-      : 'Your request has been securely logged in Firestore. We are preparing your preliminary diagnostic report. You will be redirected to WhatsApp to coordinate the date and time of the 45-minute call.',
-
-    // Section 11: Footer
-    footText: lang === 'es' ? 'POSICIONAMIENTO • PRESENCIA • CAPTACIÓN • ESCALABILIDAD' : 'POSITIONING • PRESENCE • ACQUISITION • SCALABILITY',
-    footServer: lang === 'es' ? 'ESTADO DEL SISTEMA: ÓPTIMO' : 'SYSTEM STATUS: OPTIMAL',
-    footSlogan: lang === 'es'
-      ? 'Diseñamos e implementamos sistemas digitales para el crecimiento de tu negocio.'
-      : 'We design and implement digital systems for your business growth.',
-    footOffice: lang === 'es' ? 'Quito y Guayaquil, Ecuador. Cobertura Global.' : 'Quito and Guayaquil, Ecuador. Global Coverage.',
-    footContact: lang === 'es' ? 'Contacto comercial: info@max-ai.com' : 'Business Contact: info@max-ai.com',
-
-    // Pricing Page Specific (Section 5 Catalog)
-    priceBadge: lang === 'es' ? 'Catálogo Oficial' : 'Official Catalog',
-    priceTitle: lang === 'es' ? 'Servicios Estructurados y Rangos de Inversión' : 'Structured Services & Investment Ranges',
-    priceSub: lang === 'es'
-      ? 'Transparencia total. Todo se cotiza bajo la política de hitos (40% inicio / 40% control de insumos / 20% entrega).'
-      : 'Total transparency. Everything is quoted under milestone policy (40% kick-off / 40% asset control / 20% hand-off).',
-    priceTiers: lang === 'es' ? [
-      {
-        category: '🎨 1. Branding Estratégico',
-        desc: 'Construcción de la identidad visual y base comunicativa del negocio.',
-        ranges: [
-          { name: 'Rango Emprendedor ($250 - $450 USD)', for: 'Ideal para profesionales independientes y marcas personales que inician y requieren identidad rápida y profesional.', include: 'Logotipo principal, paleta de colores oficial, tipografía corporativa y guía básica de uso digital.' },
-          { name: 'Rango PYME ($500 - $1,200 USD)', for: 'Diseñado para negocios locales establecidos o marcas comerciales con productos físicos/servicios que buscan diferenciarse.', include: 'Logotipo (versiones y variantes), imagotipo, manual de identidad de marca completo, papelería digital básica e indicaciones visuales para redes sociales.' },
-          { name: 'Rango Corporativo ($1,500 - $5,000+ USD)', for: 'Para empresas con múltiples líneas de negocio, productos o sucursales físicas que exigen un despliegue masivo.', include: 'Auditoría de posicionamiento, manual de marca completo (directrices de tono de voz, branding espacial y audiovisual), diseño de activos institucionales y soporte de implementación gráfica.' }
-        ]
-      },
-      {
-        category: '💻 2. Desarrollo Web Comercial',
-        desc: 'Sitios web rápidos, seguros, sin tecnologías obsoletas ni caídas de servidor.',
-        ranges: [
-          { name: 'Landing Page de Validación ($250 - $600 USD)', for: 'Diseñada exclusivamente para captar prospectos o lanzar un servicio específico de alta conversión.', include: 'Estructura de página única de alto impacto, formulario integrado de captura de leads, conexión básica de analíticas y optimización móvil estricta.' },
-          { name: 'Web Corporativa ($600 - $1,800 USD)', for: 'El sitio institucional definitivo para posicionar la oferta completa de servicios de una PYME o profesional consultivo.', include: 'Multisecciones (Inicio, Quiénes Somos, Servicios individuales, Contacto, Blog/Portafolio), formularios de reserva avanzada de citas y enlaces directos de captación.' },
-          { name: 'E-commerce ($1,200 - $5,000+ USD)', for: 'Tienda virtual estructurada para vender productos de forma fluida y automatizada.', include: 'Catálogo interactivo de productos, pasarela de pago configurada (tarjetas de crédito, transferencias), carrito de compras, gestión de stock e integración con sistemas de mensajería para alertas de pedidos.' }
-        ]
-      },
-      {
-        category: '📈 3. Marketing Digital & Captación',
-        desc: 'Estrategias recurrentes orientadas a generar reuniones y ventas.',
-        ranges: [
-          { name: 'Plan Básico ($250 - $500 USD / mes)', for: 'Para profesionales y pequeños negocios locales que necesitan visibilidad inicial controlada.', include: 'Estrategia de pauta publicitaria en Meta Ads, configuración de Google Business Profile (Mapas) y reporte mensual básico de leads generados.' },
-          { name: 'Plan Profesional ($500 - $1,000 USD / mes)', for: 'Ideal para negocios con flujo constante de servicios que quieren escalar y dominar su área local.', include: 'Embudos de captación avanzados (pauta digital en múltiples plataformas), optimización de tasa de conversión web y gestión de campañas de retargeting.' },
-          { name: 'Plan Avanzado ($1,000 - $3,000+ USD / mes)', for: 'Diseñado para empresas con presupuesto de expansión nacional o regional.', include: 'SEO local y técnico avanzado para motores tradicionales e IA (GEO), campañas de captación omnicanal, embudos con imanes de prospectos avanzados e informes de analítica avanzada con atribución de ventas.' }
-        ]
-      },
-      {
-        category: '🤖 4. IA & Automatización Comercial',
-        desc: 'Sistemas autónomos que procesan, califican e integran operaciones.',
-        ranges: [
-          { name: 'Automatización Básica ($500 - $1,500 USD)', for: 'Ideal para eliminar tareas repetitivas y unificar accesos y bases de datos.', include: 'Respuestas estructuradas automáticas en chat de WhatsApp, conexión del sitio web con un CRM (ej. Notion o similar) e integraciones básicas de correo electrónico.' },
-          { name: 'Integración Profesional ($1,500 - $5,000 USD)', for: 'Diseñado para PYMEs que desean delegar la primera fase de contacto comercial en la tecnología.', include: 'Bot conversacional inteligente alimentado con IA (API de Gemini en Google AI Studio) integrado a WhatsApp o web, calificación automática de prospectos y agendamiento autónomo de llamadas de diagnóstico.' },
-          { name: 'Solución Empresarial ($5,000 - $15,000+ USD)', for: 'Para corporativos que buscan crear sistemas expertos a partir de sus propios datos internos de negocio.', include: 'Sistema RAG (Generación Recuperada por Búsqueda Semántica) que lee los documentos PDF, políticas o históricos de la empresa para responder internamente, asistentes inteligentes personalizados por rol y automatización de flujos comerciales masivos.' }
-        ]
-      }
-    ] : [
-      {
-        category: '🎨 1. Strategic Branding',
-        desc: 'Construction of the visual identity and communicative base of the business.',
-        ranges: [
-          { name: 'Entrepreneur Range ($250 - $450 USD)', for: 'Ideal for independent professionals and personal brands starting out who need a fast, professional identity.', include: 'Main logo, official color palette, corporate typography, and basic digital usage guide.' },
-          { name: 'SME Range ($500 - $1,200 USD)', for: 'Designed for established local businesses or commercial brands looking to stand out.', include: 'Logo (versions and variants), imagetype, complete brand book, basic digital stationery, and social media templates.' },
-          { name: 'Corporate Range ($1,500 - $5,000+ USD)', for: 'For companies with multiple business lines, products, or physical branches demanding massive deployment.', include: 'Positioning audit, complete brand manual (including tone of voice, spatial, and audiovisual branding), design of corporate assets, and implementation support.' }
-        ]
-      },
-      {
-        category: '💻 2. Commercial Web Development',
-        desc: 'Fast, secure websites, without obsolete technologies or server crashes.',
-        ranges: [
-          { name: 'Validation Landing Page ($250 - $600 USD)', for: 'Exclusively designed to capture prospects or launch a specific high-converting service.', include: 'Single page high-impact structure, integrated lead capture form, basic analytics connection, and strict mobile optimization.' },
-          { name: 'Corporate Web ($600 - $1,800 USD)', for: 'The definitive institutional site to position the full range of services for an SME or professional.', include: 'Multi-sections (Home, About Us, Services, Contact, Blog/Portfolio), advanced booking forms, and direct capture links.' },
-          { name: 'E-commerce ($1,200 - $5,000+ USD)', for: 'Virtual store structured to sell products smoothly and automatically.', include: 'Interactive product catalog, payment gateway (credit cards, transfers), shopping cart, inventory management, and messaging integration.' }
-        ]
-      },
-      {
-        category: '📈 3. Digital Marketing & Acquisition',
-        desc: 'Recurring strategies oriented to generate meetings and sales.',
-        ranges: [
-          { name: 'Basic Plan ($250 - $500 USD / month)', for: 'For professionals and small local businesses needing initial controlled visibility.', include: 'Ad campaigns on Meta Ads, Google Business Profile (Maps) optimization, and basic monthly lead reports.' },
-          { name: 'Professional Plan ($500 - $1,000 USD / month)', for: 'Ideal for businesses with steady service flow looking to scale and dominate locally.', include: 'Advanced acquisition funnels (cross-platform digital ads), web conversion rate optimization, and retargeting campaigns.' },
-          { name: 'Advanced Plan ($1,000 - $3,000+ USD / month)', for: 'Designed for companies with national or regional expansion budgets.', include: 'Advanced local and technical SEO for traditional and AI search (GEO), omni-channel acquisition campaigns, advanced lead magnets, and attribution reporting.' }
-        ]
-      },
-      {
-        category: '🤖 4. AI & Commercial Automation',
-        desc: 'Autonomous systems that process, qualify, and integrate operations.',
-        ranges: [
-          { name: 'Basic Automation ($500 - $1,500 USD)', for: 'Ideal to eliminate repetitive tasks and unify database access.', include: 'Structured auto-replies on WhatsApp, website connection to CRM (e.g. Notion), and basic email flows.' },
-          { name: 'Professional Integration ($1,500 - $5,000 USD)', for: 'Designed for SMEs wishing to delegate the first phase of contact to technology.', include: 'Intelligent chat agent powered by AI (Gemini API via Google AI Studio) on WhatsApp/web, auto-lead qualification, and autonomous booking.' },
-          { name: 'Enterprise Solution ($5,000 - $15,000+ USD)', for: 'For corporates seeking to create expert systems from internal data.', include: 'Semantic RAG system querying internal PDFs/documents, role-based custom AI agents, and massive workflow automation.' }
-        ]
-      }
-    ],
-
-    // Google Forms
-    gfBadge: lang === 'es' ? 'Integración Google Forms' : 'Google Forms Integration',
-    gfTitle: lang === 'es' ? 'Sincronizador Google Forms' : 'Google Forms Synchronizer',
-    gfSub: lang === 'es'
-      ? 'Sincroniza tus formularios de Google Workspace con nuestro motor NoSQL. Genera análisis en tiempo real y gestiona prospectos corporativos.'
-      : 'Sync your Google Workspace forms with our NoSQL engine. Generate real-time analytics and manage enterprise leads.',
-    gfNoAuthTitle: lang === 'es' ? 'Conectar Google Workspace' : 'Connect Google Workspace',
-    gfNoAuthSub: lang === 'es'
-      ? 'Autentícate de forma segura con tu cuenta de Google para otorgarle a MAX AI acceso a tus formularios y sincronizar respuestas en tiempo real.'
-      : 'Authenticate securely with your Google account to grant MAX AI access to your forms and sync responses in real time.',
-    gfNoAuthBtn: lang === 'es' ? 'Iniciar Sesión con Google' : 'Sign In with Google',
-    gfAuthStatus: lang === 'es' ? 'ESPACIO DE TRABAJO CONECTADO' : 'WORKSPACE CONNECTED',
-    gfConnectTitle: lang === 'es' ? 'Conectar Formulario de Google' : 'Connect Google Form',
-    gfConnectLabel: lang === 'es' ? 'ID del Formulario en Google Forms' : 'Google Form ID',
-    gfConnectBtn: lang === 'es' ? 'Enlazar' : 'Link',
-    gfExpressTitle: lang === 'es' ? 'Creación Express de Diagnóstico' : 'Express Diagnostic Creation',
-    gfExpressSub: lang === 'es'
-      ? 'MAX AI creará un formulario en tu Google Drive estructurado con preguntas de cualificación para prospectos corporativos y lo enlazará automáticamente.'
-      : 'MAX AI will create a structured qualification Google Form in your Google Drive and automatically link it to the platform.',
-    gfExpressBtn1: lang === 'es' ? 'Generar Formulario 1-Click' : 'Generate Form 1-Click',
-    gfExpressBtn2: lang === 'es' ? 'Creando en Google...' : 'Creating in Google...',
-    gfLinkedTitle: lang === 'es' ? 'Formularios Enlazados' : 'Linked Forms',
-    gfLinkedEmpty: lang === 'es' ? 'No has conectado ningún formulario todavía.' : 'You have not connected any forms yet.',
-    gfActiveTitle: lang === 'es' ? 'Formulario Activo' : 'Active Form',
-    gfActiveResponses: lang === 'es' ? 'Respuestas' : 'Responses',
-    gfActiveQuestions: lang === 'es' ? 'Preguntas' : 'Questions',
-    gfRecentResponses: lang === 'es' ? 'Respuestas Recientes' : 'Recent Responses',
-    gfRecentResponsesSync: lang === 'es' ? 'Sincronización Live' : 'Live Sync',
-    gfRecentResponsesEmpty: lang === 'es' ? 'Tu formulario no tiene ninguna respuesta todavía.' : 'Your form does not have any responses yet.',
-    gfRecentResponsesEmptySub: lang === 'es' ? 'Comparte el enlace del formulario para recibir solicitudes de leads.' : 'Share the form link to start receiving lead requests.',
-    gfNoSelectedTitle: lang === 'es' ? 'Ningún Formulario Seleccionado' : 'No Form Selected',
-    gfNoSelectedSub: lang === 'es' ? 'Conecta un formulario existente ingresando su identificador o presiona el botón de generación express de 1-click.' : 'Connect an existing form by entering its ID or press the 1-click express generation button.',
-    gfActiveSync: lang === 'es' ? 'Estado Sync' : 'Sync Status',
-    gfRecentResponsesTag: lang === 'es' ? 'RESPUESTA' : 'RESPONSE',
-
-    // CRM
-    crmBadge: lang === 'es' ? 'CRM Corporativo' : 'Corporate CRM',
-    crmTitle: lang === 'es' ? 'Leads Recibidos' : 'Received Leads',
-    crmSub: lang === 'es'
-      ? 'Bandeja de entrada en tiempo real con las cotizaciones de tu onboarding configuradas en Firestore.'
-      : 'Real-time inbox with your onboarding quotes configured in Firestore.',
-    crmNoAuthTitle: lang === 'es' ? 'Acceso al CRM' : 'CRM Access',
-    crmNoAuthSub: lang === 'es'
-      ? 'Inicia sesión de forma segura para revisar las propuestas de diagnóstico y presupuestos estimados.'
-      : 'Sign in securely to review diagnostic proposals and estimated budgets.',
-    crmEmpty: lang === 'es' ? 'No se encontraron leads' : 'No leads found',
-    crmEmptySub: lang === 'es'
-      ? 'Los leads que configures y envíes en el protocolo de Onboarding aparecerán aquí instantáneamente.'
-      : 'Leads you configure and submit in the Onboarding protocol will appear here instantly.',
-    crmCardDate: lang === 'es' ? 'Fecha' : 'Date',
-    crmCardContact: lang === 'es' ? 'Contacto Directo' : 'Direct Contact',
-
-    // Contact Page
-    contactTitle: lang === 'es' ? 'Contacto Cognitivo' : 'Cognitive Contact',
-    contactSub: lang === 'es' 
-      ? 'Conecta con nuestro equipo de ingenieros y diseñadores para materializar tu visión digital.' 
-      : 'Connect with our team of software engineers and designers to materialize your digital vision.',
-    contactLabelName: lang === 'es' ? 'Nombre Completo' : 'Full Name',
-    contactLabelEmail: lang === 'es' ? 'Correo Electrónico' : 'Email Address',
-    contactLabelPhone: lang === 'es' ? 'WhatsApp Directo' : 'Direct WhatsApp',
-    contactLabelSubject: lang === 'es' ? 'Asunto / Proyecto' : 'Subject / Project',
-    contactLabelMessage: lang === 'es' ? 'Mensaje / Detalles' : 'Message / Details',
-    contactBtnSubmit: lang === 'es' ? 'ENVIAR MENSAJE' : 'SEND MESSAGE',
-    contactBtnSubmitting: lang === 'es' ? 'ENVIANDO...' : 'SENDING...',
-    contactSuccessTitle: lang === 'es' ? '¡Mensaje Transmitido!' : 'Message Transmitted!',
-    contactSuccessSub: lang === 'es' 
-      ? 'Hemos registrado tu solicitud en el núcleo. Un arquitecto cognitivo se pondrá en contacto contigo en menos de 2 horas y te redireccionaremos a WhatsApp.' 
-      : 'We have registered your request in the core. A cognitive architect will contact you in less than 2 hours and we will redirect you to WhatsApp.',
-    contactDetailsTitle: lang === 'es' ? 'Canales Directos' : 'Direct Channels',
-    contactOffice: lang === 'es' ? 'Sede Central' : 'Headquarters',
-    contactOfficeLoc: lang === 'es' ? 'Quito, Ecuador • Cobertura Global' : 'Quito, Ecuador • Global Coverage',
-    contactSocials: lang === 'es' ? 'Redes de la Agencia' : 'Agency Networks',
-
-    // Configurator
-    confBadge: lang === 'es' ? 'Configurador Inteligente' : 'Smart Configurator',
-    confTitle: lang === 'es' ? 'Crea tu Ecosistema Técnico' : 'Build Your Technical Ecosystem',
-    confSub: lang === 'es'
-      ? 'Selecciona los módulos tecnológicos que demanda tu negocio y obtén una estimación de recursos y tiempos del Ingeniero Principal.'
-      : 'Select the technical modules your business demands and obtain an estimate of resources and time from the Principal Engineer.',
-    confSumTitle: lang === 'es' ? 'RESUMEN DE INFRAESTRUCTURA' : 'INFRASTRUCTURE SUMMARY',
-    confSumMod: lang === 'es' ? 'Módulos Solicitados' : 'Requested Modules',
-    confSumTime: lang === 'es' ? 'Tiempo de Producción' : 'Production Time',
-    confSumTimeWeeks: lang === 'es' ? 'semanas' : 'weeks',
-    confSumBudget: lang === 'es' ? 'Presupuesto Estimado' : 'Estimated Budget',
-    confSumCta: lang === 'es' ? 'PROCEDER AL ONBOARDING' : 'PROCEED TO ONBOARDING',
-
-    // Case Studies Page
-    csBadge: lang === 'es' ? 'Showcase Real' : 'Real Showcase',
-    csTitle: lang === 'es' ? 'CASOS DE ÉXITO MAX AI' : 'MAX AI CASE STUDIES',
-    csSub: lang === 'es'
-      ? 'Plataformas reales y estables producidas bajo ingeniería de alto desempeño para marcas sofisticadas.'
-      : 'Real and stable platforms built under high-performance engineering for sophisticated brands.',
-  };
+  const t = TRANSLATIONS[lang];
 
   // Render Projects Helper
   const renderProjectsSection = () => {
@@ -1787,6 +1106,7 @@ export default function App() {
                   onClick={() => setIsDark(true)}
                   className={`p-1 rounded-full transition-all cursor-pointer ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                   title={lang === 'es' ? "Modo Oscuro" : "Dark Mode"}
+                  aria-label={lang === 'es' ? "Activar Modo Oscuro" : "Activate Dark Mode"}
                 >
                   <Moon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
@@ -1794,6 +1114,7 @@ export default function App() {
                   onClick={() => setIsDark(false)}
                   className={`p-1 rounded-full transition-all cursor-pointer ${!isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                   title={lang === 'es' ? "Modo Claro" : "Light Mode"}
+                  aria-label={lang === 'es' ? "Activar Modo Claro" : "Activate Light Mode"}
                 >
                   <Sun className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
@@ -1802,20 +1123,20 @@ export default function App() {
 
             {/* Brand Logo with Fluid Expanding Image Effect */}
             <div 
-              className="group relative h-15 w-15 hover:w-[188px] rounded-lg transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
+              className="group relative h-10 w-10 hover:w-[122px] rounded-xl transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
               onClick={() => setActivePage('inicio')}
             >
               {/* Small Logo */}
               <img 
-                src="/logo_pequeno.png" 
+                src={isDark ? "/logo_pequeno.png" : "/logo_pequeno_light.jpeg"} 
                 alt="MAX AI" 
-                className="absolute left-0 top-0 h-15 w-15 rounded-lg object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90" 
+                className={`absolute left-0 top-0 h-10 w-10 rounded-xl object-cover transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
               {/* Long Logo */}
               <img 
-                src="/logo_largo.png" 
+                src={isDark ? "/logo_largo.png" : "/logo_largo_light.jpeg"} 
                 alt="MAX AI Digital Studio" 
-                className="absolute left-0 top-0 h-15 w-[188px] rounded-lg object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" 
+                className={`absolute left-0 top-0 h-10 w-[122px] rounded-xl object-cover opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
             </div>
           </div>
@@ -1840,7 +1161,15 @@ export default function App() {
                   : isDark ? 'hover:text-white' : 'hover:text-[#020813]'
               }`}
             >
-              {t.services}
+              {lang === 'es' ? (
+                <>
+                  Precios <span className="text-[#C17F4E]">&</span> Servicios
+                </>
+              ) : (
+                <>
+                  Pricing <span className="text-[#C17F4E]">&</span> Services
+                </>
+              )}
             </button>
             <button 
               onClick={() => setActivePage('portafolio')}
@@ -1862,8 +1191,12 @@ export default function App() {
               onClick={() => setActivePage('contacto')}
               className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded transition-all ${
                 activePage === 'contacto'
-                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
-                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
+                  ? isDark
+                    ? 'bg-zinc-900 text-white border border-white'
+                    : 'bg-[#EAE6DB] text-[#3D3528] border border-[#3D3528]'
+                  : isDark
+                    ? 'bg-white text-zinc-950 hover:bg-zinc-200 border border-transparent shadow-md'
+                    : 'bg-[#3D3528] text-white hover:bg-[#2B251C] border border-transparent shadow-md'
               }`}
             >
               {t.contact}
@@ -1902,8 +1235,12 @@ export default function App() {
               onClick={() => setActivePage('contacto')}
               className={`px-3 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded transition-all shrink-0 ${
                 activePage === 'contacto'
-                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
-                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
+                  ? isDark
+                    ? 'bg-zinc-900 text-white border border-white'
+                    : 'bg-[#EAE6DB] text-[#3D3528] border border-[#3D3528]'
+                  : isDark
+                    ? 'bg-white text-zinc-950 hover:bg-zinc-200 border border-transparent shadow-md'
+                    : 'bg-[#3D3528] text-white hover:bg-[#2B251C] border border-transparent shadow-md'
               }`}
             >
               {t.contact}
@@ -1913,6 +1250,7 @@ export default function App() {
             <button 
               onClick={() => setActivePage('login')}
               title={currentUser ? (lang === 'es' ? 'Mi cuenta' : 'My account') : (lang === 'es' ? 'Iniciar sesión' : 'Sign in')}
+              aria-label={currentUser ? (lang === 'es' ? 'Portal de clientes / Cuenta' : 'Client portal / Account') : (lang === 'es' ? 'Iniciar sesión' : 'Sign in')}
               className={`relative p-2 rounded-full transition-all border shrink-0 ${
                 activePage === 'login'
                   ? 'bg-zinc-800 text-[#C17F4E] border-[#C17F4E]'
@@ -1936,6 +1274,7 @@ export default function App() {
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? (lang === 'es' ? 'Cerrar menú' : 'Close menu') : (lang === 'es' ? 'Abrir menú' : 'Open menu')}
               className={`p-2 rounded border transition-all ${
                 isDark
                   ? 'border-white/5 bg-zinc-900/40 text-zinc-300 hover:text-white'
@@ -1978,7 +1317,15 @@ export default function App() {
                   onClick={() => { setActivePage('precios'); setMobileMenuOpen(false); }}
                   className={`text-left text-sm font-semibold tracking-wider uppercase py-2.5 px-3 rounded transition-all ${activePage === 'precios' ? 'bg-[#C17F4E]/10 text-[#C17F4E]' : 'hover:bg-white/5'}`}
                 >
-                  {t.services}
+                  {lang === 'es' ? (
+                    <>
+                      Precios <span className="text-[#C17F4E]">&</span> Servicios
+                    </>
+                  ) : (
+                    <>
+                      Pricing <span className="text-[#C17F4E]">&</span> Services
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={() => { setActivePage('portafolio'); setMobileMenuOpen(false); }}
@@ -2034,21 +1381,26 @@ export default function App() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-start items-center relative z-10">
                 
                 {/* Left Content */}
-                <div className="lg:col-span-7 flex flex-col items-start gap-6">
+                <div className="lg:col-span-7 flex flex-col items-center text-center gap-6">
 
                   <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
                     {t.heroTitle1} <br/> 
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle2}</span> <br/> 
-                    {t.heroTitle3} <br/> 
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle4}</span>
+                    {t.heroTitle3}
+                    {t.heroTitle4 && (
+                      <>
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle4}</span>
+                      </>
+                    )}
                   </h1>
 
-                  <p className={`text-base sm:text-lg max-w-xl font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
+                  <p className={`text-base sm:text-lg max-w-xl font-sans font-light leading-relaxed ${themeStyles.textMuted} mx-auto`}>
                     {t.heroSub}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
-                    <div className="flex flex-col items-stretch sm:items-start gap-1">
+                  <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4 justify-center items-start">
+                    <div className="flex flex-col items-center gap-1">
                       <button
                         onClick={() => {
                           const target = document.getElementById('diagnostico');
@@ -2061,15 +1413,13 @@ export default function App() {
                         <span>{t.heroCta1}</span>
                         <ArrowRight className="w-4 h-4" />
                       </button>
-                      <p className="text-[9px] text-zinc-500 font-mono mt-1 text-center sm:text-left">{t.heroCta1Sub}</p>
+                      <p className="text-[9px] text-zinc-500 font-mono mt-1 text-center">{t.heroCta1Sub}</p>
                     </div>
                     
                     <button
                       onClick={() => {
-                        const target = document.getElementById('sistema');
-                        if (target) {
-                          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
+                        setActivePage('precios');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
                       className={`px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest transition-all text-center border cursor-pointer h-fit ${
                         isDark 
@@ -2081,21 +1431,17 @@ export default function App() {
                     </button>
                   </div>
 
-                  <p className={`text-xs font-mono font-bold border-l-2 border-[#C17F4E]/50 pl-3 py-1 ${themeStyles.textMuted} mt-6`}>
-                    {t.heroTagline}
-                  </p>
-
                   {/* Metrics Grid inside Hero */}
-                  <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 w-full max-w-lg mt-6">
-                    <div className="border-l border-[#C17F4E]/40 pl-4">
+                  <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 w-full max-w-lg mt-6 mx-auto">
+                    <div className="text-center px-2">
                       <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>3.5X</div>
                       <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat1}</div>
                     </div>
-                    <div className="border-l border-[#C17F4E]/40 pl-4">
+                    <div className="text-center px-2">
                       <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>99.98%</div>
                       <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat2}</div>
                     </div>
-                    <div className="border-l border-[#C17F4E]/40 pl-4">
+                    <div className="text-center px-2">
                       <div className={`text-2xl font-mono font-bold tracking-tighter ${themeStyles.title}`}>85ms</div>
                       <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{t.heroStat3}</div>
                     </div>
@@ -2104,268 +1450,22 @@ export default function App() {
 
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
                 <div className="lg:col-span-5 relative w-full select-none flex flex-col items-center gap-4">
-                  {/* Centered Logo above the diagram */}
-                  <div className="w-full flex justify-center mb-1">
+                  {/* Diorama (diagrama pixel art) above */}
+                  <div className={`p-1.5 rounded-2xl border transition-all duration-500 w-full relative overflow-hidden h-[330px] flex items-center justify-center ${themeStyles.card}`}>
+                    <IsometricScene isDark={isDark} lang={lang} themeStyles={themeStyles} />
+                  </div>
+                  {/* Centered Logo below the diagram */}
+                  <div className="w-full flex justify-center mt-2">
                     <img 
-                      src="/logo_max_ai_hero.png" 
+                      src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_claro.jpeg"} 
                       alt="MAX AI" 
-                      className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]"
+                      className={`w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)] ${!isDark ? 'mix-blend-multiply opacity-90' : ''}`}
                     />
                   </div>
-                  <div className={`p-6 rounded-2xl border transition-all duration-500 flex flex-col justify-between h-[380px] w-full relative overflow-hidden ${themeStyles.card}`}>
-                    
-                    {/* Header bar */}
-                    <div className="h-10 border-b border-[#C17F4E]/10 pb-4 flex items-center justify-between">
-                      <div className="flex gap-1.5 items-center">
-                        <div className="w-2 h-2 rounded-full bg-[#C17F4E] animate-pulse"></div>
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">MAX-AI SYSTEM ORCHESTRATOR</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 bg-[#C17F4E]/10 text-[#C17F4E] px-2 py-0.5 rounded text-[8px] font-mono font-bold tracking-wider">
-                        <span>PIPELINE: ACTIVE</span>
-                      </div>
-                    </div>
-
-                    {/* Diagram Hub Board */}
-                    <div className="relative flex-1 w-full h-[240px] mt-2 overflow-hidden">
-                      
-                      {/* Subtle background glow centered on the brain core */}
-                      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none w-36 h-36 bg-[#C17F4E]/5 rounded-full blur-3xl animate-pulse"></div>
-                      
-                      {/* Connection paths and particles */}
-                      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 240">
-                        <defs>
-                          <filter id="glow-subtle" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="3" result="blur" />
-                            <feMerge>
-                              <feMergeNode in="blur" />
-                              <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                          </filter>
-                          <filter id="glow-heavy" x="-40%" y="-40%" width="180%" height="180%">
-                            <feGaussianBlur stdDeviation="6" result="blur" />
-                            <feMerge>
-                              <feMergeNode in="blur" />
-                              <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                          </filter>
-                        </defs>
-                        
-                        {/* --- Base Inactive Paths (Circuit layout) --- */}
-                        {/* Web <-> Brain */}
-                        <path d="M 70 60 C 130 60, 140 120, 200 120" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
-                        {/* Android <-> Brain */}
-                        <path d="M 70 180 C 130 180, 140 120, 200 120" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
-                        {/* Brain <-> Firestore DB */}
-                        <path d="M 200 120 C 260 120, 270 60, 330 60" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
-                        {/* Brain <-> APIs */}
-                        <path d="M 200 120 C 260 120, 270 180, 330 180" fill="none" stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(2,8,19,0.06)"} strokeWidth="3" />
-
-                        {/* --- Active Glowing Connection Paths --- */}
-                        {/* Web <-> Brain active */}
-                        <path 
-                          d="M 70 60 C 130 60, 140 120, 200 120" 
-                          fill="none" 
-                          stroke={activeDiagNode === 'web' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
-                          strokeWidth="1.5" 
-                          className="transition-all duration-500 opacity-60" 
-                          filter="url(#glow-subtle)" 
-                        />
-                        {/* Android <-> Brain active */}
-                        <path 
-                          d="M 70 180 C 130 180, 140 120, 200 120" 
-                          fill="none" 
-                          stroke={activeDiagNode === 'android' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
-                          strokeWidth="1.5" 
-                          className="transition-all duration-500 opacity-60" 
-                          filter="url(#glow-subtle)" 
-                        />
-                        {/* Brain <-> DB active */}
-                        <path 
-                          d="M 200 120 C 260 120, 270 60, 330 60" 
-                          fill="none" 
-                          stroke={activeDiagNode === 'db' || activeDiagNode === 'ia' ? "#2563EB" : "transparent"} 
-                          strokeWidth="1.5" 
-                          className="transition-all duration-500 opacity-60" 
-                          filter="url(#glow-subtle)" 
-                        />
-                        {/* Brain <-> APIs active */}
-                        <path 
-                          d="M 200 120 C 260 120, 270 180, 330 180" 
-                          fill="none" 
-                          stroke={activeDiagNode === 'api' || activeDiagNode === 'ia' ? "#C17F4E" : "transparent"} 
-                          strokeWidth="1.5" 
-                          className="transition-all duration-500 opacity-60" 
-                          filter="url(#glow-subtle)" 
-                        />
-
-                        {/* --- Flowing Particles (Native SVG Hardware Accelerated) --- */}
-                        {/* Web -> Brain (Request Inputs) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 70 60 C 130 60, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="0s" />
-                        </circle>
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 70 60 C 130 60, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="1.2s" />
-                        </circle>
-
-                        {/* Android -> Brain (Request Inputs) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 70 180 C 130 180, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="0.6s" />
-                        </circle>
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 70 180 C 130 180, 140 120, 200 120" dur="2.4s" repeatCount="indefinite" begin="1.8s" />
-                        </circle>
-
-                        {/* Brain -> DB (Cloud Storage Query - Blue) */}
-                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 260 120, 270 60, 330 60" dur="2.4s" repeatCount="indefinite" begin="0.3s" />
-                        </circle>
-                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 260 120, 270 60, 330 60" dur="2.4s" repeatCount="indefinite" begin="1.5s" />
-                        </circle>
-
-                        {/* Brain -> APIs (Integrations Action) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 260 120, 270 180, 330 180" dur="2.4s" repeatCount="indefinite" begin="0.9s" />
-                        </circle>
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 260 120, 270 180, 330 180" dur="2.4s" repeatCount="indefinite" begin="2.1s" />
-                        </circle>
-
-                        {/* DB -> Brain (Data Return - Blue) */}
-                        <circle r="2.5" fill="#2563EB" filter="url(#glow-subtle)">
-                          <animateMotion path="M 330 60 C 270 60, 260 120, 200 120" dur="2.8s" repeatCount="indefinite" begin="0.7s" />
-                        </circle>
-
-                        {/* API -> Brain (Action Callback) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 330 180 C 270 180, 260 120, 200 120" dur="2.8s" repeatCount="indefinite" begin="1.4s" />
-                        </circle>
-
-                        {/* Brain -> Web UI (Render Update) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 140 120, 130 60, 70 60" dur="2.8s" repeatCount="indefinite" begin="2.1s" />
-                        </circle>
-
-                        {/* Brain -> Android UI (Render Update) */}
-                        <circle r="2.5" fill="#C17F4E" filter="url(#glow-subtle)">
-                          <animateMotion path="M 200 120 C 140 120, 130 180, 70 180" dur="2.8s" repeatCount="indefinite" begin="2.8s" />
-                        </circle>
-                      </svg>
-
-                      {/* --- NODE BUTTONS --- */}
-                      
-                      {/* Node 1: Web (Top-Left) */}
-                      <div 
-                        onClick={() => setActiveDiagNode('web')}
-                        className="absolute left-[17.5%] top-[25%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
-                      >
-                        <div 
-                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'web'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
-                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
-                          }`}
-                        >
-                          <Code2 className="w-5 h-5" />
-                        </div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'web' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>WEB</span>
-                      </div>
-
-                      {/* Node 2: Android (Bottom-Left) */}
-                      <div 
-                        onClick={() => setActiveDiagNode('android')}
-                        className="absolute left-[17.5%] top-[75%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
-                      >
-                        <div 
-                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'android'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
-                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
-                          }`}
-                        >
-                          <Phone className="w-5 h-5" />
-                        </div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'android' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>ANDROID</span>
-                      </div>
-
-                      {/* Node 3: AI Core Brain (Center) */}
-                      <div 
-                        onClick={() => setActiveDiagNode('ia')}
-                        className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
-                      >
-                        <div className="relative">
-                          <div className={`absolute -inset-1.5 rounded-full bg-[#C17F4E]/10 animate-ping opacity-75 ${activeDiagNode === 'ia' ? 'block' : 'hidden group-hover:block'}`}></div>
-                          <div 
-                            className={`relative w-13 h-13 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                              activeDiagNode === 'ia'
-                                ? 'border-[#C17F4E] bg-[#C17F4E]/25 scale-115 shadow-lg shadow-[#C17F4E]/30 text-[#C17F4E]'
-                                : isDark ? 'border-zinc-700 bg-zinc-950 text-[#C17F4E] group-hover:border-[#C17F4E] group-hover:scale-105' : 'border-[#C17F4E]/50 bg-[#FAF8F5] text-[#C17F4E] group-hover:border-[#C17F4E] group-hover:scale-105'
-                            }`}
-                          >
-                            <Brain className="w-6 h-6 animate-pulse" />
-                          </div>
-                        </div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'ia' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>AI AGENT</span>
-                      </div>
-
-                      {/* Node 4: Firestore Database (Top-Right) */}
-                      <div 
-                        onClick={() => setActiveDiagNode('db')}
-                        className="absolute left-[82.5%] top-[25%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
-                      >
-                        <div 
-                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'db'
-                              ? 'border-[#2563EB] bg-[#2563EB]/15 scale-110 shadow-lg shadow-[#2563EB]/25 text-[#2563EB]'
-                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#2563EB]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#2563EB]/60'
-                          }`}
-                        >
-                          <Database className="w-5 h-5" />
-                        </div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'db' ? 'text-[#2563EB]' : 'text-zinc-500'}`}>FIRESTORE</span>
-                      </div>
-
-                      {/* Node 5: APIs / Webhooks (Bottom-Right) */}
-                      <div 
-                        onClick={() => setActiveDiagNode('api')}
-                        className="absolute left-[82.5%] top-[75%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 flex flex-col items-center group"
-                      >
-                        <div 
-                          className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            activeDiagNode === 'api'
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/15 scale-110 shadow-lg shadow-[#C17F4E]/25 text-[#C17F4E]'
-                              : isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400 group-hover:border-[#C17F4E]/60' : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 group-hover:border-[#C17F4E]/60'
-                          }`}
-                        >
-                          <Zap className="w-5 h-5" />
-                        </div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-wider mt-1.5 ${activeDiagNode === 'api' ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>APIs</span>
-                      </div>
-
-                    </div>
-
-                    {/* Explanatory Info Bar (Single highly informative line, zero clutter) */}
-                    <div className={`py-3 px-4 rounded-xl border flex gap-3 items-center text-xs font-mono transition-colors duration-300 ${themeStyles.cardInner}`}>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <span className={`w-2 h-2 rounded-full animate-pulse ${activeDiagNode === 'db' ? 'bg-[#2563EB]' : 'bg-[#C17F4E]'}`}></span>
-                        <span className={`font-bold text-[9px] uppercase tracking-wider ${activeDiagNode === 'db' ? 'text-[#2563EB]' : 'text-[#C17F4E]'}`}>
-                          {activeDiagNode}
-                        </span>
-                      </div>
-                      <span className={`text-[10px] leading-relaxed text-left flex-1 font-sans ${themeStyles.textMuted}`}>
-                        {activeDiagNode === 'web' && (lang === 'es' ? 'Desarrollo Web: Plataformas ultra-rápidas en React/Next.js conectadas a agentes autónomos.' : 'Web Dev: Ultra-fast React/Next.js platforms connected to autonomous backend agents.')}
-                        {activeDiagNode === 'android' && (lang === 'es' ? 'Apps Android: Desarrollo nativo en Kotlin optimizado para flujos y agentes IA.' : 'Android Apps: Native Kotlin apps optimized for AI workflows and mobile agents.')}
-                        {activeDiagNode === 'ia' && (lang === 'es' ? 'Estudio Agéntico IA: Cerebros cognitivos autónomos que automatizan tu negocio 24/7.' : 'Agentic AI Studio: Autonomous cognitive cores that automate business tasks 24/7.')}
-                        {activeDiagNode === 'db' && (lang === 'es' ? 'Bases de Datos: Persistencia en la nube (Firestore) segura y en tiempo real.' : 'Cloud Database: Real-time, secure data persistence powered by Firestore.')}
-                        {activeDiagNode === 'api' && (lang === 'es' ? 'APIs e Integraciones: Canales con WhatsApp, pasarelas de pago y webhooks.' : 'APIs & Integrations: Pipelines connecting WhatsApp, payment gateways, and webhooks.')}
-                      </span>
-                    </div>
-
-                  </div>
                 </div>
-  
-                </div>
-              </section>
+
+              </div>
+            </section>
   
               {/* --- SECCIÓN DE SÍNTOMAS DEL PROBLEMA (INTERACTIVO SCANNER) --- */}
               <motion.section 
@@ -3211,12 +2311,20 @@ export default function App() {
             
             {/* --- HERO PRECIOS --- */}
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
-              <div className="max-w-4xl">
+              <div className="text-center max-w-3xl mx-auto">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Cotizador Inteligente' : 'Smart Configurator'}</span>
                 <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
-                  {lang === 'es' ? 'Precios y Despliegue' : 'Pricing & Deployment'}
+                  {lang === 'es' ? (
+                    <>
+                      Precios <span className="text-[#C17F4E]">&</span> servicios
+                    </>
+                  ) : (
+                    <>
+                      Pricing <span className="text-[#C17F4E]">&</span> services
+                    </>
+                  )}
                 </h1>
-                <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl ${themeStyles.textMuted}`}>
+                <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl mx-auto ${themeStyles.textMuted}`}>
                   {lang === 'es' 
                     ? 'Selecciona los módulos de software que tu negocio necesita y calcula en tiempo real una estimación de inversión y tiempos de despliegue.'
                     : 'Select the software modules your business needs and calculate in real-time an investment estimate and deployment timeline.'}
@@ -3904,10 +3012,10 @@ export default function App() {
                       <div>
                         <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider font-semibold">Email</h4>
                         <a 
-                          href="mailto:contacto@maxai.studio" 
+                          href="mailto:max.baldeon94@gmail.com" 
                           className={`text-base font-medium hover:text-[#C17F4E] transition-colors mt-1 block ${themeStyles.title}`}
                         >
-                          contacto@maxai.studio
+                          max.baldeon94@gmail.com
                         </a>
                         <span className="text-[10px] text-zinc-500 font-mono">{lang === 'es' ? 'Respuesta en < 1 Hora' : 'Response in < 1 Hour'}</span>
                       </div>
@@ -3933,40 +3041,26 @@ export default function App() {
 
               </div>
 
-              {/* Right Side: Diagnostic Form (Section 10) */}
+              {/* Right Side: Contact Form (Section 13) */}
               <div className="lg:col-span-7">
                 <div className={`p-8 rounded-xl border shadow-2xl relative ${themeStyles.card}`}>
                   
-                  {validationError && (
+                  {contactFormValidationError && (
                     <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg mb-6 text-xs sm:text-sm font-sans flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4" />
-                      <span>{validationError}</span>
+                      <span>{contactFormValidationError}</span>
                     </div>
                   )}
 
-                  {selectedModules.length > 0 && (
-                    <div className="bg-[#C17F4E]/10 border border-[#C17F4E]/30 text-[#C17F4E] p-4 rounded-lg text-xs font-mono mb-6 leading-relaxed flex flex-col gap-1">
-                      <div>
-                        ⚡ <strong>MÓDULOS DE INTERÉS PRE-CONFIGURADOS DESDE TU COTIZADOR:</strong>
-                      </div>
-                      <div className="text-zinc-300 text-[11px] font-sans">
-                        {selectedModules.map(id => MODULES.find(m => m.id === id)?.name).join(', ')}
-                      </div>
-                      <div className="mt-1 font-bold">
-                        Presupuesto Estimado: ${configuratorTotal} USD | Tiempo de Despliegue: ~{configuratorDuration} semanas.
-                      </div>
-                    </div>
-                  )}
-
-                  {!formSubmitted ? (
-                    <form onSubmit={handleFormSubmit} className="space-y-6">
+                  {!contactFormSubmitted ? (
+                    <form onSubmit={handleContactFormSubmit} className="space-y-6">
                       
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {/* Full Name */}
+                        {/* Name */}
                         <div>
                           <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                            <span>{t.diagLabelName} *</span>
-                            {isContactNameValid && (
+                            <span>{t.contactLabelName} *</span>
+                            {isContactFormNameValid && (
                               <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
                                 <Check className="w-3.5 h-3.5" /> Ok
                               </span>
@@ -3975,42 +3069,19 @@ export default function App() {
                           <input
                             type="text"
                             required
-                            value={contactName}
-                            onChange={(e) => setContactName(e.target.value)}
-                            onBlur={() => handleFieldBlur('contactName')}
+                            value={contactFormName}
+                            onChange={(e) => setContactFormName(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormName')}
                             placeholder="Ej. Juan Pérez"
-                            className={getInputClass('contactName', isContactNameValid, themeStyles)}
+                            className={getInputClass('contactFormName', isContactFormNameValid, themeStyles)}
                           />
                         </div>
 
-                        {/* Business Name */}
-                        <div>
-                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                            <span>{t.diagLabelCompany} *</span>
-                            {isCompanyNameValid && (
-                              <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
-                                <Check className="w-3.5 h-3.5" /> Ok
-                              </span>
-                            )}
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={companyName}
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            onBlur={() => handleFieldBlur('companyName')}
-                            placeholder="Ej. Mi Empresa S.A."
-                            className={getInputClass('companyName', isCompanyNameValid, themeStyles)}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {/* Email */}
                         <div>
                           <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                            <span>{t.diagLabelEmail} *</span>
-                            {isContactEmailValid && (
+                            <span>{t.contactLabelEmail} *</span>
+                            {isContactFormEmailValid && (
                               <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
                                 <Check className="w-3.5 h-3.5" /> Ok
                               </span>
@@ -4019,19 +3090,21 @@ export default function App() {
                           <input
                             type="email"
                             required
-                            value={contactEmail}
-                            onChange={(e) => setContactEmail(e.target.value)}
-                            onBlur={() => handleFieldBlur('contactEmail')}
+                            value={contactFormEmail}
+                            onChange={(e) => setContactFormEmail(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormEmail')}
                             placeholder="juan@empresa.com"
-                            className={getInputClass('contactEmail', isContactEmailValid, themeStyles)}
+                            className={getInputClass('contactFormEmail', isContactFormEmailValid, themeStyles)}
                           />
                         </div>
+                      </div>
 
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {/* WhatsApp */}
                         <div>
                           <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold flex justify-between items-center">
-                            <span>{t.diagLabelPhone} *</span>
-                            {isContactPhoneValid && (
+                            <span>{t.contactLabelPhone} *</span>
+                            {isContactFormPhoneValid && (
                               <span className="text-emerald-500 text-[10px] flex items-center gap-1 font-mono">
                                 <Check className="w-3.5 h-3.5" /> Ok
                               </span>
@@ -4040,94 +3113,52 @@ export default function App() {
                           <input
                             type="tel"
                             required
-                            value={contactPhone}
-                            onChange={(e) => setContactPhone(e.target.value)}
-                            onBlur={() => handleFieldBlur('contactPhone')}
+                            value={contactFormPhone}
+                            onChange={(e) => setContactFormPhone(e.target.value)}
+                            onBlur={() => handleFieldBlur('contactFormPhone')}
                             placeholder="Ej. +593 98 318 6044"
-                            className={getInputClass('contactPhone', isContactPhoneValid, themeStyles)}
+                            className={getInputClass('contactFormPhone', isContactFormPhoneValid, themeStyles)}
+                          />
+                        </div>
+
+                        {/* Subject */}
+                        <div>
+                          <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
+                            {t.contactLabelSubject}
+                          </label>
+                          <input
+                            type="text"
+                            value={contactFormSubject}
+                            onChange={(e) => setContactFormSubject(e.target.value)}
+                            placeholder="Ej. Consulta de Servicios / IA"
+                            className={`w-full p-3 rounded text-sm transition-all duration-300 outline-none border ${themeStyles.input}`}
                           />
                         </div>
                       </div>
 
-                      {/* Current Website */}
+                      {/* Message / Details */}
                       <div>
                         <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-2 font-bold">
-                          {t.diagLabelWeb}
+                          {t.contactLabelMessage} *
                         </label>
-                        <input
-                          type="text"
-                          value={customMessage}
-                          onChange={(e) => setCustomMessage(e.target.value)}
-                          placeholder="Ej. www.miempresa.com"
-                          className={`w-full p-3 rounded text-sm transition-all duration-300 outline-none border ${themeStyles.input}`}
+                        <textarea
+                          required
+                          value={contactFormMessage}
+                          onChange={(e) => setContactFormMessage(e.target.value)}
+                          placeholder={lang === 'es' ? 'Escribe aquí los detalles de tu consulta...' : 'Write your inquiry details here...'}
+                          rows={5}
+                          className={`w-full p-3 rounded text-sm transition-all duration-300 outline-none border resize-none ${themeStyles.input}`}
                         />
-                      </div>
-
-                      {/* Obstacles Select */}
-                      <div>
-                        <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-3 font-bold">
-                          {t.diagLabelObstacle}
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {t.diagObstacles.map((opt) => (
-                            <label
-                              key={opt}
-                              className={`p-3.5 rounded border text-xs cursor-pointer flex items-start gap-3 transition-all ${
-                                bottleneck === opt
-                                  ? 'border-[#C17F4E] bg-[#C17F4E]/5 text-white'
-                                  : isDark ? 'border-white/5 bg-zinc-950/40 text-zinc-400 hover:border-white/10' : 'border-slate-200 bg-white hover:border-slate-300'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="contact_obstacle"
-                                value={opt}
-                                checked={bottleneck === opt}
-                                onChange={() => setBottleneck(opt)}
-                                className="mt-0.5 accent-[#C17F4E]"
-                              />
-                              <span className="leading-snug">{opt}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Budget Select */}
-                      <div>
-                        <label className="block text-xs uppercase font-mono tracking-wider text-zinc-400 mb-3 font-bold">
-                          {t.diagLabelBudget}
-                        </label>
-                        <div className="grid grid-cols-1 gap-3">
-                          {t.diagBudgets.map((opt) => (
-                            <label
-                              key={opt}
-                              className={`p-3.5 rounded border text-xs cursor-pointer flex items-start gap-3 transition-all ${
-                                digitalMaturity === opt
-                                  ? 'border-[#C17F4E] bg-[#C17F4E]/5 text-white'
-                                  : isDark ? 'border-white/5 bg-zinc-950/40 text-zinc-400 hover:border-white/10' : 'border-slate-200 bg-white hover:border-slate-300'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="contact_budgetRange"
-                                value={opt}
-                                checked={digitalMaturity === opt}
-                                onChange={() => setDigitalMaturity(opt)}
-                                className="mt-0.5 accent-[#C17F4E]"
-                              />
-                              <span className="leading-snug">{opt}</span>
-                            </label>
-                          ))}
-                        </div>
                       </div>
 
                       {/* Submit Button */}
                       <button
                         type="submit"
-                        className="w-full py-4 bg-[#C17F4E] text-white text-xs font-mono font-bold uppercase tracking-widest rounded hover:bg-[#D79663] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#C17F4E]/10 cursor-pointer"
+                        disabled={contactFormLoading}
+                        className="w-full py-4 bg-[#C17F4E] text-white text-xs font-mono font-bold uppercase tracking-widest rounded hover:bg-[#D79663] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#C17F4E]/10 cursor-pointer disabled:opacity-50"
                       >
                         <Send className="w-4 h-4 animate-pulse" />
-                        <span>{t.diagSubmit}</span>
+                        <span>{contactFormLoading ? t.contactBtnSubmitting : t.contactBtnSubmit}</span>
                       </button>
 
                     </form>
@@ -4137,14 +3168,22 @@ export default function App() {
                         <CheckCircle className="w-8 h-8 animate-bounce" />
                       </div>
                       <h3 className={`font-display font-bold text-2xl uppercase ${themeStyles.title}`}>
-                        {t.diagSuccessTitle}
+                        {t.contactSuccessTitle}
                       </h3>
                       <p className={`text-sm leading-relaxed max-w-md mx-auto ${themeStyles.textMuted}`}>
-                        {t.diagSuccessSub}
+                        {t.contactSuccessSub}
                       </p>
                       <div className="pt-4">
                         <button
-                          onClick={resetForm}
+                          onClick={() => {
+                            setContactFormName('');
+                            setContactFormEmail('');
+                            setContactFormPhone('');
+                            setContactFormSubject('');
+                            setContactFormMessage('');
+                            setContactFormSubmitted(false);
+                            setTouchedFields({});
+                          }}
                           className="bg-zinc-800 border border-white/5 text-zinc-400 hover:text-white px-5 py-2.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer"
                         >
                           Reiniciar Formulario
@@ -4164,24 +3203,7 @@ export default function App() {
       </main>
 
       {/* --- PREMIUM FOOTER --- */}
-      <footer className={`border-t py-12 transition-colors duration-500 ${isDark ? 'bg-zinc-950/80 border-white/5 text-zinc-400' : 'bg-[#FAF8F5] border-[#D6D0C1] text-slate-600'}`}>
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row justify-between items-center gap-6 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-          <div className="flex gap-6 flex-wrap justify-center">
-            <span>© 2026 MAX AI STUDIO</span>
-            <span className="text-zinc-700">|</span>
-            <span>{t.footText}</span>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-              <span className="text-zinc-400">{t.footServer}</span>
-            </div>
-            <span className="text-zinc-700">|</span>
-            <a href="https://wa.me/593983186044" target="_blank" rel="noopener noreferrer" className="hover:text-[#C17F4E] transition-colors">WHATSAPP</a>
-          </div>
-        </div>
-      </footer>
+      <Footer isDark={isDark} lang={lang} t={t} setActivePage={setActivePage} />
 
       {/* Floating WhatsApp Button */}
       <a
