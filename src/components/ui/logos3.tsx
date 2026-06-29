@@ -54,7 +54,7 @@ const Logos3 = ({
     {
       id: "python",
       description: "Python",
-      image: `https://cdn.simpleicons.org/python/${isDark ? '3776AB' : '1d4ed8'}`,
+      image: "https://svgl.app/library/python.svg",
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
@@ -96,7 +96,7 @@ const Logos3 = ({
     {
       id: "tailwindcss",
       description: "Tailwind CSS",
-      image: `https://cdn.simpleicons.org/tailwindcss/${isDark ? '06B6D4' : '0f766e'}`,
+      image: "https://svgl.app/library/tailwindcss.svg",
       className: "h-7 w-auto hover:scale-105 transition-all duration-300",
     },
     {
