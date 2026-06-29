@@ -82,7 +82,7 @@ const Logos3 = ({
 }: Logos3Props) => {
   return (
     <div className="w-full mt-8 pt-6 border-t border-white/5">
-      <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4 text-center">
+      <p className="text-xs sm:text-sm font-semibold font-mono text-zinc-500 uppercase tracking-wider mb-4 text-center">
         {heading}
       </p>
       <div className="relative mx-auto flex items-center justify-center max-w-md overflow-hidden">
