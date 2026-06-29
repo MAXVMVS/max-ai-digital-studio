@@ -1067,7 +1067,7 @@ export default function App() {
       </div>
 
       {/* --- HEADER / NAVBAR --- */}
-      <header className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b h-20 transition-all duration-300 ${themeStyles.header}`}>
+      <header className={`fixed top-0 left-0 w-full z-40 backdrop-blur-md border-b h-24 transition-all duration-300 ${themeStyles.header}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex items-center justify-between">
           
           {/* Left Side: Language & Theme Switchers + Logo */}
@@ -1123,20 +1123,20 @@ export default function App() {
 
             {/* Brand Logo with Fluid Expanding Image Effect */}
             <div 
-              className="group relative h-[60px] w-[60px] hover:w-[207px] rounded-xl transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
+              className="group relative h-[84px] w-[84px] hover:w-[290px] rounded-xl transition-all duration-500 ease-out cursor-pointer overflow-hidden flex items-center shrink-0 ml-1 md:ml-2" 
               onClick={() => setActivePage('inicio')}
             >
               {/* Small Logo */}
               <img 
                 src={isDark ? "/logo_pequeno.png" : "/logo_pequeno_light.jpeg"} 
                 alt="MAX AI" 
-                className={`absolute left-0 top-0 h-[60px] w-[60px] rounded-xl object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 ${!isDark ? 'mix-blend-multiply' : ''}`} 
+                className={`absolute left-0 top-0 h-[84px] w-[84px] rounded-xl object-contain transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
               {/* Long Logo */}
               <img 
                 src={isDark ? "/logo_largo.png" : "/logo_largo_light.jpeg"} 
                 alt="MAX AI Digital Studio" 
-                className={`absolute left-0 top-0 h-[60px] w-[207px] rounded-xl object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 ${!isDark ? 'mix-blend-multiply' : ''}`} 
+                className={`absolute left-0 top-0 h-[84px] w-[290px] rounded-xl object-contain opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 ${!isDark ? 'mix-blend-multiply' : ''}`} 
               />
             </div>
           </div>
@@ -1281,7 +1281,7 @@ export default function App() {
       </header>
 
       {/* Spacer to offset fixed header */}
-      <div className="h-20 w-full" />
+      <div className="h-24 w-full" />
 
       {/* --- MOBILE DRAWER SIDEBAR --- */}
       {mobileMenuOpen && (
