@@ -13,7 +13,7 @@ interface Logo {
   description: string;
   image: string;
   className?: string;
-  invertInDark?: boolean;
+  isCustomSvg?: boolean;
 }
 
 interface Logos3Props {
@@ -24,59 +24,92 @@ interface Logos3Props {
 }
 
 const Logos3 = ({
-  heading = "Ecosistema de Herramientas",
   isDark = true,
   logos = [
     {
-      id: "logo-1",
-      description: "Astro",
-      image: "https://www.shadcnblocks.com/images/block/logos/astro.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
+      id: "n8n",
+      description: "n8n",
+      image: "https://cdn.simpleicons.org/n8n",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-2",
-      description: "Figma",
-      image: "https://www.shadcnblocks.com/images/block/logos/figma.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
+      id: "google-ai-studio",
+      description: "Google AI Studio",
+      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/google-color.svg",
+      className: "h-7 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-3",
-      description: "Next.js",
-      image: "https://www.shadcnblocks.com/images/block/logos/nextjs.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
-      invertInDark: true,
+      id: "gemini",
+      description: "Gemini",
+      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/gemini-color.svg",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-4",
-      description: "React",
-      image: "https://www.shadcnblocks.com/images/block/logos/react.png",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
+      id: "chatgpt",
+      description: "ChatGPT",
+      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/openai.svg",
+      className: "h-8 w-auto text-zinc-500 dark:text-zinc-600 hover:text-[#10a37f] dark:hover:text-[#10a37f] opacity-60 dark:opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-105",
+      isCustomSvg: true,
     },
     {
-      id: "logo-5",
-      description: "shadcn/ui",
-      image: "https://www.shadcnblocks.com/images/block/logos/shadcn-ui.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
-      invertInDark: true,
+      id: "python",
+      description: "Python",
+      image: "https://cdn.simpleicons.org/python",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-6",
+      id: "supabase",
       description: "Supabase",
-      image: "https://www.shadcnblocks.com/images/block/logos/supabase.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
+      image: "https://cdn.simpleicons.org/supabase",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-7",
-      description: "Tailwind CSS",
-      image: "https://www.shadcnblocks.com/images/block/logos/tailwind.svg",
-      className: "h-5 w-auto opacity-75 hover:opacity-100 transition-opacity",
+      id: "firebase",
+      description: "Firebase",
+      image: "https://cdn.simpleicons.org/firebase",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
     {
-      id: "logo-8",
+      id: "vercel",
       description: "Vercel",
-      image: "https://www.shadcnblocks.com/images/block/logos/vercel.svg",
-      className: "h-8 w-auto opacity-75 hover:opacity-100 transition-opacity",
-      invertInDark: true,
+      image: "https://cdn.simpleicons.org/vercel",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 dark:hover:invert transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "hostinger",
+      description: "Hostinger",
+      image: "https://cdn.simpleicons.org/hostinger",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "nextjs",
+      description: "Next.js",
+      image: "https://cdn.simpleicons.org/nextdotjs",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 dark:hover:invert transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "react",
+      description: "React",
+      image: "https://cdn.simpleicons.org/react",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "tailwindcss",
+      description: "Tailwind CSS",
+      image: "https://cdn.simpleicons.org/tailwindcss",
+      className: "h-5 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "antigravity",
+      description: "Antigravity",
+      image: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/antigravity.svg",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
+    },
+    {
+      id: "linux",
+      description: "Linux",
+      image: "https://cdn.simpleicons.org/linux",
+      className: "h-8 w-auto grayscale opacity-60 dark:opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105",
     },
   ],
 }: Logos3Props) => {
@@ -98,7 +131,7 @@ const Logos3 = ({
                   <img
                     src={logo.image}
                     alt={logo.description}
-                    className={`${logo.className} ${logo.invertInDark && isDark ? "invert" : ""}`}
+                    className={logo.className}
                   />
                 </div>
               </CarouselItem>
