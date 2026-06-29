@@ -72,7 +72,7 @@ const Logos3 = ({
     {
       id: "vercel",
       description: "Vercel",
-      image: `https://cdn.simpleicons.org/vercel/${isDark ? 'FFF' : '000'}`,
+      image: "https://cdn.simpleicons.org/vercel/000",
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
@@ -84,7 +84,7 @@ const Logos3 = ({
     {
       id: "nextjs",
       description: "Next.js",
-      image: `https://cdn.simpleicons.org/nextdotjs/${isDark ? 'FFF' : '000'}`,
+      image: "https://cdn.simpleicons.org/nextdotjs/000",
       className: "h-11 w-auto hover:scale-105 transition-all duration-300",
     },
     {
