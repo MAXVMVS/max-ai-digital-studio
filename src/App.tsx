@@ -1435,7 +1435,7 @@ export default function App() {
                     <img 
                       src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_hero_light.png"} 
                       alt="MAX AI" 
-                      className={`w-[91%] h-auto object-contain ${isDark ? 'filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]' : ''}`}
+                      className={`w-[64%] h-auto object-contain ${isDark ? 'filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]' : ''}`}
                     />
                   </div>
                   {/* Diorama (diagrama pixel art) below */}
