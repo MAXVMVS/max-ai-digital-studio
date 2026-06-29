@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Brain, Cpu, Layers, Zap, Sparkles, Code2, Database, Network, 
+  Brain, Layers, Sparkles, Code2, Network, 
   ArrowRight, Check, CheckCircle2, ArrowLeft, Sun, Moon, Menu, X, 
   ExternalLink, TrendingUp, Users, ChevronRight, Send, AlertTriangle, HelpCircle,
   FolderKanban, LayoutDashboard, LogOut, LogIn, Plus, RefreshCw, FileText, CheckCircle, CircleUser,
@@ -1762,77 +1762,7 @@ export default function App() {
                   </div>
                 </div>
               </motion.section>
-  
-              {/* --- SECCIÓN STACKS TECNOLÓGICOS (COMPARATIVA BENTO) --- */}
-              <motion.section 
-                id="stacks"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto border-t border-white/5 relative z-10"
-              >
-                <div className="max-w-4xl">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.stackBadge}</span>
-                  <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
-                    {t.stackTitle}
-                  </h2>
-                  <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed max-w-2xl ${themeStyles.textMuted}`}>
-                    {t.stackSub}
-                  </p>
-                </div>
-  
-                {/* 4 Levels Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-                  {t.stackLevels.map((lvl, idx) => {
-                    const icons = [
-                      <Zap className="w-5 h-5" />,
-                      <Layers className="w-5 h-5" />,
-                      <Database className="w-5 h-5" />,
-                      <Cpu className="w-5 h-5" />
-                    ];
-                    return (
-                      <div 
-                        key={idx} 
-                        className={`p-6 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
-                          idx === 3 ? 'border-[#C17F4E] bg-gradient-to-b from-[#C17F4E]/10 to-transparent' : themeStyles.card
-                        }`}
-                      >
-                        <div>
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-[#C17F4E] font-mono text-[9px] uppercase tracking-widest font-black block">{lvl.target}</span>
-                            <div className="p-2 rounded bg-[#C17F4E]/10 text-[#C17F4E] shrink-0">
-                              {icons[idx]}
-                            </div>
-                          </div>
-                          
-                          <h3 className={`font-display font-black text-base uppercase mb-4 ${themeStyles.title}`}>{lvl.level}</h3>
-                          
-                          <div className="space-y-4 font-sans text-xs mb-6">
-                            <div>
-                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Arquitectura</span>
-                              <p className={`mt-0.5 font-medium leading-relaxed ${isDark ? 'text-zinc-200' : 'text-slate-800'}`}>{lvl.arch}</p>
-                            </div>
-                            <div>
-                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Costo de servidores</span>
-                              <p className="font-mono font-bold text-[#C17F4E] mt-0.5 text-xs">{lvl.cost}</p>
-                            </div>
-                            <div>
-                              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Uso Recomendado</span>
-                              <p className={`mt-0.5 leading-relaxed ${themeStyles.textMuted}`}>{lvl.use}</p>
-                            </div>
-                          </div>
-                        </div>
-    
-                        <div className="pt-4 border-t border-white/5 mt-auto font-sans text-xs">
-                          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block">Diferenciador</span>
-                          <p className="italic text-emerald-500 font-semibold mt-0.5">“{lvl.diff}”</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.section>
+
   
               {/* --- SECCIÓN CLIENTES IDEALES --- */}
               <motion.section 
