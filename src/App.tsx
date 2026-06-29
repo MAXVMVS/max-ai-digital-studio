@@ -1191,12 +1191,8 @@ export default function App() {
               onClick={() => setActivePage('contacto')}
               className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded transition-all ${
                 activePage === 'contacto'
-                  ? isDark
-                    ? 'bg-zinc-900 text-white border border-white'
-                    : 'bg-[#EAE6DB] text-[#3D3528] border border-[#3D3528]'
-                  : isDark
-                    ? 'bg-white text-zinc-950 hover:bg-zinc-200 border border-transparent shadow-md'
-                    : 'bg-[#3D3528] text-white hover:bg-[#2B251C] border border-transparent shadow-md'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
               }`}
             >
               {t.contact}
@@ -1235,12 +1231,8 @@ export default function App() {
               onClick={() => setActivePage('contacto')}
               className={`px-3 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded transition-all shrink-0 ${
                 activePage === 'contacto'
-                  ? isDark
-                    ? 'bg-zinc-900 text-white border border-white'
-                    : 'bg-[#EAE6DB] text-[#3D3528] border border-[#3D3528]'
-                  : isDark
-                    ? 'bg-white text-zinc-950 hover:bg-zinc-200 border border-transparent shadow-md'
-                    : 'bg-[#3D3528] text-white hover:bg-[#2B251C] border border-transparent shadow-md'
+                  ? 'bg-zinc-800 text-white border border-[#C17F4E]'
+                  : 'bg-[#C17F4E] text-white hover:bg-[#D79663]'
               }`}
             >
               {t.contact}
