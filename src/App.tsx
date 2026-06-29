@@ -1442,17 +1442,17 @@ export default function App() {
 
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
                 <div className="lg:col-span-5 relative w-full select-none flex flex-col items-center gap-4">
-                  {/* Diorama (diagrama pixel art) above */}
-                  <div className={`p-1.5 rounded-2xl border transition-all duration-500 w-full relative overflow-hidden h-[330px] flex items-center justify-center ${themeStyles.card}`}>
-                    <IsometricScene isDark={isDark} lang={lang} themeStyles={themeStyles} />
-                  </div>
-                  {/* Centered Logo below the diagram */}
-                  <div className="w-full flex justify-center mt-2">
+                  {/* Centered Logo above the diagram */}
+                  <div className="w-full flex justify-center mb-2">
                     <img 
                       src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_claro.jpeg"} 
                       alt="MAX AI" 
                       className={`w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)] ${!isDark ? 'mix-blend-multiply opacity-90' : ''}`}
                     />
+                  </div>
+                  {/* Diorama (diagrama pixel art) below */}
+                  <div className={`p-1.5 rounded-2xl border transition-all duration-500 w-full relative overflow-hidden h-[330px] flex items-center justify-center ${themeStyles.card}`}>
+                    <IsometricScene isDark={isDark} lang={lang} themeStyles={themeStyles} />
                   </div>
                 </div>
 
