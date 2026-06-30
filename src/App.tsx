@@ -1379,14 +1379,11 @@ export default function App() {
               >
                 <div className="text-center max-w-3xl mx-auto mb-16">
                   <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
-                    {lang === 'es' ? 'El Sistema' : 'The System'}
-                  </span>
-                  <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                     {t.systBadge}
-                  </h2>
-                  <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
+                  </span>
+                  <h2 className={`font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight uppercase mt-2 ${themeStyles.title}`}>
                     {t.systTitle}
-                  </p>
+                  </h2>
                 </div>
 
                 {/* Cyclic Diagram Connection Stepper */}
