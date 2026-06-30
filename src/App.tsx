@@ -1282,7 +1282,7 @@ export default function App() {
           <div className="fade-in">
             
             {/* --- HERO & DASHBOARD REPLICA ROW --- */}
-            <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+            <section className="relative pt-20 pb-8 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <Interactive3DNetwork />
               
 
@@ -1375,7 +1375,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
+                className="pt-10 pb-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
               >
                 <div className="text-center max-w-3xl mx-auto mb-16">
                   <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
