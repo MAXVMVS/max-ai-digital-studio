@@ -1385,55 +1385,6 @@ export default function App() {
                     {t.systTitle}
                   </h2>
                 </div>
-
-                {/* Cyclic Diagram Connection Stepper */}
-                <div className={`hidden lg:flex justify-between items-center max-w-4xl mx-auto mb-16 p-4 rounded-xl font-mono text-[9px] uppercase tracking-widest text-zinc-500 border ${
-                  isDark ? 'bg-zinc-950/20 border-white/5' : 'bg-slate-100 border-slate-200 text-slate-500'
-                }`}>
-                  <button 
-                    onClick={() => setActivePilar(0)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
-                      activePilar === 0 
-                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
-                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
-                    }`}
-                  >
-                    1. {t.systPillar1Title}
-                  </button>
-                  <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
-                  <button 
-                    onClick={() => setActivePilar(1)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
-                      activePilar === 1 
-                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
-                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
-                    }`}
-                  >
-                    2. {t.systPillar2Title}
-                  </button>
-                  <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
-                  <button 
-                    onClick={() => setActivePilar(2)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
-                      activePilar === 2 
-                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
-                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
-                    }`}
-                  >
-                    3. {t.systPillar3Title}
-                  </button>
-                  <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
-                  <button 
-                    onClick={() => setActivePilar(3)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
-                      activePilar === 3 
-                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
-                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
-                    }`}
-                  >
-                    4. {t.systPillar4Title}
-                  </button>
-                </div>
   
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
                   {/* Pillar Selector Buttons */}
