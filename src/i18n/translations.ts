@@ -190,7 +190,7 @@ export const TRANSLATIONS = {
 
     // Section 6: Cómo Trabajamos
     metBadge: 'Metodología',
-    metTitle: 'Cronograma en 8 Semanas',
+    metTitle: 'Cronograma en 8 fases',
     metSub: '',
     metWeeks: [
       {
@@ -562,7 +562,7 @@ export const TRANSLATIONS = {
 
     // Section 6: Cómo Trabajamos
     metBadge: 'Methodology',
-    metTitle: '8-Week Timeline',
+    metTitle: 'Timeline in 8 phases',
     metSub: '',
     metWeeks: [
       {

@@ -1593,14 +1593,11 @@ export default function App() {
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center max-w-3xl mx-auto mb-16">
                     <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
-                      {lang === 'es' ? 'Cómo Trabajamos' : 'How We Work'}
+                      {t.metBadge}
                     </span>
                     <h2 className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
-                      {t.metBadge}
-                    </h2>
-                    <p className={`text-sm sm:text-base font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
                       {t.metTitle}
-                    </p>
+                    </h2>
                   </div>
 
                   {/* Progress Line Stepper (Desktop) */}
