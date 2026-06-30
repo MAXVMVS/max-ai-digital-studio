@@ -1715,11 +1715,8 @@ export default function App() {
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-16">
                     <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
-                      {lang === 'es' ? 'Sesión Estratégica' : 'Strategic Session'}
-                    </span>
-                    <h2 className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                       {t.diagBadge}
-                    </h2>
+                    </span>
                     <p className={`text-sm sm:text-base font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted} max-w-2xl mx-auto`}>
                       {t.diagSub}
                     </p>
