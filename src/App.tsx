@@ -1381,7 +1381,7 @@ export default function App() {
                   <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
                     {t.systBadge}
                   </span>
-                  <h2 className={`font-display font-bold text-xl sm:text-2xl lg:text-3xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
+                  <h2 className={`font-display font-bold text-2xl sm:text-3xl lg:text-4xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                     {t.systTitle}
                   </h2>
                 </div>
@@ -1595,7 +1595,7 @@ export default function App() {
                     <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
                       {t.metBadge}
                     </span>
-                    <h2 className={`font-display font-bold text-xl sm:text-2xl lg:text-3xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
+                    <h2 className={`font-display font-bold text-2xl sm:text-3xl lg:text-4xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                       {t.metTitle}
                     </h2>
                   </div>
