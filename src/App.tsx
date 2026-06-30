@@ -1292,7 +1292,7 @@ export default function App() {
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-center text-center gap-6">
 
-                  <h1 className={`font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
+                  <h1 className={`font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
                     {t.heroTitle1} <br/> 
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle2}</span> <br/> 
                     {t.heroTitle3}
@@ -1958,7 +1958,7 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <div className="text-center max-w-3xl mx-auto">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Cotizador Inteligente' : 'Smart Configurator'}</span>
-                <h1 className={`font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
+                <h1 className={`font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
                   {lang === 'es' ? (
                     <>
                       Precios <span className="text-[#C17F4E]">&</span> servicios
@@ -2161,7 +2161,7 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <div className="text-center max-w-3xl mx-auto mb-16">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.csBadge}</span>
-                <h1 className={`font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                <h1 className={`font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                   {t.csTitle}
                 </h1>
                 <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
@@ -2191,7 +2191,7 @@ export default function App() {
                   <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
                     {lang === 'es' ? 'Acceso al Sistema' : 'System Access'}
                   </span>
-                  <h1 className={`font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase mt-2 mb-4 ${themeStyles.title}`}>
+                  <h1 className={`font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 mb-4 ${themeStyles.title}`}>
                     {lang === 'es' ? 'Iniciar Sesión' : 'Login'}
                   </h1>
                   <p className={`text-sm font-sans font-light mb-10 ${themeStyles.textMuted}`}>
@@ -2626,7 +2626,7 @@ export default function App() {
             {/* Header */}
             <div className="text-center mb-16 relative z-10">
               <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'NÚCLEO DE COMUNICACIÓN' : 'COMMUNICATION CORE'}</span>
-              <h1 className={`font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
+              <h1 className={`font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
                 {t.contactTitle}
               </h1>
               <p className={`text-sm sm:text-base font-sans font-light mt-4 max-w-2xl mx-auto leading-relaxed ${themeStyles.textMuted}`}>
