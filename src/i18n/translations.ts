@@ -10,13 +10,13 @@ export interface Module {
 
 export interface CaseStudy {
   client: string;
-  tagline: string;
-  description: string;
-  kpis: string[];
+  tagline: { es: string; en: string };
+  description: { es: string; en: string };
+  kpis: { es: string[]; en: string[] };
   stack: string[];
   url: string;
   image: string;
-  category: string;
+  category: { es: string; en: string };
 }
 
 export const MODULES: Module[] = [
@@ -25,7 +25,7 @@ export const MODULES: Module[] = [
     name: 'Ecosistema B2C + Catálogo Meta',
     price: 1800,
     durationWeeks: 3,
-    description: 'Sincronización automatizada de inventario a Meta Graph API, píxeles de conversión y lookbooks de Instagram.',
+    description: 'Sincronización automatizada de inventory a Meta Graph API, píxeles de conversión y lookbooks de Instagram.',
     category: 'Ventas e Integraciones'
   },
   {
@@ -66,13 +66,25 @@ export const MODULES: Module[] = [
 export const CASE_STUDIES: CaseStudy[] = [
   {
     client: 'Psic. Damaris Pazmiño',
-    tagline: 'Salud Mental & Clínica Automatizada',
-    description: 'Ecosistema digital completo para automatizar el agendamiento y flujo de pacientes, integrado con Google Cloud Firestore y geolocalización avanzada en Google Maps.',
-    kpis: ['+140% citas agendadas', 'Cancelaciones reducidas a cero', 'Carga inicial < 1.2s'],
+    tagline: {
+      es: 'Salud Mental & Clínica Automatizada',
+      en: 'Mental Health & Automated Clinic'
+    },
+    description: {
+      es: 'Ecosistema digital completo para automatizar el agendamiento y flujo de pacientes, integrado con Google Cloud Firestore y geolocalización avanzada en Google Maps.',
+      en: 'Complete digital ecosystem to automate patient scheduling and workflow, integrated with Google Cloud Firestore and advanced Google Maps geolocation.'
+    },
+    kpis: {
+      es: ['+140% citas agendadas', 'Cancelaciones reducidas a cero', 'Carga inicial < 1.2s'],
+      en: ['+140% booked appointments', 'Cancellations reduced to zero', 'Initial load < 1.2s']
+    },
     stack: ['React 19', 'Tailwind v4', 'Firestore Realtime', 'Google Maps API'],
-    url: 'https://psicdamaris.vercel.app',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    category: 'Salud & Automatización'
+    url: 'https://psic-damarispazmino.vercel.app/',
+    image: '/damaris_hero.webp',
+    category: {
+      es: 'Salud & Automatización',
+      en: 'Health & Automation'
+    }
   }
 ];
 
@@ -94,7 +106,7 @@ export const TRANSLATIONS = {
     portHeader: 'Portafolio',
     whatsappBtn: 'WHATSAPP DIRECTO',
     login: 'Login',
-    system: 'Sistema',
+    system: 'Servicios',
     dashboard: 'Dashboard',
     portal: 'Mi Portal',
 
@@ -141,45 +153,45 @@ export const TRANSLATIONS = {
     ],
 
     // Section 4: El Sistema (La Solución)
-    systBadge: 'La Solución',
-    systTitle: 'Un engranaje unificado. Cuatro pilares de crecimiento.',
-    systSub: 'En MAX AI - Digital Studio no vendemos tecnología. Vendemos crecimiento empresarial. Un sistema de crecimiento digital es una estructura viva e integrada donde cada pieza ayuda a la siguiente.',
-    systPillar1Title: 'Posicionamiento',
-    systPillar1Sub: 'Branding Estratégico',
-    systPillar2Title: 'Presencia',
-    systPillar2Sub: 'Web Premium',
-    systPillar3Title: 'Captación',
-    systPillar3Sub: 'Marketing Digital',
-    systPillar4Title: 'Escalabilidad',
-    systPillar4Sub: 'IA & Automatización',
+    systBadge: 'Estructura de Servicios',
+    systTitle: 'MAX AI - Digital Studio es un sistema inteligente de crecimiento digital',
+    systSub: '',
+    systPillar1Title: 'Branding Estratégico',
+    systPillar1Sub: 'Identidad Visual',
+    systPillar2Title: 'Desarrollo Web',
+    systPillar2Sub: 'Ecosistema Premium',
+    systPillar3Title: 'Marketing Digital',
+    systPillar3Sub: 'Captación & Crecimiento',
+    systPillar4Title: 'IA & Automatización',
+    systPillar4Sub: 'Escalabilidad Moderna',
 
     systPillarDetails: [
       {
-        title: 'Pilar 1: Posicionamiento (Branding Estratégico)',
+        title: 'Branding Estratégico',
         concept: 'La base de la confianza. Diseñamos identidades visuales que comunican autoridad y diferencian tu negocio de la competencia.',
-        focus: 'No diseñamos logotipos sueltos. Construimos sistemas visuales coherentes, tipografías personalizadas y manuales de marca prácticos para que tu negocio sea reconocible al instante.'
+        focus: ''
       },
       {
-        title: 'Pilar 2: Presencia (Desarrollo Web Premium)',
+        title: 'Desarrollo Web',
         concept: 'Tu plataforma comercial central. Desarrollamos portales web de alto rendimiento optimizados para retener al visitante y convertirlo en cliente.',
-        focus: 'Sitios web responsivos que cargan en milisegundos, estructurados de forma estratégica y diseñados con estándares de experiencia de usuario (UX) premium.'
+        focus: ''
       },
       {
-        title: 'Pilar 3: Captación (Marketing Digital)',
+        title: 'Marketing Digital',
         concept: 'Flujo constante de prospectos. Implementamos embudos de venta y campañas enfocadas en atraer personas con alta intención de compra.',
-        focus: 'Estrategias que unifican el posicionamiento orgánico (SEO) y pauta digital inteligente para llevar tráfico calificado hacia tu sistema de captación.'
+        focus: ''
       },
       {
-        title: 'Pilar 4: Escalabilidad (IA & Automatización)',
+        title: 'IA & Automatización',
         concept: 'Eficiencia operativa. Integramos herramientas y agentes inteligentes que procesan solicitudes de clientes, agendan citas y eliminan tareas manuales.',
-        focus: 'Automatizamos tus flujos comerciales (chats, correos electrónicos, CRM) para que tu negocio pueda atender clientes 24/7 sin sobrecargar tu agenda.'
+        focus: ''
       }
     ],
 
     // Section 6: Cómo Trabajamos
     metBadge: 'Metodología',
     metTitle: 'Cronograma en 8 Semanas',
-    metSub: 'El desorden retrasa los proyectos. En MAX AI eliminamos la improvisación. Diseñamos tus activos digitales bajo un cronograma estricto que protege tu inversión y nuestro tiempo de entrega.',
+    metSub: '',
     metWeeks: [
       {
         number: 'Sem 1-2',
@@ -309,7 +321,7 @@ export const TRANSLATIONS = {
 
     // Section 10: Diagnóstico / Formulario
     diagBadge: 'Diagnóstico Gratis',
-    diagTitle: '¿Listo para construir tu Sistema de Crecimiento Digital?',
+    diagTitle: '',
     diagSub: 'Agenda una sesión de diagnóstico gratuita de 45 minutos. Analizaremos tu presencia web actual, identificaremos oportunidades de automatización comercial con IA y te entregaremos una ruta de acción clara. Sin compromisos de compra.',
     diagLabelName: 'Nombre Completo',
     diagLabelCompany: 'Nombre del Negocio / Empresa',
@@ -342,44 +354,44 @@ export const TRANSLATIONS = {
     footContact: 'Contacto comercial: max.baldeon94@gmail.com',
 
     // Pricing Page Specific (Section 5 Catalog)
-    priceBadge: 'Catálogo Oficial',
-    priceTitle: 'Servicios Estructurados y Rangos de Inversión',
-    priceSub: 'Transparencia total. Todo se cotiza bajo la política de hitos (40% inicio / 40% control de insumos / 20% entrega).',
+    priceBadge: '',
+    priceTitle: '',
+    priceSub: '',
     priceTiers: [
       {
         category: '🎨 1. Branding Estratégico',
         desc: 'Construcción de la identidad visual y base comunicativa del negocio.',
         ranges: [
-          { name: 'Rango Emprendedor ($250 - $450 USD)', for: 'Ideal para profesionales independientes y marcas personales que inician y requieren identidad rápida y profesional.', include: 'Logotipo principal, paleta de colores oficial, tipografía corporativa y guía básica de uso digital.' },
-          { name: 'Rango PYME ($500 - $1,200 USD)', for: 'Diseñado para negocios locales establecidos o marcas comerciales con productos físicos/servicios que buscan diferenciarse.', include: 'Logotipo (versiones y variantes), imagotipo, manual de identidad de marca completo, papelería digital básica e indicaciones visuales para redes sociales.' },
-          { name: 'Rango Corporativo ($1,500 - $5,000+ USD)', for: 'Para empresas con múltiples líneas de negocio, productos o sucursales físicas que exigen un despliegue masivo.', include: 'Auditoría de posicionamiento, manual de marca completo (directrices de tono de voz, branding espacial y audiovisual), diseño de activos institucionales y soporte de implementación gráfica.' }
+          { name: 'Rango Emprendedor ($150 - $300* USD)', for: 'Ideal para profesionales independientes y marcas personales que inician y requieren identidad rápida y profesional.', include: 'Logotipo principal, paleta de colores oficial, tipografía corporativa y guía básica de uso digital.' },
+          { name: 'Rango PYME ($350 - $750 USD)', for: 'Diseñado para negocios locales establecidos o marcas comerciales con productos físicos/servicios que buscan diferenciarse.', include: 'Logotipo (versiones y variantes), imagotipo, manual de identidad de marca completo, papelería digital básica e indicaciones visuales para redes sociales.' },
+          { name: 'Rango Corporativo ($900 - $2,500*+ USD)', for: 'Para empresas con múltiples líneas de negocio, productos o sucursales físicas que exigen un despliegue masivo.', include: 'Auditoría de posicionamiento, manual de marca completo (directrices de tono de voz, branding espacial y audiovisual), diseño de activos institucionales y soporte de implementación gráfica.' }
         ]
       },
       {
         category: '💻 2. Desarrollo Web Comercial',
         desc: 'Sitios web rápidos, seguros, sin tecnologías obsoletas ni caídas de servidor.',
         ranges: [
-          { name: 'Landing Page de Validación ($250 - $600 USD)', for: 'Diseñada exclusivamente para captar prospectos o lanzar un servicio específico de alta conversión.', include: 'Estructura de página única de alto impacto, formulario integrado de captura de leads, conexión básica de analíticas y optimización móvil estricta.' },
-          { name: 'Web Corporativa ($600 - $1,800 USD)', for: 'El sitio institucional definitivo para posicionar la oferta completa de servicios de una PYME o profesional consultivo.', include: 'Multisecciones (Inicio, Quiénes Somos, Servicios individuales, Contacto, Blog/Portafolio), formularios de reserva avanzada de citas y enlaces directos de captación.' },
-          { name: 'E-commerce ($1,200 - $5,000+ USD)', for: 'Tienda virtual estructurada para vender productos de forma fluida y automatizada.', include: 'Catálogo interactivo de productos, pasarela de pago configurada (tarjetas de crédito, transferencias), carrito de compras, gestión de stock e integración con sistemas de mensajería para alertas de pedidos.' }
+          { name: 'Landing Page de Validación ($150 - $450* USD)', for: 'Diseñada exclusivamente para captar prospectos o lanzar un servicio específico de alta conversión.', include: 'Estructura de página única de alto impacto, formulario integrado de captura de leads, conexión básica de analíticas y optimización móvil estricta.' },
+          { name: 'Web Corporativa ($500 - $1,500* USD)', for: 'El sitio institucional definitivo para posicionar la oferta completa de servicios de una PYME o profesional consultivo.', include: 'Multisecciones (Inicio, Quiénes Somos, Servicios individuales, Contacto, Blog/Portafolio), formularios de reserva avanzada de citas y enlaces directos de captación.' },
+          { name: 'E-commerce ($900 - $2,500*+ USD)', for: 'Tienda virtual estructurada para vender productos de forma fluida y automatizada.', include: 'Catálogo interactivo de productos, pasarela de pago configurada (tarjetas de crédito, transferencias), carrito de compras, gestión de stock e integración con sistemas de mensajería para alertas de pedidos.' }
         ]
       },
       {
         category: '📈 3. Marketing Digital & Captación',
         desc: 'Estrategias recurrentes orientadas a generar reuniones y ventas.',
         ranges: [
-          { name: 'Plan Básico ($250 - $500 USD / mes)', for: 'Para profesionales y pequeños negocios locales que necesitan visibilidad inicial controlada.', include: 'Estrategia de pauta publicitaria en Meta Ads, configuración de Google Business Profile (Mapas) y reporte mensual básico de leads generados.' },
-          { name: 'Plan Profesional ($500 - $1,000 USD / mes)', for: 'Ideal para negocios con flujo constante de servicios que quieren escalar y dominar su área local.', include: 'Embudos de captación avanzados (pauta digital en múltiples plataformas), optimización de tasa de conversión web y gestión de campañas de retargeting.' },
-          { name: 'Plan Avanzado ($1,000 - $3,000+ USD / mes)', for: 'Diseñado para empresas con presupuesto de expansión nacional o regional.', include: 'SEO local y técnico avanzado para motores tradicionales e IA (GEO), campañas de captación omnicanal, embudos con imanes de prospectos avanzados e informes de analítica avanzada con atribución de ventas.' }
+          { name: 'Plan Básico ($150 - $450* USD / mes)', for: 'Para profesionales y pequeños negocios locales que necesitan visibilidad inicial controlada.', include: 'Estrategia de pauta publicitaria en Meta Ads, configuración de Google Business Profile (Mapas) y reporte mensual básico de leads generados.' },
+          { name: 'Plan Profesional ($500 - $900* USD / mes)', for: 'Ideal para negocios con flujo constante de servicios que quieren escalar y dominar su área local.', include: 'Embudos de captación avanzados (pauta digital en múltiples plataformas), optimización de tasa de conversión web y gestión de campaigns de retargeting.' },
+          { name: 'Plan Avanzado ($900 - $2,000*+ USD / mes)', for: 'Diseñado para empresas con presupuesto de expansión nacional o regional.', include: 'SEO local y técnico avanzado para motores tradicionales e IA (GEO), campañas de captación omnicanal, embudos con imanes de prospectos avanzados e informes de analítica avanzada con atribución de ventas.' }
         ]
       },
       {
         category: '🤖 4. IA & Automatización Comercial',
         desc: 'Sistemas autónomos que procesan, califican e integran operaciones.',
         ranges: [
-          { name: 'Automatización Básica ($500 - $1,500 USD)', for: 'Ideal para eliminar tareas repetitivas y unificar accesos y bases de datos.', include: 'Respuestas estructuradas automáticas en chat de WhatsApp, conexión del sitio web con un CRM (ej. Notion o similar) e integraciones básicas de correo electrónico.' },
-          { name: 'Integración Profesional ($1,500 - $5,000 USD)', for: 'Diseñado para PYMEs que desean delegar la primera fase de contacto comercial en la tecnología.', include: 'Bot conversacional inteligente alimentado con IA (API de Gemini en Google AI Studio) integrado a WhatsApp o web, calificación automática de prospectos y agendamiento autónomo de llamadas de diagnóstico.' },
-          { name: 'Solución Empresarial ($5,000 - $15,000+ USD)', for: 'Para corporativos que buscan crear sistemas expertos a partir de sus propios datos internos de negocio.', include: 'Sistema RAG (Generación Recuperada por Búsqueda Semántica) que lee los documentos PDF, políticas o históricos de la empresa para responder internamente, asistentes inteligentes personalizados por rol y automatización de flujos comerciales masivos.' }
+          { name: 'Automatización Básica ($350 - $1,000* USD)', for: 'Ideal para eliminar tareas repetitivas y unificar accesos y bases de datos.', include: 'Respuestas estructuradas automáticas en chat de WhatsApp, conexión del sitio web con un CRM (ej. Notion o similar) e integraciones básicas de correo electrónico.' },
+          { name: 'Integración Profesional ($1,000 - $3,000* USD)', for: 'Diseñado para PYMEs que desean delegar la primera fase de contacto comercial en la tecnología.', include: 'Bot conversacional inteligente alimentado con IA (API de Gemini en Google AI Studio) integrado a WhatsApp o web, calificación automática de prospectos y agendamiento autónomo de llamadas de diagnóstico.' },
+          { name: 'Solución Empresarial ($2,500 - $10,000*+ USD)', for: 'Para corporativos que buscan crear sistemas expertos a partir de sus propios datos internos de negocio.', include: 'Sistema RAG (Generación Recuperada por Búsqueda Semántica) que lee los documentos PDF, políticas o históricos de la empresa para responder internamente, asistentes inteligentes personalizados por rol y automatización de flujos comerciales masivos.' }
         ]
       }
     ],
@@ -442,7 +454,7 @@ export const TRANSLATIONS = {
     contactSocials: 'Redes de la Agencia',
 
     // Configurator
-    confBadge: 'Configurador Inteligente',
+    confBadge: '',
     confTitle: 'Crea tu Ecosistema Técnico',
     confSub: 'Selecciona los módulos tecnológicos que demanda tu negocio y obtén una estimación de recursos y tiempos del Ingeniero Principal.',
     confSumTitle: 'RESUMEN DE INFRAESTRUCTURA',
@@ -466,7 +478,7 @@ export const TRANSLATIONS = {
     portHeader: 'Portfolio',
     whatsappBtn: 'WHATSAPP DIRECT',
     login: 'Login',
-    system: 'System',
+    system: 'Services',
     dashboard: 'Dashboard',
     portal: 'My Portal',
 
@@ -513,45 +525,45 @@ export const TRANSLATIONS = {
     ],
 
     // Section 4: El Sistema (La Solución)
-    systBadge: 'The Solution',
-    systTitle: 'A unified gear. Four pillars of growth.',
-    systSub: 'At MAX AI - Digital Studio we do not sell technology. We sell business growth. A digital growth system is a living and integrated structure where each piece helps the next.',
-    systPillar1Title: 'Positioning',
-    systPillar1Sub: 'Strategic Branding',
-    systPillar2Title: 'Presence',
-    systPillar2Sub: 'Premium Web',
-    systPillar3Title: 'Acquisition',
-    systPillar3Sub: 'Digital Marketing',
-    systPillar4Title: 'Scalability',
-    systPillar4Sub: 'AI & Automation',
+    systBadge: 'Service Structure',
+    systTitle: 'MAX AI - Digital Studio is a smart digital growth system',
+    systSub: '',
+    systPillar1Title: 'Strategic Branding',
+    systPillar1Sub: 'Visual Identity',
+    systPillar2Title: 'Web Development',
+    systPillar2Sub: 'Premium Ecosystem',
+    systPillar3Title: 'Digital Marketing',
+    systPillar3Sub: 'Acquisition & Growth',
+    systPillar4Title: 'AI & Automation',
+    systPillar4Sub: 'Modern Scalability',
 
     systPillarDetails: [
       {
-        title: 'Pillar 1: Positioning (Strategic Branding)',
+        title: 'Strategic Branding',
         concept: 'The foundation of trust. We design visual identities that communicate authority and differentiate your business from the competition.',
-        focus: 'We do not design loose logos. We build coherent visual systems, custom typography, and practical brand guidelines to make your business instantly recognizable.'
+        focus: ''
       },
       {
-        title: 'Pillar 2: Presence (Premium Web Development)',
+        title: 'Web Development',
         concept: 'Your central business platform. We develop high-performance web portals optimized to retain visitors and convert them into clients.',
-        focus: 'Responsive websites that load in milliseconds, strategically structured and designed with premium User Experience (UX) standards.'
+        focus: ''
       },
       {
-        title: 'Pillar 3: Acquisition (Digital Marketing)',
+        title: 'Digital Marketing',
         concept: 'Constant flow of prospects. We implement sales funnels and campaigns focused on attracting people with high purchase intent.',
-        focus: 'Strategies that unify organic positioning (SEO) and smart digital ads to drive qualified traffic to your acquisition system.'
+        focus: ''
       },
       {
-        title: 'Pillar 4: Scalability (AI & Automation)',
+        title: 'AI & Automation',
         concept: 'Operational efficiency. We integrate smart tools and agents that process client requests, schedule appointments, and eliminate manual tasks.',
-        focus: 'We automate your business workflows (chats, emails, CRM) so your business can serve clients 24/7 without overloading your schedule.'
+        focus: ''
       }
     ],
 
     // Section 6: Cómo Trabajamos
     metBadge: 'Methodology',
     metTitle: '8-Week Timeline',
-    metSub: 'Disorder delays projects. At MAX AI we eliminate improvisation. We design your digital assets under a strict schedule that protects your investment and our delivery time.',
+    metSub: '',
     metWeeks: [
       {
         number: 'Wk 1-2',
@@ -681,7 +693,7 @@ export const TRANSLATIONS = {
 
     // Section 10: Diagnóstico / Formulario
     diagBadge: 'Free Diagnostic',
-    diagTitle: 'Ready to build your Digital Growth System?',
+    diagTitle: '',
     diagSub: 'Book a free 45-minute diagnostic session. We will analyze your current web presence, identify commercial automation opportunities with AI, and deliver a clear action roadmap. No purchase commitments.',
     diagLabelName: 'Full Name',
     diagLabelCompany: 'Business / Company Name',
@@ -714,44 +726,44 @@ export const TRANSLATIONS = {
     footContact: 'Business Contact: max.baldeon94@gmail.com',
 
     // Pricing Page Specific (Section 5 Catalog)
-    priceBadge: 'Official Catalog',
-    priceTitle: 'Structured Services & Investment Ranges',
-    priceSub: 'Total transparency. Everything is quoted under milestone policy (40% kick-off / 40% asset control / 20% hand-off).',
+    priceBadge: '',
+    priceTitle: '',
+    priceSub: '',
     priceTiers: [
       {
         category: '🎨 1. Strategic Branding',
         desc: 'Construction of the visual identity and communicative base of the business.',
         ranges: [
-          { name: 'Entrepreneur Range ($250 - $450 USD)', for: 'Ideal for independent professionals and personal brands starting out who need a fast, professional identity.', include: 'Main logo, official color palette, corporate typography, and basic digital usage guide.' },
-          { name: 'SME Range ($500 - $1,200 USD)', for: 'Designed for established local businesses or commercial brands looking to stand out.', include: 'Logo (versions and variants), imagetype, complete brand book, basic digital stationery, and social media templates.' },
-          { name: 'Corporate Range ($1,500 - $5,000+ USD)', for: 'For companies with multiple business lines, products, or physical branches demanding massive deployment.', include: 'Positioning audit, complete brand manual (including tone of voice, spatial, and audiovisual branding), design of corporate assets, and implementation support.' }
+          { name: 'Entrepreneur Range ($150 - $300* USD)', for: 'Ideal for independent professionals and personal brands starting out who need a fast, professional identity.', include: 'Main logo, official color palette, corporate typography, and basic digital usage guide.' },
+          { name: 'SME Range ($350 - $750 USD)', for: 'Designed for established local businesses or commercial brands looking to stand out.', include: 'Logo (versions and variants), imagetype, complete brand book, basic digital stationery, and social media templates.' },
+          { name: 'Corporate Range ($900 - $2,500*+ USD)', for: 'For companies with multiple business lines, products, or physical branches demanding massive deployment.', include: 'Positioning audit, complete brand manual (including tone of voice, spatial, and audiovisual branding), design of corporate assets, and implementation support.' }
         ]
       },
       {
         category: '💻 2. Commercial Web Development',
         desc: 'Fast, secure websites, without obsolete technologies or server crashes.',
         ranges: [
-          { name: 'Validation Landing Page ($250 - $600 USD)', for: 'Exclusively designed to capture prospects or launch a specific high-converting service.', include: 'Single page high-impact structure, integrated lead capture form, basic analytics connection, and strict mobile optimization.' },
-          { name: 'Corporate Web ($600 - $1,800 USD)', for: 'The definitive institutional site to position the full range of services for an SME or professional.', include: 'Multi-sections (Home, About Us, Services, Contact, Blog/Portfolio), advanced booking forms, and direct capture links.' },
-          { name: 'E-commerce ($1,200 - $5,000+ USD)', for: 'Virtual store structured to sell products smoothly and automatically.', include: 'Interactive product catalog, payment gateway (credit cards, transfers), shopping cart, inventory management, and messaging integration.' }
+          { name: 'Validation Landing Page ($150 - $450* USD)', for: 'Exclusively designed to capture prospects or launch a specific high-converting service.', include: 'Single page high-impact structure, integrated lead capture form, basic analytics connection, and strict mobile optimization.' },
+          { name: 'Corporate Web ($500 - $1,500* USD)', for: 'The definitive institutional site to position the full range of services for an SME or professional.', include: 'Multi-sections (Home, About Us, Services, Contact, Blog/Portfolio), advanced booking forms, and direct capture links.' },
+          { name: 'E-commerce ($900 - $2,500*+ USD)', for: 'Virtual store structured to sell products smoothly and automatically.', include: 'Interactive product catalog, payment gateway (credit cards, transfers), shopping cart, inventory management, and messaging integration.' }
         ]
       },
       {
         category: '📈 3. Digital Marketing & Acquisition',
         desc: 'Recurring strategies oriented to generate meetings and sales.',
         ranges: [
-          { name: 'Basic Plan ($250 - $500 USD / month)', for: 'For professionals and small local businesses needing initial controlled visibility.', include: 'Ad campaigns on Meta Ads, Google Business Profile (Maps) optimization, and basic monthly lead reports.' },
-          { name: 'Professional Plan ($500 - $1,000 USD / month)', for: 'Ideal for businesses with steady service flow looking to scale and dominate locally.', include: 'Advanced acquisition funnels (cross-platform digital ads), web conversion rate optimization, and retargeting campaigns.' },
-          { name: 'Advanced Plan ($1,000 - $3,000+ USD / month)', for: 'Designed for companies with national or regional expansion budgets.', include: 'Advanced local and technical SEO for traditional and AI search (GEO), omni-channel acquisition campaigns, advanced lead magnets, and attribution reporting.' }
+          { name: 'Basic Plan ($150 - $450* USD / month)', for: 'For professionals and small local businesses needing initial controlled visibility.', include: 'Ad campaigns on Meta Ads, Google Business Profile (Maps) optimization, and basic monthly lead reports.' },
+          { name: 'Professional Plan ($500 - $900* USD / month)', for: 'Ideal for businesses with steady service flow looking to scale and dominate locally.', include: 'Advanced acquisition funnels (cross-platform digital ads), web conversion rate optimization, and retargeting campaigns.' },
+          { name: 'Advanced Plan ($900 - $2,000*+ USD / month)', for: 'Designed for companies with national or regional expansion budgets.', include: 'Advanced local and technical SEO for traditional and AI search (GEO), omni-channel acquisition campaigns, advanced lead magnets, and attribution reporting.' }
         ]
       },
       {
         category: '🤖 4. AI & Commercial Automation',
         desc: 'Autonomous systems that process, qualify, and integrate operations.',
         ranges: [
-          { name: 'Basic Automation ($500 - $1,500 USD)', for: 'Ideal to eliminate repetitive tasks and unify database access.', include: 'Structured auto-replies on WhatsApp, website connection to CRM (e.g. Notion), and basic email flows.' },
-          { name: 'Professional Integration ($1,500 - $5,000 USD)', for: 'Designed for SMEs wishing to delegate the first phase of contact to technology.', include: 'Intelligent chat agent powered by AI (Gemini API via Google AI Studio) on WhatsApp/web, auto-lead qualification, and autonomous booking.' },
-          { name: 'Enterprise Solution ($5,000 - $15,000+ USD)', for: 'For corporates seeking to create expert systems from internal data.', include: 'Semantic RAG system querying internal PDFs/documents, role-based custom AI agents, and massive workflow automation.' }
+          { name: 'Basic Automation ($350 - $1,000* USD)', for: 'Ideal to eliminate repetitive tasks and unify database access.', include: 'Structured auto-replies on WhatsApp, website connection to CRM (e.g. Notion), and basic email flows.' },
+          { name: 'Professional Integration ($1,000 - $3,000* USD)', for: 'Designed for SMEs wishing to delegate the first phase of contact to technology.', include: 'Intelligent chat agent powered by AI (Gemini API via Google AI Studio) on WhatsApp/web, auto-lead qualification, and autonomous booking.' },
+          { name: 'Enterprise Solution ($2,500 - $10,000*+ USD)', for: 'For corporates seeking to create expert systems from internal data.', include: 'Semantic RAG system querying internal PDFs/documents, role-based custom AI agents, and massive workflow automation.' }
         ]
       }
     ],
@@ -814,7 +826,7 @@ export const TRANSLATIONS = {
     contactSocials: 'Agency Networks',
 
     // Configurator
-    confBadge: 'Smart Configurator',
+    confBadge: '',
     confTitle: 'Build Your Technical Ecosystem',
     confSub: 'Select the technical modules your business demands and obtain an estimate of resources and time from the Principal Engineer.',
     confSumTitle: 'INFRASTRUCTURE SUMMARY',

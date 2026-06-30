@@ -74,6 +74,19 @@ service cloud.firestore {
         && data.status is string && data.status in ['en proceso', 'finalizado', 'en pausa', 'completado'];
     }
 
+    // --- CONTACT SCHEMA VALIDATION ---
+    function isValidContact(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'subject', 'message', 'createdAt', 'status'])
+        && data.keys().size() <= 9
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 200
+        && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 100
+        && data.subject is string && data.subject.size() <= 500
+        && data.message is string && data.message.size() >= 10 && data.message.size() <= 5000
+        && data.status is string && data.status in ['new', 'read', 'archived']
+        && (data.userId == null || (data.userId is string && data.userId.size() <= 128));
+    }
+
     // --- ADMIN RULES ---
     match /admins/{adminId} {
       allow read: if isSignedIn();
@@ -125,9 +138,20 @@ service cloud.firestore {
       allow get: if isAdmin() || (isSignedIn() && existing().clientId == request.auth.uid);
       allow list: if isAdmin() || (isSignedIn() && resource.data.clientId == request.auth.uid);
 
-      allow create: if isAdmin() || (isSignedIn() && incoming().clientId == request.auth.uid && isValidProject(incoming()) && incoming().createdAt == request.time);
-      allow update: if isAdmin() || (isSignedIn() && existing().clientId == request.auth.uid && incoming().clientId == existing().clientId && isValidProject(incoming()) && incoming().createdAt == existing().createdAt);
+      allow create: if isAdmin() && isValidProject(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidProject(incoming()) && incoming().createdAt == existing().createdAt;
       allow delete: if isAdmin();
+    }
+
+    // --- CONTACTS RULES ---
+    match /contacts/{contactId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidId(contactId)
+        && isValidContact(incoming())
+        && incoming().createdAt == request.time
+        && incoming().status == 'new'
+        && (incoming().userId == null || incoming().userId == request.auth.uid);
+      allow update, delete: if isAdmin();
     }
 
   }

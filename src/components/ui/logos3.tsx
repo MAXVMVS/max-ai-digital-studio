@@ -148,8 +148,8 @@ const Logos3 = ({
             ))}
           </CarouselContent>
         </Carousel>
-        <div className={`absolute inset-y-0 left-0 w-10 bg-gradient-to-r ${isDark ? 'from-[#020813]' : 'from-[#D6CFBE]'} to-transparent z-10 pointer-events-none`}></div>
-        <div className={`absolute inset-y-0 right-0 w-10 bg-gradient-to-l ${isDark ? 'from-[#020813]' : 'from-[#D6CFBE]'} to-transparent z-10 pointer-events-none`}></div>
+        <div className={`absolute inset-y-0 left-0 w-10 bg-gradient-to-r ${isDark ? 'from-[#020813]' : 'from-slate-50'} to-transparent z-10 pointer-events-none`}></div>
+        <div className={`absolute inset-y-0 right-0 w-10 bg-gradient-to-l ${isDark ? 'from-[#020813]' : 'from-slate-50'} to-transparent z-10 pointer-events-none`}></div>
       </div>
     </div>
   );

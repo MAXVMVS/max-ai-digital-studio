@@ -18,179 +18,35 @@ import {
 } from 'firebase/firestore';
 
 // --- Modularized Imports ---
-import { IsometricScene } from './components/IsometricScene';
 import { Footer } from './components/Footer';
-import { Logos3 } from './components/ui/logos3';
 import { MODULES, CASE_STUDIES, INITIAL_LOGS, TRANSLATIONS, CaseStudy } from './i18n/translations';
+import { Interactive3DNetwork } from './components/Interactive3DNetwork';
+import { CaseStudyCard } from './components/CaseStudyCard';
+import { useLocation } from './lib/router';
 
-// --- 3D & Premium UI Components (Interactive Skills integration) ---
-function Interactive3DNetwork() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
-      setMousePos({ x, y });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-20 sm:opacity-30">
-      <svg 
-        style={{
-          transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0)`,
-          transition: 'transform 1s cubic-bezier(0.1, 0.8, 0.2, 1)',
-        }}
-        viewBox="0 0 800 600" 
-        className="w-full h-full"
-      >
-        <line x1="150" y1="100" x2="350" y2="80" stroke="#C17F4E" strokeWidth="0.8" strokeDasharray="3 3" />
-        <line x1="350" y1="80" x2="550" y2="180" stroke="#C17F4E" strokeWidth="0.8" />
-        <line x1="150" y1="100" x2="200" y2="380" stroke="#2563EB" strokeWidth="0.8" />
-        <line x1="200" y1="380" x2="450" y2="450" stroke="#2563EB" strokeWidth="0.8" strokeDasharray="2 2" />
-        <line x1="550" y1="180" x2="450" y2="450" stroke="#C17F4E" strokeWidth="0.8" />
-        <line x1="350" y1="80" x2="200" y2="380" stroke="#C17F4E" strokeWidth="0.8" />
-        <line x1="150" y1="100" x2="450" y2="450" stroke="#2563EB" strokeWidth="0.4" />
-
-        <circle cx="150" cy="100" r="5" fill="#2563EB" className="animate-pulse" />
-        <circle cx="350" cy="80" r="6" fill="#C17F4E" />
-        <circle cx="550" cy="180" r="7" fill="#2563EB" />
-        <circle cx="200" cy="380" r="5" fill="#C17F4E" className="animate-pulse" />
-        <circle cx="450" cy="450" r="6" fill="#2563EB" />
-      </svg>
-    </div>
-  );
-}
-
-interface CaseStudyCardProps {
-  key?: React.Key;
-  c: CaseStudy;
-  isDark: boolean;
-  themeStyles: any;
-  lang: 'es' | 'en';
-}
-
-function CaseStudyCard({ c, isDark, themeStyles, lang }: CaseStudyCardProps) {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const tiltX = -(y / (rect.height / 2)) * 6;
-    const tiltY = (x / (rect.width / 2)) * 6;
-    setCoords({ x: tiltX, y: tiltY });
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setCoords({ x: 0, y: 0 });
-  };
-
-  const translatedCategory = lang === 'es' 
-    ? c.category 
-    : (c.client === 'Psic. Damaris Pazmiño' ? 'Health & Automation' : c.client === 'Amy Tevet' ? 'Luxury & E-commerce' : 'Automotive & SaaS');
-
-  const translatedTagline = lang === 'es' 
-    ? c.tagline 
-    : (c.client === 'Psic. Damaris Pazmiño' ? 'Mental Health & Automated Clinic' : c.client === 'Amy Tevet' ? 'Premium Tailoring & B2C High Fashion' : 'Automotive Dealership & Automated Leads');
-
-  const translatedDescription = lang === 'es' 
-    ? c.description 
-    : (c.client === 'Psic. Damaris Pazmiño' ? 'Complete digital ecosystem to automate patient scheduling and workflow, integrated with Google Cloud Firestore and advanced Google Maps geolocation.' : c.client === 'Amy Tevet' ? 'Silent luxury interactive digital lookbook, with automatic catalog synchronization via Meta\'s Graph API to power direct conversion and ad campaigns.' : 'Intelligent vehicle inventory with automated lead qualification via integrated WhatsApp CRM, improving instant response time.');
-
-  const translatedKpis = lang === 'es' 
-    ? c.kpis 
-    : (c.client === 'Psic. Damaris Pazmiño' ? ['+140% booked appointments', 'Cancellations reduced to zero', 'Initial load < 1.2s'] : c.client === 'Amy Tevet' ? ['Active daily sync', '+220k Instagram reach', 'High contrast design'] : ['99.98% certified uptime', 'Lead conversion x3.5', 'Inference latency 85ms']);
-
-  return (
-    <div 
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform: isHovered 
-          ? `perspective(1000px) rotateX(${coords.x}deg) rotateY(${coords.y}deg) translateY(-6px)`
-          : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)',
-        transition: isHovered ? 'none' : 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-        transformStyle: 'preserve-3d',
-      }}
-      className={`rounded-xl border flex flex-col justify-between overflow-hidden shadow-lg transition-all duration-300 ${
-        isHovered ? 'shadow-[#C17F4E]/10 border-[#C17F4E]/30' : ''
-      } ${themeStyles.card}`}
-    >
-      <div style={{ transform: 'translateZ(15px)' }}>
-        <div className="relative h-48 overflow-hidden bg-zinc-950">
-          <img 
-            src={c.image} 
-            alt={c.client} 
-            referrerPolicy="no-referrer"
-            loading="lazy"
-            width={600}
-            height={400}
-            className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
-          />
-          <div className="absolute top-4 left-4 bg-[#C17F4E] text-white font-mono text-[9px] font-bold uppercase px-2 py-1 rounded tracking-widest">
-            {translatedCategory}
-          </div>
-        </div>
-
-        <div className="p-6">
-          <h3 className={`font-display font-black text-lg uppercase leading-none ${themeStyles.title}`}>{c.client}</h3>
-          <p className="text-xs text-[#C17F4E] font-mono font-semibold mt-1 mb-3">{translatedTagline}</p>
-          <p className={`text-xs sm:text-sm font-sans font-light leading-relaxed mb-4 ${themeStyles.textMuted}`}>{translatedDescription}</p>
-          
-          <div className={`space-y-1 p-3 rounded border mb-4 ${themeStyles.cardInner}`}>
-            <p className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-bold">{lang === 'es' ? 'Métricas Auditadas' : 'Audited Metrics'}</p>
-            {translatedKpis.map((k, kIdx) => (
-              <div key={kIdx} className={`flex gap-2 items-center text-[11px] font-mono ${isDark ? 'text-zinc-300' : 'text-slate-800'}`}>
-                <span className="text-[#C17F4E] font-black">✓</span> {k}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ transform: 'translateZ(10px)' }} className="p-6 pt-0 border-t border-white/5 mt-auto flex items-center justify-between">
-        <div className="flex gap-1.5 flex-wrap">
-          {c.stack.map((s, sIdx) => (
-            <span key={sIdx} className="text-[9px] font-mono bg-zinc-950/80 px-2 py-0.5 rounded text-zinc-400">
-              {s}
-            </span>
-          ))}
-        </div>
-        
-        {c.url !== '#' && (
-          <a 
-            href={c.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1 text-[#C17F4E] hover:text-[#D79663] transition-colors"
-            title={lang === 'es' ? 'Visitar Staging' : 'Visit Staging'}
-          >
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        )}
-      </div>
-    </div>
-  );
-}
+const IsometricScene = React.lazy(() => 
+  import('./components/IsometricScene').then(module => ({ default: module.IsometricScene }))
+);
+const Logos3 = React.lazy(() => 
+  import('./components/ui/logos3').then(module => ({ default: module.Logos3 }))
+);
 
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login'>(() => {
-    const saved = localStorage.getItem('maxai_active_page');
-    return (saved as 'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login') || 'inicio';
-  });
+  const [path, navigate] = useLocation();
 
-  useEffect(() => {
-    localStorage.setItem('maxai_active_page', activePage);
-  }, [activePage]);
+  const activePage = useMemo(() => {
+    if (path === '/precios') return 'precios';
+    if (path === '/portafolio') return 'portafolio';
+    if (path === '/contacto') return 'contacto';
+    if (path === '/login') return 'login';
+    return 'inicio';
+  }, [path]);
+
+  const setActivePage = (page: 'inicio' | 'precios' | 'portafolio' | 'contacto' | 'login') => {
+    if (page === 'inicio') navigate('/');
+    else navigate(`/${page}`);
+  };
 
 
   // --- Contact page state ---
@@ -223,6 +79,8 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('maxai_lang', lang);
   }, [lang]);
+
+  const t = TRANSLATIONS[lang];
 
   // --- Firebase & Google Forms Integration State ---
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -554,6 +412,68 @@ export default function App() {
 
   // Configurator Selected modules state
   const [selectedModules, setSelectedModules] = useState<string[]>(['meta_b2c', 'whatsapp_flow']);
+
+  // Pricing selected ranges state (12 checkboxes)
+  const [selectedRanges, setSelectedRanges] = useState<string[]>([]);
+
+  const getRangePrice = (name: string): number => {
+    const match = name.match(/\$(\d+[\d,]*)/);
+    if (match) {
+      return parseInt(match[1].replace(/,/g, ''), 10);
+    }
+    return 0;
+  };
+
+  const totalBudget = useMemo(() => {
+    let sum = 0;
+    selectedRanges.forEach((key) => {
+      const [catIdx, rIdx] = key.split('_').map(Number);
+      const category = t.priceTiers[catIdx];
+      if (category) {
+        const range = category.ranges[rIdx];
+        if (range) {
+          sum += getRangePrice(range.name);
+        }
+      }
+    });
+    return sum;
+  }, [selectedRanges, t.priceTiers]);
+
+  const toggleRangeSelection = (key: string) => {
+    const [catIdx] = key.split('_').map(Number);
+    setSelectedRanges((prev) => {
+      if (prev.includes(key)) {
+        return prev.filter((k) => k !== key);
+      }
+      if (catIdx === 3) {
+        return [...prev, key];
+      }
+      const cleaned = prev.filter((k) => !k.startsWith(`${catIdx}_`));
+      return [...cleaned, key];
+    });
+  };
+
+  const handleProceedToOnboardingWithRanges = () => {
+    const selectedDetails = selectedRanges.map((key) => {
+      const [catIdx, rIdx] = key.split('_').map(Number);
+      const category = t.priceTiers[catIdx];
+      const range = category?.ranges[rIdx];
+      return range ? `- ${category.category}: ${range.name}` : '';
+    }).filter(Boolean).join('\n');
+
+    const message = lang === 'es'
+      ? `Hola MAX AI, he seleccionado los siguientes rangos de inversión en la calculadora:\n${selectedDetails}\n\nPresupuesto base estimado: $${totalBudget} USD.`
+      : `Hello MAX AI, I have selected the following investment ranges in the calculator:\n${selectedDetails}\n\nEstimated base budget: $${totalBudget} USD.`;
+    
+    setCustomMessage(message);
+    setActivePage('inicio');
+    setTimeout(() => {
+      const element = document.getElementById('diagnostico');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+  };
 
   // Dynamic process stream log state
   const [logs, setLogs] = useState<string[]>(INITIAL_LOGS);
@@ -908,16 +828,14 @@ export default function App() {
     textMuted: 'text-zinc-400',
     title: 'text-white'
   } : {
-    bg: 'bg-[#D6CFBE] text-[#0A1128]',
-    header: 'bg-[#D6CFBE]/90 border-[#BDB6A5]',
-    card: 'bg-[#E4DEC8] border-[#BDB6A5] backdrop-blur-xl shadow-lg shadow-[#BDB6A5]/40',
-    cardInner: 'bg-[#C8C0AA] border-[#ACA48F]',
-    input: 'bg-[#EDE7D3] border-[#BDB6A5] text-slate-800 focus:border-[#C17F4E]',
-    textMuted: 'text-[#2D3340]',
-    title: 'text-[#020813]'
+    bg: 'bg-slate-50 text-slate-900',
+    header: 'bg-white/90 border-slate-200/80 shadow-sm backdrop-blur-md',
+    card: 'bg-white border-slate-200/80 shadow-md shadow-slate-100/50 backdrop-blur-md',
+    cardInner: 'bg-slate-50 border-slate-200/60',
+    input: 'bg-white border-slate-200 text-slate-800 focus:border-[#C17F4E] focus:ring-1 focus:ring-[#C17F4E]',
+    textMuted: 'text-slate-500 font-medium',
+    title: 'text-slate-950 font-black'
   };
-
-  const t = TRANSLATIONS[lang];
 
   // Render Projects Helper
   const renderProjectsSection = () => {
@@ -1074,7 +992,7 @@ export default function App() {
             {/* Stacked Switchers: Language (Top) and Theme (Bottom) */}
             <div className="flex flex-col gap-1 items-center justify-center select-none scale-[0.85] sm:scale-100 origin-center shrink-0">
               {/* Language Switcher (ES | EN Toggle Group) */}
-              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
                 <button
                   onClick={() => setLang('es')}
                   className={`px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] font-mono font-bold uppercase transition-all cursor-pointer ${
@@ -1100,7 +1018,7 @@ export default function App() {
               </div>
 
               {/* Theme Toggle Button */}
-              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-[#EAE6DB] border-[#D6D0C1]'}`}>
+              <div className={`flex p-0.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
                 <button
                   onClick={() => setIsDark(true)}
                   className={`p-1 rounded-full transition-all cursor-pointer ${isDark ? 'bg-[#C17F4E] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
@@ -1269,7 +1187,7 @@ export default function App() {
               className={`p-2 rounded border transition-all ${
                 isDark
                   ? 'border-white/5 bg-zinc-900/40 text-zinc-300 hover:text-white'
-                  : 'border-[#D6D0C1] bg-[#FAF8F5] text-slate-700 hover:bg-[#F2EFE9]'
+                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -1374,7 +1292,7 @@ export default function App() {
                 {/* Left Content */}
                 <div className="lg:col-span-7 flex flex-col items-center text-center gap-6">
 
-                  <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
+                  <h1 className={`font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase ${themeStyles.title}`}>
                     {t.heroTitle1} <br/> 
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C17F4E] to-[#D79663]">{t.heroTitle2}</span> <br/> 
                     {t.heroTitle3}
@@ -1423,7 +1341,9 @@ export default function App() {
                   </div>
 
                   {/* Ecosystem Logos Marquee inside Hero */}
-                  <Logos3 heading={lang === 'es' ? 'Herramientas de nuestro ecosistema' : 'Our Ecosystem Stack'} isDark={isDark} />
+                  <React.Suspense fallback={<div className="h-20 w-full flex items-center justify-center text-zinc-500 font-mono text-[9px] uppercase tracking-widest">Loading tools marquee...</div>}>
+                    <Logos3 heading={lang === 'es' ? 'Herramientas de nuestro ecosistema' : 'Our Ecosystem Stack'} isDark={isDark} />
+                  </React.Suspense>
                 </div>
 
                 {/* Right Column: Dynamic Agentic Ecosystem Hub */}
@@ -1431,14 +1351,16 @@ export default function App() {
                   {/* Centered Logo above the diagram */}
                   <div className="w-full flex justify-center mb-2">
                     <img 
-                      src={isDark ? "/logo_max_ai_hero.png" : "/logo_max_ai_hero_light.png"} 
+                      src={isDark ? "/logo_max_ai_hero.png?v=2" : "/logo_max_ai_hero_light.png?v=2"} 
                       alt="MAX AI" 
                       className={`w-[64%] h-auto object-contain ${isDark ? 'filter drop-shadow-[0_4px_12px_rgba(193,127,78,0.15)]' : ''}`}
                     />
                   </div>
                   {/* Diorama (diagrama pixel art) below */}
                   <div className={`p-1.5 rounded-2xl border transition-all duration-500 w-full relative overflow-hidden h-[330px] flex items-center justify-center ${themeStyles.card}`}>
-                    <IsometricScene isDark={isDark} lang={lang} themeStyles={themeStyles} />
+                    <React.Suspense fallback={<div className="h-full w-full flex items-center justify-center text-zinc-500 font-mono text-xs">Loading diorama...</div>}>
+                      <IsometricScene isDark={isDark} lang={lang} themeStyles={themeStyles} />
+                    </React.Suspense>
                   </div>
                 </div>
 
@@ -1457,7 +1379,7 @@ export default function App() {
               >
                 <div className="text-center max-w-3xl mx-auto mb-16">
                   <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.systBadge}</span>
-                  <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                  <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                     {t.systTitle}
                   </h2>
                   <p className={`text-sm font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
@@ -1466,33 +1388,51 @@ export default function App() {
                 </div>
 
                 {/* Cyclic Diagram Connection Stepper */}
-                <div className="hidden lg:flex justify-between items-center max-w-4xl mx-auto mb-16 p-4 bg-zinc-950/20 border border-white/5 rounded-xl font-mono text-[9px] uppercase tracking-widest text-zinc-500">
+                <div className={`hidden lg:flex justify-between items-center max-w-4xl mx-auto mb-16 p-4 rounded-xl font-mono text-[9px] uppercase tracking-widest text-zinc-500 border ${
+                  isDark ? 'bg-zinc-950/20 border-white/5' : 'bg-slate-100 border-slate-200 text-slate-500'
+                }`}>
                   <button 
                     onClick={() => setActivePilar(0)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${activePilar === 0 ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' : 'hover:text-zinc-300'}`}
+                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
+                      activePilar === 0 
+                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
+                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
+                    }`}
                   >
-                    1. Posicionamiento (Branding)
+                    1. {t.systPillar1Title}
                   </button>
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
                   <button 
                     onClick={() => setActivePilar(1)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${activePilar === 1 ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' : 'hover:text-zinc-300'}`}
+                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
+                      activePilar === 1 
+                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
+                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
+                    }`}
                   >
-                    2. Presencia (Web Premium)
+                    2. {t.systPillar2Title}
                   </button>
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
                   <button 
                     onClick={() => setActivePilar(2)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${activePilar === 2 ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' : 'hover:text-zinc-300'}`}
+                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
+                      activePilar === 2 
+                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
+                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
+                    }`}
                   >
-                    3. Captación (Marketing)
+                    3. {t.systPillar3Title}
                   </button>
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-700" />
                   <button 
                     onClick={() => setActivePilar(3)}
-                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${activePilar === 3 ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' : 'hover:text-zinc-300'}`}
+                    className={`px-3 py-1.5 rounded transition-all cursor-pointer ${
+                      activePilar === 3 
+                        ? 'bg-[#C17F4E]/10 text-[#C17F4E] font-bold border border-[#C17F4E]/30' 
+                        : isDark ? 'hover:text-zinc-300' : 'hover:text-slate-800'
+                    }`}
                   >
-                    4. Escalabilidad (IA)
+                    4. {t.systPillar4Title}
                   </button>
                 </div>
   
@@ -1511,7 +1451,7 @@ export default function App() {
                         className={`p-4 rounded-lg border text-left transition-all flex items-center gap-4 cursor-pointer ${
                           activePilar === idx
                             ? 'border-[#C17F4E] bg-[#C17F4E]/10 shadow-md'
-                            : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:bg-zinc-850' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:bg-[#F2EFE9]'
+                            : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800/40' : 'border-slate-200 bg-white hover:bg-slate-50'
                         }`}
                       >
                         <span className={`font-mono text-lg font-bold ${activePilar === idx ? 'text-[#C17F4E]' : 'text-zinc-500'}`}>
@@ -1654,7 +1594,7 @@ export default function App() {
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center max-w-3xl mx-auto mb-16">
                     <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.metBadge}</span>
-                    <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                       {t.metTitle}
                     </h2>
                     <p className={`text-sm font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
@@ -1693,13 +1633,13 @@ export default function App() {
                               className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-mono text-xs font-bold transition-all z-10 ${
                                 isActive
                                   ? `border-[#C17F4E] text-[#C17F4E] scale-110 shadow-lg shadow-[#C17F4E]/25 ${
-                                      isDark ? 'bg-zinc-950' : 'bg-[#FAF8F5]'
+                                      isDark ? 'bg-zinc-950' : 'bg-white'
                                     }`
                                   : isCompleted
                                     ? 'border-[#C17F4E] bg-[#C17F4E] text-zinc-950'
                                     : isDark 
                                       ? 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-[#C17F4E]' 
-                                      : 'border-[#D6D0C1] bg-[#FAF8F5] text-zinc-500 hover:border-[#C17F4E]'
+                                      : 'border-slate-200 bg-white text-zinc-500 hover:border-[#C17F4E]'
                               }`}
                             >
                               <span>{idx + 1}</span>
@@ -1731,7 +1671,7 @@ export default function App() {
                         className={`py-3 px-2 rounded font-mono text-[10px] uppercase tracking-wider transition-all border cursor-pointer text-center ${
                           activeWeek === idx
                             ? 'bg-[#C17F4E] text-white font-bold border-[#C17F4E] shadow-lg shadow-[#C17F4E]/10'
-                            : isDark ? 'bg-zinc-900/40 border-white/5 text-zinc-400 hover:bg-zinc-800' : 'bg-[#FAF8F5] border-[#D6D0C1] text-slate-700 hover:bg-[#F2EFE9]'
+                            : isDark ? 'bg-zinc-900/40 border-white/5 text-zinc-400 hover:bg-zinc-800' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         <div className="font-black text-xs transition-colors" style={{ color: activeWeek === idx ? '#fff' : '#C17F4E' }}>{wk.number}</div>
@@ -1777,7 +1717,7 @@ export default function App() {
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-16">
                     <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.diagBadge}</span>
-                    <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
+                    <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                       {t.diagTitle}
                     </h2>
                     <p className={`text-sm font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
@@ -2018,7 +1958,7 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <div className="text-center max-w-3xl mx-auto">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'Cotizador Inteligente' : 'Smart Configurator'}</span>
-                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl uppercase mt-3 leading-none ${themeStyles.title}`}>
+                <h1 className={`font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
                   {lang === 'es' ? (
                     <>
                       Precios <span className="text-[#C17F4E]">&</span> servicios
@@ -2038,157 +1978,174 @@ export default function App() {
             </section>
 
             {/* --- CATÁLOGO DE SERVICIOS Y RANGOS DE INVERSIÓN (SECCIÓN 5) --- */}
-            <section className={`py-20 px-6 sm:px-10 lg:px-16 border-t ${isDark ? 'bg-zinc-950/20 border-white/5' : 'bg-[#FAF8F5]/50 border-[#D6D0C1]'}`}>
+            <section className={`pt-10 pb-20 px-6 sm:px-10 lg:px-16 border-t ${isDark ? 'bg-zinc-950/20 border-white/5' : 'bg-slate-50/50 border-slate-200'}`}>
               <div className="max-w-7xl mx-auto">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.priceBadge}</span>
-                  <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {t.priceTitle}
-                  </h2>
-                  <p className={`text-sm font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
-                    {t.priceSub}
-                  </p>
-                </div>
+                {(t.priceBadge || t.priceTitle || t.priceSub) && (
+                  <div className="text-center max-w-3xl mx-auto mb-16">
+                    {t.priceBadge && (
+                      <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.priceBadge}</span>
+                    )}
+                    {t.priceTitle && (
+                      <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                        {t.priceTitle}
+                      </h2>
+                    )}
+                    {t.priceSub && (
+                      <p className={`text-sm font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
+                        {t.priceSub}
+                      </p>
+                    )}
+                  </div>
+                )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                {/* MOBILE & TABLET LAYOUT: Column-based card loops (unaligned rows but stacked correctly per category) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:hidden gap-6">
                   {t.priceTiers.map((category, idx) => (
-                    <div key={idx} className={`p-8 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-[#C17F4E]/30 ${themeStyles.card}`}>
+                    <div key={idx} className={`p-6 sm:p-8 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-[#C17F4E]/30 ${themeStyles.card}`}>
                       <div>
-                        <div className="flex justify-between items-start mb-4">
-                          <h3 className={`font-display font-bold text-lg uppercase tracking-wider ${themeStyles.title}`}>
-                            {category.category}
-                          </h3>
+                        <div className="flex flex-col justify-between mb-6">
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className={`font-display font-bold text-lg uppercase tracking-wider ${themeStyles.title}`}>
+                              {category.category}
+                            </h3>
+                          </div>
+                          <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
+                            {category.desc}
+                          </p>
                         </div>
-                        <p className={`text-xs font-sans font-light mb-8 leading-relaxed ${themeStyles.textMuted}`}>
-                          {category.desc}
-                        </p>
 
                         <div className="space-y-6">
-                          {category.ranges.map((range, rIdx) => (
-                            <div key={rIdx} className="p-4 rounded bg-[#C17F4E]/5 border border-[#C17F4E]/10 space-y-2">
-                              <div className="flex justify-between items-baseline flex-wrap gap-2">
-                                <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
-                                  {range.name}
-                                </h4>
+                          {category.ranges.map((range, rIdx) => {
+                            const rangeKey = `${idx}_${rIdx}`;
+                            const isSelected = selectedRanges.includes(rangeKey);
+                            return (
+                              <div
+                                key={rIdx}
+                                onClick={() => toggleRangeSelection(rangeKey)}
+                                className={`p-4 rounded border space-y-2 flex flex-col justify-between cursor-pointer transition-all duration-200 ${
+                                  isSelected
+                                    ? 'border-[#C17F4E] bg-[#C17F4E]/10 shadow-md ring-1 ring-[#C17F4E]/20'
+                                    : 'bg-[#C17F4E]/5 border-[#C17F4E]/10 hover:border-[#C17F4E]/30'
+                                }`}
+                              >
+                                <div className="space-y-2">
+                                  <div className="flex justify-between items-start gap-2">
+                                    <div className="flex items-start gap-2.5">
+                                      <div className={`mt-0.5 w-4 h-4 rounded border flex items-center justify-center transition-all shrink-0 ${
+                                        isSelected ? 'bg-[#C17F4E] border-[#C17F4E] text-white' : 'border-zinc-500 bg-transparent'
+                                      }`}>
+                                        {isSelected && <Check className="w-2.5 h-2.5" />}
+                                      </div>
+                                      <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-white leading-normal">
+                                        {range.name}
+                                      </h4>
+                                    </div>
+                                  </div>
+                                  <p className={`text-xs font-sans leading-relaxed ${themeStyles.textMuted}`}>
+                                    <strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Ideal para: ' : 'Ideal for: '}</strong>{range.for}
+                                  </p>
+                                </div>
+                                <div className="text-[11px] font-sans text-zinc-400 flex items-start gap-1.5 leading-relaxed pt-1.5 border-t border-white/5 mt-auto">
+                                  <span className="text-[#C17F4E] font-bold shrink-0">✓</span>
+                                  <span><strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Incluye: ' : 'Includes: '}</strong>{range.include}</span>
+                                </div>
                               </div>
-                              <p className={`text-xs font-sans leading-relaxed ${themeStyles.textMuted}`}>
-                                <strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Ideal para: ' : 'Ideal for: '}</strong>{range.for}
-                              </p>
-                              <div className="text-[11px] font-sans text-zinc-400 flex items-start gap-1.5 leading-relaxed pt-1.5 border-t border-white/5">
-                                <span className="text-[#C17F4E] font-bold shrink-0">✓</span>
-                                <span><strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Incluye: ' : 'Includes: '}</strong>{range.include}</span>
-                              </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
-                      </div>
-
-                      <div className="pt-6 border-t border-white/5 mt-8 flex justify-between items-center text-[10px] font-mono uppercase tracking-wider">
-                        <span className="text-zinc-500">{lang === 'es' ? 'Hitos: 40% / 40% / 20%' : 'Milestones: 40% / 40% / 20%'}</span>
-                        <span className="text-[#C17F4E] font-bold">{lang === 'es' ? 'COTIZADOR ABAJO ↓' : 'QUOTE BELOW ↓'}</span>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            </section>
 
-            {/* --- SOLUCIÓN CONFIGURATOR INTERACTIVO --- */}
-            <section className={`py-20 px-6 sm:px-10 lg:px-16 border-t ${isDark ? 'bg-zinc-950/40 border-white/5' : 'bg-[#EAE6DB] border-[#D0C9B8]'}`}>
-              <div className="max-w-7xl mx-auto">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.confBadge}</span>
-                  <h2 className={`font-display font-bold text-3xl sm:text-4xl uppercase mt-2 ${themeStyles.title}`}>
-                    {t.confTitle}
-                  </h2>
-                  <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
-                    {t.confSub}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                  
-                  {/* Modules Checklist (Left 7 Columns) */}
-                  <div className="lg:col-span-7 flex flex-col gap-4">
-                    {MODULES.map((m) => {
-                      const isSelected = selectedModules.includes(m.id);
-                      const translatedName = lang === 'es' ? m.name : (m.id === 'meta_b2c' ? 'B2C Ecosystem + Meta Catalog' : m.id === 'landing_crm' ? 'Landing Page Lead Gen + CRM' : m.id === 'custom_ml' ? 'Custom AI & ML Model' : m.id === 'whatsapp_flow' ? 'WhatsApp Cloud API Flows' : 'Metrics Dashboard & Firestore Sync');
-                      const translatedDesc = lang === 'es' ? m.description : (m.id === 'meta_b2c' ? 'Automated inventory sync to Meta Graph API, conversion pixels, and Instagram lookbooks.' : m.id === 'landing_crm' ? 'Ultra-fast design optimized for conversion with SEO indexing and native CRM connection.' : m.id === 'custom_ml' ? 'Predictive cognitive models trained with your business data to forecast demand or automate flows.' : m.id === 'whatsapp_flow' ? 'Smart automated customer care with hybrid AI agents to answer stock queries and book appointments.' : 'Real-time interactive panel for management administration with high-speed NoSQL database.');
-                      const translatedCat = lang === 'es' ? m.category : (m.category === 'Ventas e Integraciones' ? 'Sales & Integrations' : m.category === 'Infraestructura Web' ? 'Web Infrastructure' : 'Artificial Intelligence');
-                      return (
-                        <div
-                          key={m.id}
-                          onClick={() => toggleModule(m.id)}
-                          className={`p-5 rounded-lg border cursor-pointer transition-all flex items-start gap-4 ${
-                            isSelected
-                              ? 'border-[#C17F4E] bg-[#C17F4E]/5 shadow-md'
-                              : isDark ? 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-750' : 'border-[#D6D0C1] bg-[#FAF8F5] hover:border-[#CAC6B7] shadow-sm'
-                          }`}
-                        >
-                          <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center transition-all ${
-                            isSelected ? 'bg-[#C17F4E] border-[#C17F4E] text-white' : 'border-zinc-500 bg-transparent'
-                          }`}>
-                            {isSelected && <Check className="w-3.5 h-3.5" />}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex justify-between items-baseline flex-wrap gap-2">
-                              <h4 className={`font-display font-bold text-sm uppercase tracking-wider ${isDark ? 'text-white' : 'text-[#020813]'}`}>{translatedName}</h4>
-                              <span className="font-mono text-xs text-[#C17F4E] font-semibold">${m.price} USD</span>
-                            </div>
-                            <p className="text-xs text-zinc-500 font-sans mt-1 leading-relaxed">{translatedDesc}</p>
-                            <div className="flex gap-4 mt-2.5">
-                              <span className="font-mono text-[10px] text-zinc-500 uppercase">{lang === 'es' ? 'TIEMPO ESTIMADO' : 'ESTIMATED TIME'}: {m.durationWeeks} {lang === 'es' ? 'SEMANAS' : 'WEEKS'}</span>
-                              <span className="font-mono text-[10px] text-zinc-500 uppercase">•</span>
-                              <span className="font-mono text-[10px] text-zinc-500 uppercase">{translatedCat}</span>
-                            </div>
-                          </div>
+                {/* DESKTOP LAYOUT: Row-based grid using CSS Subgrid inside Category Cards.
+                    This preserves the visual card container wrapper for each category while aligning the inner elements perfectly. */}
+                <div className="hidden xl:grid grid-cols-4 grid-rows-[auto_auto_auto_auto] gap-x-6 gap-y-0">
+                  {t.priceTiers.map((category, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`grid grid-rows-subgrid row-span-4 gap-y-6 p-8 rounded-xl border transition-all duration-300 hover:border-[#C17F4E]/30 ${themeStyles.card}`}
+                    >
+                      {/* Cell 0: Header */}
+                      <div className="flex flex-col justify-between">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className={`font-display font-bold text-sm uppercase tracking-wider ${themeStyles.title}`}>
+                            {category.category}
+                          </h3>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <p className={`text-xs font-sans font-light leading-relaxed ${themeStyles.textMuted}`}>
+                          {category.desc}
+                        </p>
+                      </div>
 
-                  {/* Calculations and CTA Card (Right 5 Columns) */}
-                  <div className="lg:col-span-5">
-                    <div className={`p-6 rounded-xl border ${themeStyles.card}`}>
-                      <h3 className={`font-display font-bold text-sm uppercase tracking-widest border-b border-white/5 pb-4 mb-6 ${themeStyles.title}`}>
-                        {t.confSumTitle}
-                      </h3>
-
-                      <div className="space-y-4">
-                        <div className="flex justify-between font-sans">
-                          <span className="text-xs text-zinc-500 font-semibold uppercase">{t.confSumMod}</span>
-                          <span className={`text-xs font-mono font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>{selectedModules.length}</span>
-                        </div>
-                        
-                        <div className="flex justify-between font-sans">
-                          <span className="text-xs text-zinc-500 font-semibold uppercase">{t.confSumTime}</span>
-                          <span className={`text-xs font-mono font-bold ${isDark ? 'text-white' : 'text-[#020813]'}`}>~ {configuratorDuration} {t.confSumTimeWeeks}</span>
-                        </div>
-
-                        <div className="pt-4 border-t border-white/5 flex justify-between items-baseline mt-4">
-                          <span className="text-xs font-mono font-bold uppercase text-zinc-400">{t.confSumBudget}</span>
-                          <span className="text-3xl font-mono text-[#C17F4E] font-black">${configuratorTotal} <span className="text-xs text-zinc-500 font-sans">USD</span></span>
-                        </div>
-
-                        <div className="pt-6">
-                          <button
-                            onClick={handleProceedToOnboarding}
-                            disabled={selectedModules.length === 0}
-                            className={`w-full py-3.5 text-center font-mono text-xs font-bold uppercase tracking-widest rounded transition-all flex items-center justify-center gap-2 ${
-                              selectedModules.length > 0
-                                ? 'bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white hover:opacity-90 shadow-lg'
-                                : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
+                      {/* Cells 1, 2, 3: Ranges */}
+                      {[0, 1, 2].map((rIdx) => {
+                        const range = category.ranges[rIdx];
+                        const rangeKey = `${idx}_${rIdx}`;
+                        const isSelected = selectedRanges.includes(rangeKey);
+                        return (
+                          <div
+                            key={rIdx}
+                            onClick={() => toggleRangeSelection(rangeKey)}
+                            className={`p-5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all duration-200 ${
+                              isSelected
+                                ? 'border-[#C17F4E] bg-[#C17F4E]/10 shadow-md ring-1 ring-[#C17F4E]/20'
+                                : 'bg-[#C17F4E]/5 border-[#C17F4E]/10 hover:border-[#C17F4E]/30'
                             }`}
                           >
-                            <span>{t.confSumCta}</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-start gap-2">
+                                <div className="flex items-start gap-2.5">
+                                  <div className={`mt-0.5 w-4 h-4 rounded border flex items-center justify-center transition-all shrink-0 ${
+                                    isSelected ? 'bg-[#C17F4E] border-[#C17F4E] text-white' : 'border-zinc-500 bg-transparent'
+                                  }`}>
+                                    {isSelected && <Check className="w-2.5 h-2.5" />}
+                                  </div>
+                                  <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-white leading-normal">
+                                    {range.name}
+                                  </h4>
+                                </div>
+                              </div>
+                              <p className={`text-xs font-sans leading-relaxed ${themeStyles.textMuted}`}>
+                                <strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Ideal para: ' : 'Ideal for: '}</strong>{range.for}
+                              </p>
+                            </div>
+                            <div className="text-[11px] font-sans text-zinc-400 flex items-start gap-1.5 leading-relaxed pt-2 border-t border-white/5 mt-4">
+                              <span className="text-[#C17F4E] font-bold shrink-0">✓</span>
+                              <span><strong className="text-zinc-300 font-semibold">{lang === 'es' ? 'Incluye: ' : 'Includes: '}</strong>{range.include}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Dynamic selected ranges summary estimator */}
+                {selectedRanges.length > 0 && (
+                  <div className={`mt-12 p-6 rounded-xl border ${themeStyles.card} max-w-2xl mx-auto text-center fade-in`}>
+                    <h3 className={`font-display font-bold text-sm uppercase tracking-widest border-b border-white/5 pb-4 mb-4 ${themeStyles.title}`}>
+                      {lang === 'es' ? 'Resumen de Selección' : 'Selection Summary'}
+                    </h3>
+                    <div className="flex flex-wrap justify-center gap-6 text-xs font-mono text-zinc-400 mb-6">
+                      <div>
+                        <span className="text-zinc-500 uppercase">{lang === 'es' ? 'Servicios Seleccionados: ' : 'Selected Services: '}</span>
+                        <span className="text-white font-bold">{selectedRanges.length}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-500 uppercase">{lang === 'es' ? 'Inversión Base Estimada: ' : 'Estimated Base Investment: '}</span>
+                        <span className="text-[#C17F4E] font-black">${totalBudget} USD</span>
                       </div>
                     </div>
+                    <button
+                      onClick={handleProceedToOnboardingWithRanges}
+                      className="px-8 py-3.5 bg-gradient-to-r from-[#C17F4E] to-[#D79663] text-white font-mono text-xs font-bold uppercase tracking-widest rounded hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-lg"
+                    >
+                      <span>{lang === 'es' ? 'Iniciar Diagnóstico con esta Selección' : 'Start Diagnosis with this Selection'}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-
-                </div>
+                )}
               </div>
             </section>
 
@@ -2204,7 +2161,7 @@ export default function App() {
             <section className="relative py-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
               <div className="text-center max-w-3xl mx-auto mb-16">
                 <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{t.csBadge}</span>
-                <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 ${themeStyles.title}`}>
+                <h1 className={`font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
                   {t.csTitle}
                 </h1>
                 <p className={`text-sm font-sans font-light mt-3 ${themeStyles.textMuted}`}>
@@ -2234,7 +2191,7 @@ export default function App() {
                   <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
                     {lang === 'es' ? 'Acceso al Sistema' : 'System Access'}
                   </span>
-                  <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-2 mb-4 ${themeStyles.title}`}>
+                  <h1 className={`font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase mt-2 mb-4 ${themeStyles.title}`}>
                     {lang === 'es' ? 'Iniciar Sesión' : 'Login'}
                   </h1>
                   <p className={`text-sm font-sans font-light mb-10 ${themeStyles.textMuted}`}>
@@ -2669,7 +2626,7 @@ export default function App() {
             {/* Header */}
             <div className="text-center mb-16 relative z-10">
               <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">{lang === 'es' ? 'NÚCLEO DE COMUNICACIÓN' : 'COMMUNICATION CORE'}</span>
-              <h1 className={`font-display font-extrabold text-4xl sm:text-5xl uppercase mt-3 tracking-tight ${themeStyles.title}`}>
+              <h1 className={`font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase mt-3 ${themeStyles.title}`}>
                 {t.contactTitle}
               </h1>
               <p className={`text-sm sm:text-base font-sans font-light mt-4 max-w-2xl mx-auto leading-relaxed ${themeStyles.textMuted}`}>
