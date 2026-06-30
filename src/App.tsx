@@ -1378,12 +1378,12 @@ export default function App() {
                 className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
               >
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                  <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
                     {t.systBadge}
-                  </h2>
-                  <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
+                  </span>
+                  <h2 className={`font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight uppercase ${themeStyles.title}`}>
                     {t.systTitle}
-                  </p>
+                  </h2>
                 </div>
 
                 {/* Cyclic Diagram Connection Stepper */}
@@ -1592,7 +1592,7 @@ export default function App() {
               >
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
+                    <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
                       {lang === 'es' ? 'Cómo Trabajamos' : 'How We Work'}
                     </span>
                     <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
@@ -1717,7 +1717,7 @@ export default function App() {
               >
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-16">
-                    <span className="text-[#C17F4E] font-mono text-xs uppercase tracking-[0.2em]">
+                    <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
                       {lang === 'es' ? 'Sesión Estratégica' : 'Strategic Session'}
                     </span>
                     <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
