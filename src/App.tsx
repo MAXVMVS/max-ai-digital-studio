@@ -1378,10 +1378,10 @@ export default function App() {
                 className="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto"
               >
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                  <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
+                  <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
                     {t.systBadge}
                   </span>
-                  <h2 className={`font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight uppercase ${themeStyles.title}`}>
+                  <h2 className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                     {t.systTitle}
                   </h2>
                 </div>
@@ -1592,13 +1592,13 @@ export default function App() {
               >
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
+                    <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
                       {lang === 'es' ? 'Cómo Trabajamos' : 'How We Work'}
                     </span>
-                    <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                    <h2 className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                       {t.metBadge}
                     </h2>
-                    <p className={`text-base sm:text-lg font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted}`}>
+                    <p className={`text-sm sm:text-base font-sans font-light mt-3 leading-relaxed ${themeStyles.textMuted}`}>
                       {t.metTitle}
                     </p>
                   </div>
@@ -1717,10 +1717,10 @@ export default function App() {
               >
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-16">
-                    <span className="text-[#C17F4E] font-mono text-sm sm:text-base lg:text-lg font-extrabold uppercase tracking-[0.2em] block mb-3">
+                    <span className="text-[#C17F4E] font-mono text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.15em] block mb-4">
                       {lang === 'es' ? 'Sesión Estratégica' : 'Strategic Session'}
                     </span>
-                    <h2 className={`font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight uppercase mt-2 ${themeStyles.title}`}>
+                    <h2 className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-relaxed uppercase mt-2 ${themeStyles.title}`}>
                       {t.diagBadge}
                     </h2>
                     <p className={`text-sm sm:text-base font-sans font-light mt-4 leading-relaxed ${themeStyles.textMuted} max-w-2xl mx-auto`}>
